@@ -5,6 +5,6 @@ int	global = 42;
 int	main()
 {
 	printf("Hello World!!!\n");
-	printf("%d\n", global);
+	printf("%d\n\n", global);
 	return (0);
 }
