@@ -32,4 +32,4 @@ jobs:
           curl -L https://github.com/42School/norminette/releases/download/3.4.1/norminette-linux -o norminette
           chmod +x norminette
       - name: Run Norminette
-        run: norminette
+        run: ls -la; norminette
