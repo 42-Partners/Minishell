@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
+/*   Updated: 2025/12/09 15:40:37 by gustaoli         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 
-int	global = 42;
+int	g_global = 42;
 
-int	main()
+int	main(void)
 {
-	printf("Hello World!!!\n");
-	printf("%d\n\n", global);
+	printf("Hello World%d\n", g_global);
 	return (0);
 }
