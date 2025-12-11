@@ -1,21 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_print_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/09 15:40:37 by gustaoli         ###   ########.fr       */
+/*   Created: 2025/08/12 12:02:23 by rafaoliv          #+#    #+#             */
+/*   Updated: 2025/08/12 13:35:00 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "libft.h"
 
-int	g_global = 42;
-
-int	main(void)
+int	ft_print_char(int c)
 {
-	printf("Hello World%d\n", g_global);
-	return (0);
+	int	res;
+
+	res = 0;
+	res += write(1, &c, 1);
+	return (res);
 }
