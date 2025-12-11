@@ -25,10 +25,10 @@ jobs:
         echo "Running norminette..."
         NORM=$(norminette | grep Error:)
         if [ -n "$NORM" ]; then
-          echo "Norminette failed!"
+          echo "Norminette failed"
           exit 1
         fi
-        echo "Norminette passed!"
+        echo "Norminette passed"
 
   compile:
     name: Compile
