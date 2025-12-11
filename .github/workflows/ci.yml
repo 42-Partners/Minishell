@@ -23,7 +23,7 @@ jobs:
     - name: Run norminette
       run: |
         echo "Running norminette..."
-        NORM=$(norminette | grep Error:)
+        NORM=$(norminette | grep Error: || true)
         if [ -n "$NORM" ]; then
           echo "Norminette failed"
           exit 1
