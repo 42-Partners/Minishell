@@ -21,14 +21,7 @@ jobs:
       run: pip3 install norminette
     
     - name: Run norminette
-      run: |
-        echo "Running norminette..."
-        norminette src/ includes/
-        if [ $? -ne 0 ]; then
-          echo "Norminette failed!"
-          exit 1
-        fi
-        echo "Norminette passed!"
+      run: norminette
 
   compile:
     name: Compile
