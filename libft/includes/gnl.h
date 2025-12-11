@@ -6,12 +6,12 @@
 /*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:36:09 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/10 14:03:46 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2025/12/11 10:38:24 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
+#ifndef GNL_H
+# define GNL_H
 
 # include <stdlib.h>
 # include <fcntl.h>
