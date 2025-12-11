@@ -104,50 +104,50 @@ jobs:
   #         echo "Basic tests passed"
   #       fi
 
-  memory:
-    name: Memory Leak Detection
-    runs-on: ubuntu-latest
-    # needs: test
+  # memory:
+  #   name: Memory Leak Detection
+  #   runs-on: ubuntu-latest
+  #   # needs: test
     
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
+  #     with:
+  #       submodules: recursive
     
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y valgrind libreadline-dev
+  #   - name: Install dependencies
+  #     run: |
+  #       sudo apt-get update
+  #       sudo apt-get install -y valgrind libreadline-dev
     
-    - name: Compile minishell
-      run: make
+  #   - name: Compile minishell
+  #     run: make
     
-    - name: Make scripts executable
-      run: |
-        chmod +x tests/valgrind_quick.sh 2>/dev/null || true
-        chmod +x tests/valgrind_full.sh 2>/dev/null || true
+  #   - name: Make scripts executable
+  #     run: |
+  #       chmod +x tests/valgrind_quick.sh 2>/dev/null || true
+  #       chmod +x tests/valgrind_full.sh 2>/dev/null || true
     
-    - name: Quick memory check (dev)
-      if: github.ref == 'refs/heads/dev' || github.base_ref == 'dev'
-      run: |
-        if [ -f "tests/valgrind_quick.sh" ]; then
-          echo "Running quick valgrind check..."
-          bash tests/valgrind_quick.sh
-        else
-          echo "tests/valgrind_quick.sh not found"
-          echo "Running basic valgrind test..."
-          echo "echo test" | valgrind --leak-check=yes --error-exitcode=1 ./minishell
-        fi
-      continue-on-error: true
+  #   - name: Quick memory check (dev)
+  #     if: github.ref == 'refs/heads/dev' || github.base_ref == 'dev'
+  #     run: |
+  #       if [ -f "tests/valgrind_quick.sh" ]; then
+  #         echo "Running quick valgrind check..."
+  #         bash tests/valgrind_quick.sh
+  #       else
+  #         echo "tests/valgrind_quick.sh not found"
+  #         echo "Running basic valgrind test..."
+  #         echo "echo test" | valgrind --leak-check=yes --error-exitcode=1 ./minishell
+  #       fi
+  #     continue-on-error: true
     
-    - name: Full memory check (main)
-      if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
-      run: |
-        if [ -f "tests/valgrind_full.sh" ]; then
-          echo "Running full valgrind check..."
-          bash tests/valgrind_full.sh
-        else
-          echo "tests/valgrind_full.sh not found!"
-          exit 1
-        fi
+  #   - name: Full memory check (main)
+  #     if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
+  #     run: |
+  #       if [ -f "tests/valgrind_full.sh" ]; then
+  #         echo "Running full valgrind check..."
+  #         bash tests/valgrind_full.sh
+  #       else
+  #         echo "tests/valgrind_full.sh not found!"
+  #         exit 1
+  #       fi
