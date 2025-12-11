@@ -21,7 +21,14 @@ jobs:
       run: pip3 install norminette
     
     - name: Run norminette
-      run: norminette
+      run: |
+        echo "Running norminette..."
+        NORM=$(norminette | grep Error:)
+        if [ -n "$NORM" ]; then
+          echo "Norminette failed!"
+          exit 1
+        fi
+        echo "Norminette passed!"
 
   compile:
     name: Compile
