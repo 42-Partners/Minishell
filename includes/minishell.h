@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/09 15:40:37 by gustaoli         ###   ########.fr       */
+/*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
+/*   Updated: 2025/12/10 09:31:09 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#ifndef MINISHELL
+#define MINISHELL
 
-int	g_global = 42;
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 
-int	main(void)
+typedef struct s_tokens
 {
-	printf("Hello World%d\n", g_global);
-	return (0);
-}
+}	t_tokens;
+
+typedef struct s_ast
+{
+}	t_ast;
+
+typedef struct s_env
+{
+}	t_env;
+
+#endif
