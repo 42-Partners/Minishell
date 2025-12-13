@@ -6,29 +6,49 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/12 16:07:12 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/13 19:11:19 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
+static int	input_process(t_token **token, char *input);
+
 int	main(void)
 {
+	t_token	*token;
 	char	*input;
 
+	token = NULL;
 	while (1)
 	{
 		input = readline("42Partners@minishell: ");
-		if (!input || ft_strcmp(input, "exit") == 0)
-		{
-			if (input)
-				free(input);
+		if (!input_process(&token, input))
 			break ;
-		}
-		if (*input)
-			add_history(input);
-		free(input);
 	}
 	return (0);
+}
+
+static int	input_process(t_token **token, char *input)
+{
+	if (!input || ft_strcmp(input, "exit") == 0)
+	{
+		if (input)
+			free(input);
+		return (0);
+	}
+	if (*input)
+	{
+		add_history(input);
+		*token = tokenize(*token, input);
+		if (!*token)
+		{
+			free(input);
+			return (1);
+		}
+		free_token(token);
+	}
+	free(input);
+	return (1);
 }
