@@ -3,20 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/10 09:31:33 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:07:12 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minishell.h"
-#include <stdio.h>
-
-int	g_global = 42;
 
 int	main(void)
 {
-	printf("Hello World%d\n", g_global);
+	char	*input;
+
+	while (1)
+	{
+		input = readline("42Partners@minishell: ");
+		if (!input || ft_strcmp(input, "exit") == 0)
+		{
+			if (input)
+				free(input);
+			break ;
+		}
+		if (*input)
+			add_history(input);
+		free(input);
+	}
 	return (0);
 }

@@ -1,0 +1,113 @@
+# Readline (rl_readline)
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:malloc
+   fun:rl_allocate_line
+   fun:rl_readline
+}
+
+{
+   readline_history
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:malloc
+   fun:add_history
+}
+
+# Readline internal structures
+{
+   readline_internal_1
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_rl_init_fileio
+}
+
+{
+   readline_internal_2
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_rl_init_terminal_io
+}
+
+# ncurses / termcap / terminfo
+{
+   ncurses_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:malloc
+   fun:_nc_read_entry
+}
+
+{
+   ncurses_tinfo
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_nc_first_db
+}
+
+#glibc locale
+{
+   glibc_locale
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:__ctype_load_locale
+}
+
+{
+   glibc_locale2
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:__newlocale
+}
+
+# dynamic loader (ld-linux / libc)
+{
+   glibc_dl
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_map_object_deps
+}
+
+{
+   glibc_dl2
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_allocate_tls
+}
+
+{
+   pthread_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:pthread_create
+}
+
+# Readline keymaps
+{
+    readline_keymap
+    Memcheck:Leak
+    match-leak-kinds: reachable
+    ...
+    fun:rl_make_bare_keymap
+}
+
+{
+    readline_keymap2
+    Memcheck:Leak
+    match-leak-kinds: reachable
+    ...
+    fun:rl_initialize
+}

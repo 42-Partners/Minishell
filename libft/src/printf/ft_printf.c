@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:11:21 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/08/12 12:35:30 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:12:59 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
 int	ft_printf(const char *format, ...)
 {

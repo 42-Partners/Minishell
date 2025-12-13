@@ -1,32 +1,42 @@
-NAME        := minishell
-CC          := cc
-CFLAGS      := -Wall -Wextra -Werror -g
+NAME		:= minishell
+CC		:= cc
+CFLAGS		:= -Wall -Wextra -Werror -g
+
+# Valgrind
+VALGRIND	:= valgrind
+
+VALGRIND_FLAGS	:= --leak-check=full --show-leak-kinds=all \
+		--track-origins=yes --suppressions=valgrind.supp
+
+VALGRIND_STACK	:= $(VALGRIND_FLAGS) \
+		--read-var-info=yes --vgdb=yes --trace-children=yes \
+		--track-fds=yes
 
 # Library
-LIBFT_DIR   := libft
-LIBFT       := $(LIBFT_DIR)/libft.a
-LIBFT_FLAGS := -L$(LIBFT_DIR) -lft
+LIBFT_DIR	:= libft
+LIBFT		:= $(LIBFT_DIR)/libft.a
+LIB_FLAGS	:= -L$(LIBFT_DIR) -lft -lreadline
 
 # Directories
-SRC_DIRS     := src
-OBJ_DIR      := build
-INCLUDE_DIRS := includes $(LIBFT_DIR)
-INCLUDES     := $(foreach dir,$(INCLUDE_DIRS),-I$(dir))
+SRC_DIRS	:= src
+OBJ_DIR		:= build
+INCLUDE_DIRS	:= includes $(LIBFT_DIR)/includes
+INCLUDES	:= $(foreach dir,$(INCLUDE_DIRS),-I$(dir))
 
 # Colors
-GREEN  := \033[0;32m
-YELLOW := \033[0;33m
-RED    := \033[0;31m
-BLUE   := \033[0;34m
-RESET  := \033[0m
+GREEN 		:= \033[0;32m
+YELLOW		:= \033[0;33m
+RED		:= \033[0;31m
+BLUE		:= \033[0;34m
+RESET		:= \033[0m
 
 # Files
-SRC := $(shell find $(SRC_DIRS) -name "*.c")
-OBJ := $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
+SRC		:= $(shell find $(SRC_DIRS) -name "*.c")
+OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
 
 $(NAME): $(OBJ) $(LIBFT)
 	@echo "$(YELLOW)🔧 Linking objects...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_FLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIB_FLAGS) -o $(NAME)
 	@echo "$(GREEN)✅ $(NAME) built successfully$(RESET)"
 
 $(OBJ_DIR)/%.o: %.c
@@ -39,6 +49,14 @@ $(LIBFT):
 
 # Rules
 all: $(NAME)
+
+valgrind: $(NAME)
+	@echo "$(YELLOW)🔎 Running Valgrind...$(RESET)"
+	@$(VALGRIND) $(VALGRIND_FLAGS) ./$(NAME)
+
+valgrind-stack: $(NAME)
+	@echo "$(YELLOW)🧠 Running Valgrind (Stacktrace Mode)...$(RESET)"
+	@$(VALGRIND) $(VALGRIND_STACK) ./$(NAME)
 
 clean:
 	@rm -rf $(OBJ_DIR)
@@ -56,4 +74,4 @@ norminette:
 	@echo "$(YELLOW)🧠 Running norminette...$(RESET)"
 	@norminette $(SRC) -R CheckForbiddenSourceHeader || true
 
-.PHONY: all clean fclean re norminette
+.PHONY: all clean fclean re norminette valgrind valgrind-stack

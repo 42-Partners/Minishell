@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:50:47 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/10 09:32:53 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2025/12/12 16:11:23 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-//mandatory
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isascii(int c);
@@ -34,6 +33,7 @@ int		ft_toupper(int c);
 int		ft_tolower(int c);
 int		ft_isfloat(char *c);
 int		ft_atoi(const char *nptr);
+int		ft_strcmp(const char *s1, const char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 
@@ -70,7 +70,6 @@ void	*ft_calloc(size_t nmemb, size_t size);
 
 char	**ft_split(char const *s, char c);
 
-// bonus
 int		ft_lstsize(t_list *lst);
 
 void	ft_lstadd_front(t_list **lst, t_list *new);
@@ -82,21 +81,5 @@ void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-
-int		ft_printf(const char *format, ...);
-int		ft_conversion_specifier(char c, va_list ap);
-int		ft_print_char(int c);
-int		ft_print_str(char *str);
-int		ft_print_s_nbr(int n);
-int		ft_print_u_nbr(unsigned int n);
-int		ft_print_hexa(unsigned int n, char c);
-int		ft_print_hexa_long(unsigned long n);
-int		ft_print_pointer(void *ptr);
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1024
-# endif
-
-char	*get_next_line(int fd);
 
 #endif

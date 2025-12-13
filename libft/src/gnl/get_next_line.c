@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:36:12 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/11/06 15:27:39 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2025/12/12 15:11:37 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "gnl.h"
 
 #define MAX_FD 1024
 
