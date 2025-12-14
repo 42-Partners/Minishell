@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 16:12:48 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/07/28 15:47:22 by codespace        ###   ########.fr       */
+/*   Updated: 2025/12/13 15:48:07 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 int	ft_toupper(int c)
 {
-	int	res;
-
 	if (c >= 'a' && c <= 'z')
-	{
-		res = c - 32;
-		return (res);
-	}
-	else
-		return (c);
+		c -= 32;
+	return (c);
 }
