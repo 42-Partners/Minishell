@@ -15,7 +15,7 @@
 void	register_handlers(void);
 void	signal_handler(int signum);
 
-int g_signal = 0;
+volatile sig_atomic_t	g_signal = 0;
 
 void	register_handlers(void)
 {
