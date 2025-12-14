@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/13 18:53:38 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/14 09:40:30 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
+# include "libft.h"
 
 typedef enum e_token_type
 {
@@ -44,6 +46,9 @@ typedef struct s_env
 {
 }	t_env;
 
+extern int g_signal;
+
+/* lexer */
 t_token	*tokenize(t_token *token, char *input);
 t_token	*new_token(char *value, t_token_type type);
 void	free_token(t_token **token);
@@ -54,5 +59,11 @@ int		get_word(t_token **token, char **input);
 int		invalid_token(int c);
 int		is_operator(int c);
 int		is_quote(int c);
+
+/* signal */
+void	register_handlers(void);
+void	signal_handler(int signum);
+
+
 
 #endif

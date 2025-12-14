@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/13 19:11:19 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/14 09:40:19 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
 static int	input_process(t_token **token, char *input);
@@ -21,6 +20,7 @@ int	main(void)
 	char	*input;
 
 	token = NULL;
+	register_handlers();
 	while (1)
 	{
 		input = readline("42Partners@minishell: ");
