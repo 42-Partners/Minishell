@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/14 09:51:44 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/14 09:58:42 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_env
 {
 }	t_env;
 
-volatile sig_atomic_t	g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 /* lexer */
 t_token	*tokenize(t_token *token, char *input);
@@ -61,7 +61,7 @@ int		is_operator(int c);
 int		is_quote(int c);
 
 /* signal */
-void	register_handlers(void);
+void	register_sig_handlers(void);
 void	signal_handler(int signum);
 
 

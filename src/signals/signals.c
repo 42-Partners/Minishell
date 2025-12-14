@@ -17,7 +17,7 @@ void	signal_handler(int signum);
 
 volatile sig_atomic_t	g_signal = 0;
 
-void	register_handlers(void)
+void	register_sig_handlers(void)
 {
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);

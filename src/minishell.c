@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/14 09:40:19 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/14 09:58:29 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(void)
 	char	*input;
 
 	token = NULL;
-	register_handlers();
+	register_sig_handlers();
 	while (1)
 	{
 		input = readline("42Partners@minishell: ");
