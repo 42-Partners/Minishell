@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/14 09:58:42 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/15 20:56:45 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,5 @@ int		is_quote(int c);
 /* signal */
 void	register_sig_handlers(void);
 void	signal_handler(int signum);
-
-
 
 #endif

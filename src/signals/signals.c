@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	register_handlers(void);
+void	register_sig_handlers(void);
 void	signal_handler(int signum);
 
 volatile sig_atomic_t	g_signal = 0;
@@ -27,7 +27,7 @@ void	signal_handler(int signum)
 {
 	g_signal = signum;
 	if (signum != SIGINT)
-		return;
+		return ;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
