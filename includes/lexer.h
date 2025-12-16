@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/15 23:24:57 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/16 02:19:47 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	char			quote_type;
 	struct s_token	*next;
 }	t_token;
 
