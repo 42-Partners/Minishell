@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   token_stack.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/13 18:33:05 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/16 02:35:31 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer.h"
 #include "libft.h"
-#include "minishell.h"
 
-t_token	*new_token(char *value, t_token_type type)
+#include <stdlib.h>
+
+static t_token	*new_token(char *value, char quote_type, t_token_type type)
 {
 	t_token	*node;
 
@@ -22,18 +24,24 @@ t_token	*new_token(char *value, t_token_type type)
 		return (NULL);
 	node->type = type;
 	node->value = ft_strdup(value);
+	if (!node->value)
+		return (free(node), NULL);
+	node->quote_type = quote_type;
 	node->next = NULL;
 	return (node);
 }
 
-int	token_add_back(t_token **token, char *value, t_token_type type)
+int	token_add_back(t_token **token, char *value,
+			char quote_type, t_token_type type)
 {
 	t_token	*new;
 	t_token	*temp;
 
-	new = new_token(value, type);
-	if (!token || !new)
+	if (!token)
 		return (0);
+	new = new_token(value, quote_type, type);
+	if (!new)
+		return (ft_putstr_fd("malloc error\n", 2), 0);
 	if (!*token)
 		*token = new;
 	else
