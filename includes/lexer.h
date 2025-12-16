@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/21 18:06:57 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/16 00:38:30 by devrafaelly      ###   ########.fr       */
+/*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
+/*   Updated: 2025/12/16 02:19:47 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef LEXER_H
+# define LEXER_H
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+typedef enum e_token_type
 {
-	size_t	i;
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_REDIRECT_APPEND,
+	TOKEN_HEREDOC
+}	t_token_type;
 
-	i = 0;
-	while (((unsigned char)s1[i] && (unsigned char)s2[i]) && i < n
-		&& (unsigned char)s1[i] == (unsigned char)s2[i])
-		i++;
-	if (i == n)
-		return (0);
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*value;
+	char			quote_type;
+	struct s_token	*next;
+}	t_token;
+
+t_token	*tokenize(char *input);
+void	free_token(t_token **token);
+
+#endif

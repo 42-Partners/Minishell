@@ -1,39 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_parsing.c                                    :+:      :+:    :+:   */
+/*   token_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:31:57 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/13 18:36:23 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/16 02:36:14 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer.h"
 #include "libft.h"
-#include "minishell.h"
+
+#include <stdlib.h>
+
+int	token_add_back(t_token **token, char *value,
+		char quote_type, t_token_type type);
+int	is_word(int c);
 
 int	get_operator(t_token **token, char **input)
 {
 	int	ret;
 
 	ret = 0;
-	if (**input == '>' && *(*(input) + 1) == '>')
+	if ((*input)[0] == '>' && (*input)[1] == '>')
 	{
-		ret = token_add_back(token, ">>", TOKEN_REDIRECT_APPEND);
+		ret = token_add_back(token, ">>", 0, TOKEN_REDIRECT_APPEND);
 		(*input)++;
 	}
-	else if (**input == '<' && *(*(input) + 1) == '<')
+	else if ((*input)[0] == '<' && (*input)[1] == '<')
 	{
-		ret = token_add_back(token, "<<", TOKEN_HEREDOC);
+		ret = token_add_back(token, "<<", 0, TOKEN_HEREDOC);
 		(*input)++;
 	}
 	else if (**input == '|')
-		ret = token_add_back(token, "|", TOKEN_PIPE);
+		ret = token_add_back(token, "|", 0, TOKEN_PIPE);
 	else if (**input == '>')
-		ret = token_add_back(token, ">", TOKEN_REDIRECT_OUT);
+		ret = token_add_back(token, ">", 0, TOKEN_REDIRECT_OUT);
 	else if (**input == '<')
-		ret = token_add_back(token, "<", TOKEN_REDIRECT_IN);
+		ret = token_add_back(token, "<", 0, TOKEN_REDIRECT_IN);
 	(*input)++;
 	return (ret);
 }
@@ -50,18 +56,12 @@ int	get_quote(t_token **token, char **input)
 	end = ft_strchr(start, **input);
 	ret = 0;
 	if (!end)
-	{
-		ft_putstr_fd("syntax error: unclosed quote\n", 2);
-		return (0);
-	}
+		return (ft_putstr_fd("syntax error: unclosed quote\n", 2), 0);
 	size = end - start;
 	value = ft_substr(start, 0, size);
 	if (!value)
-	{
-		perror("malloc error");
-		return (ret);
-	}
-	ret = token_add_back(token, value, TOKEN_WORD);
+		return (ft_putstr_fd("malloc error\n", 2), 0);
+	ret = token_add_back(token, value, **input, TOKEN_WORD);
 	free(value);
 	*input = end + 1;
 	return (ret);
@@ -75,17 +75,12 @@ int	get_word(t_token **token, char **input)
 
 	i = 0;
 	ret = 0;
-	while ((*input)[i] && !invalid_token((*input)[i])
-		&& !ft_isspace((*input)[i]) && !is_operator((*input)[i])
-		&& !is_quote((*input)[i]))
+	while ((*input)[i] && is_word((*input)[i]))
 		i++;
 	value = ft_substr(*input, 0, i);
 	if (!value)
-	{
-		perror("Error");
-		return (ret);
-	}
-	ret = token_add_back(token, value, TOKEN_WORD);
+		return (ft_putstr_fd("malloc error\n", 2), 0);
+	ret = token_add_back(token, value, 0, TOKEN_WORD);
 	free(value);
 	*input += i;
 	return (ret);
