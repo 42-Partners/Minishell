@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/15 20:56:45 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/16 01:46:41 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 
 # define PROMPT "42Partners@minishell: "
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <string.h>
 # include <signal.h>
+# include <unistd.h>
+# include <readline/readline.h> 
 # include "libft.h"
 
 typedef struct s_env
