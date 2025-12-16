@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:14:41 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/15 23:56:53 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/16 08:04:33 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,7 @@ typedef struct s_ast_node
 		t_here_doc_node	here_doc_node;
 	}			t_node;
 }	t_ast_node;
+
+t_ast_node	*init_ast_node(t_token **tokens);
 
 #endif
