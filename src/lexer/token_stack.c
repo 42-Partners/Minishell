@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_stack.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/16 02:35:31 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/16 21:06:34 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <stdlib.h>
 
-static t_token	*new_token(char *value, char quote_type, t_token_type type)
+t_token	*new_token(char *value, char quote_type, t_token_type type)
 {
 	t_token	*node;
 

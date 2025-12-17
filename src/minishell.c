@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/16 02:34:01 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/16 21:31:47 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include "lexer.h"
+#include "ast.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -54,6 +55,8 @@ static int	input_process(char *input)
 	free(input);
 	if (!token)
 		return (1);
+	print_tokens(token, "@Initial tokens= ");
+	init_ast_node(token);
 	free_token(&token);
 	return (1);
 }
