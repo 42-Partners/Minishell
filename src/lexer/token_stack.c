@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/16 02:35:31 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/17 00:58:20 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <stdlib.h>
 
-static t_token	*new_token(char *value, char quote_type, t_token_type type)
+t_token	*new_token(char *value, char quote_type, t_token_type type)
 {
 	t_token	*node;
 
