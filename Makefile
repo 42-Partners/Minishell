@@ -31,7 +31,13 @@ BLUE		:= \033[0;34m
 RESET		:= \033[0m
 
 # Files
-SRC		:= $(shell find $(SRC_DIRS) -name "*.c")
+SRC		:= \
+			src/minishell.c \
+			src/lexer/tokenize.c \
+			src/lexer/token_checkers.c \
+			src/lexer/token_parse.c \
+			src/lexer/token_stack.c \
+			src/signals/signals.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
 
 $(NAME): $(OBJ) $(LIBFT)
