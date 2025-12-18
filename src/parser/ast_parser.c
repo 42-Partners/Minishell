@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 07:17:25 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/17 16:00:21 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:20:41 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void 		get_args(t_cmd_node **node, t_token *tokens);
 t_cmd_node	*consume_tokens(t_token *tokens)
 {
 	t_cmd_node	*ret;
-	t_token		*aux;
+	// t_token		*aux;
 
 	ret = malloc(sizeof(t_ast_node));
 	if (!ret)
@@ -59,14 +59,17 @@ static void get_args(t_cmd_node **node, t_token *tokens)
 	int	i;
 	
 	i = 0;
-	(*node)->args = malloc(size_t(char *) * (count_args(tokens) + 1));
+	(*node)->args = malloc(sizeof(char *) * (count_args(tokens) + 1));
 	if ((*node)->args)
-			return (free(*node), NULL);
+	{
+		free(*node);
+		return ;
+	}
 	while (tokens->type == TOKEN_WORD)
 	{
 		// use quote tipe for ???
-		(*args)[i++] = tokens->value;
+		(*node)->args[i++] = tokens->value;
 		tokens = tokens->next;
 	}
-	(*args)[i] == NULL;
+	(*node)->args[i] = NULL;
 }

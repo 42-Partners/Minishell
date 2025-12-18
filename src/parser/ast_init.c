@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 07:52:13 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/17 13:30:36 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:13:40 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ t_ast_node			*init_ast_node(t_token *tokens);
 static t_token		*divide_left(t_token *token_head, t_token *father);
 static t_token		*divide_right(t_token *token_head, t_token *father);
 // static t_ast_node	*handle_high_level(t_token *right_tokens, t_token *left_tokens);
-static t_ast_node	*handle_low_level(t_token *right_tokens, t_token *left_tokens);
-
+// static t_ast_node	*handle_low_level(t_token *tokens);
 
 t_ast_node	*init_ast_node(t_token *tokens)
 {
@@ -101,7 +100,7 @@ static t_ast_node	*handle_high_level(t_token *right_tokens, t_token *left_tokens
 	free_token(right_tokens);
 	free_token(left_tokens);
 	return (NULL);
-}*/
+}
 
 static t_ast_node	*handle_low_level(t_token *tokens)
 {
@@ -115,7 +114,7 @@ static t_ast_node	*handle_low_level(t_token *tokens)
 	ret = malloc(sizeof(t_ast_node));
 	if (!ret)
 		return (NULL);
-	ret->t_node = CMD;
+	ret->type = CMD;
 	ret->t_node = consume_tokens(tokens);
 	if (!ret->t_node)
 	{
@@ -127,3 +126,4 @@ static t_ast_node	*handle_low_level(t_token *tokens)
 	free_token(left_tokens);
 	return (ret);
 }
+	*/

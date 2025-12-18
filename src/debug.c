@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 21:23:05 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/17 12:39:13 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/18 14:11:04 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*get_token_type(t_token token);
 
 void		debug_flag(char *print_mgs)
 {
-	printf("%s\n", debug_flag);
+	printf("%s\n", print_mgs);
 }
 
 void	print_tokens(t_token *tokens, char *custom)
