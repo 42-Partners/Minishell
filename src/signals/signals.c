@@ -11,9 +11,12 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "libft.h"
 
-void	register_sig_handlers(void);
-void	signal_handler(int signum);
+#include <unistd.h>
+#include <readline/readline.h> 
+
+static void	signal_handler(int signum);
 
 volatile sig_atomic_t	g_signal = 0;
 
@@ -23,7 +26,7 @@ void	register_sig_handlers(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	signal_handler(int signum)
+static void	signal_handler(int signum)
 {
 	g_signal = signum;
 	if (signum != SIGINT)
