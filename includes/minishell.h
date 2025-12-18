@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/18 17:22:46 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/18 19:43:27 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # define PROMPT "42Partners@minishell: "
 
-#include <signal.h>
+# include <signal.h>
 
 extern volatile sig_atomic_t	g_signal;
 
