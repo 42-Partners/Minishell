@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:14:41 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/16 21:30:03 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:02:41 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ typedef enum e_node_type
 {
 	CMD,
 	LOGICAL,
-	PIPE,
-	HERE_DOC
+	PIPE
 }	t_node_type;
 
 typedef enum e_redirect_type
 {
 	REDIRECT_IN,
 	REDIRECT_OUT,
-	REDIRECT_APPEND
+	REDIRECT_APPEND,
+	HERE_DOC
 }	t_redirect_type;
 
 typedef enum e_logical_type
@@ -51,13 +51,6 @@ typedef struct s_cmd_node
 	t_redirect	**redirects;
 }	t_cmd_node;
 
-typedef struct s_here_doc_node
-{
-	char			*delimiter;
-	char			*tmp_file;
-	t_ast_node		*child;
-}	t_here_doc_node;
-
 typedef struct s_pipe_node
 {
 	t_ast_node	*right;
@@ -79,10 +72,11 @@ typedef struct s_ast_node
 		t_cmd_node		cmd_node;
 		t_pipe_node		pipe_node;
 		t_logical_node	logical_node;
-		t_here_doc_node	here_doc_node;
 	}			t_node;
 }	t_ast_node;
 
 t_ast_node	*init_ast_node(t_token *tokens);
+void		get_redirects(t_cmd_node **node, t_token *tokens);
+
 
 #endif

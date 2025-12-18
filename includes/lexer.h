@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/16 21:26:10 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/17 12:40:14 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,6 @@ void	free_token(t_token **token);
 
 /* Debug (remove on project delivery) */
 void	print_tokens(t_token *tokens, char *custom);
+void	debug_flag(char *print_mgs);
 
 #endif
