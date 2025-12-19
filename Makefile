@@ -18,7 +18,6 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 LIB_FLAGS	:= -L$(LIBFT_DIR) -lft -lreadline
 
 # Directories
-SRC_DIRS	:= src
 OBJ_DIR		:= build
 INCLUDE_DIRS	:= includes $(LIBFT_DIR)/includes
 INCLUDES	:= $(foreach dir,$(INCLUDE_DIRS),-I$(dir))
