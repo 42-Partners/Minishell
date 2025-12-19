@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/16 21:31:47 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:04:40 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ static int	input_process(char *input)
 	if (!token)
 		return (1);
 	print_tokens(token, "@Initial tokens= ");
-	init_ast_node(token);
-	free_token(&token);
+	build_ast(token);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:14:41 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/17 16:02:41 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/19 15:41:38 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,12 @@ typedef struct s_ast_node
 	}			t_node;
 }	t_ast_node;
 
-t_ast_node	*init_ast_node(t_token *tokens);
 void		get_redirects(t_cmd_node **node, t_token *tokens);
-
+t_node_type	detect_next_node_type(t_token *tokens);
+t_ast_node	*build_ast(t_token *tokens);
+t_cmd_node	*consume_tokens(t_token *tokens);
+t_ast_node	*handle_low_level(t_token *tokens);
+t_ast_node	*handle_high_level(t_node_type type,
+				t_token *right_tokens, t_token *left_tokens);
 
 #endif

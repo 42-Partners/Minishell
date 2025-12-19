@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/17 12:40:14 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/19 16:09:13 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_token
 
 t_token	*tokenize(char *input);
 t_token	*new_token(char *value, char quote_type, t_token_type type);
-int		token_add_back(t_token **token, char *value, 
+int		token_add_back(t_token **token, char *value,
 			char quote_type, t_token_type type);
 void	free_token(t_token **token);
 
