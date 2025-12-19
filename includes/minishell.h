@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/18 19:43:27 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/19 01:15:59 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct s_env
 {
 }	t_env;
 
-/* signal */
+// signal
 void	register_sig_handlers(void);
 
 #endif
