@@ -33,12 +33,12 @@ void	get_redirects(t_cmd_node **node, t_token *tokens)
 	{
 		i++;
 		aux = aux->next;
+		if (aux)
+			aux = aux->next;
 	}
+	(*node)->redirect_count = i;
 	if (i == 0)
-	{
 		(*node)->redirects = NULL;
-		(*node)->redirect_count = 0;
-	}
 	else
 	{
 		(*node)->redirects = malloc(sizeof(t_redirect *) * (i + 1));
@@ -63,13 +63,13 @@ static void	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 		(*redirect)[i] = malloc(sizeof(t_redirect));
 		if (!(*redirect)[i])
 		{
-			while (i >= 0)
+			while (i > 0)
 				free((*redirect)[--i]);
 			free(*redirect);
 			return ;
 		}
 		handle_redirect_token(&((*redirect)[i]), tokens);
-		if (tokens->next == TOKEN_WORD)
+		if (tokens->next && tokens->next->type == TOKEN_WORD)
 			tokens = tokens->next->next;
 		else
 			tokens = tokens->next;
@@ -90,7 +90,7 @@ static void	handle_redirect_token(t_redirect **redirect, t_token *token)
 	{
 		(*redirect)->type = HERE_DOC;
 		(*redirect)->fd = 0;
-		if (token->next && token->next == TOKEN_WORD)
+		if (token->next && token->next->type == TOKEN_WORD)
 			(*redirect)->file_name = token->next->value;
 		return ;
 	}

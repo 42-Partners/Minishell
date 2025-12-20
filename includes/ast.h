@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:14:41 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/19 15:41:38 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/20 01:43:58 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,8 @@ t_cmd_node	*consume_tokens(t_token *tokens);
 t_ast_node	*handle_low_level(t_token *tokens);
 t_ast_node	*handle_high_level(t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
+
+/*DEBUG*/
+void		print_ast(t_ast_node *ast);
 
 #endif

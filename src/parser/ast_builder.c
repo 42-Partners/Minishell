@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/16 07:52:13 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/19 16:08:38 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/20 02:03:11 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ast.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 t_ast_node			*build_ast(t_token *tokens);
 static t_token		*divide_left(t_token *token_head, t_token *father);
@@ -26,8 +27,12 @@ t_ast_node	*build_ast(t_token *tokens)
 	t_token		*aux;
 
 	aux = tokens;
-	while (aux && aux->type != TOKEN_PIPE)
+	while (aux)
+	{
+		if (aux->type == TOKEN_PIPE)
+			break ;
 		aux = aux->next;
+	}
 	if (detect_next_node_type(tokens) == CMD)
 		ast = handle_low_level(tokens);
 	else
@@ -68,7 +73,7 @@ static t_token	*divide_right(t_token *token_head, t_token *father)
 		return (NULL);
 	while (token_head && token_head != father)
 		token_head = token_head->next;
-	if (!token_head)
+	if (!token_head || !token_head->next)
 		return (NULL);
 	else
 		token_head = token_head->next;

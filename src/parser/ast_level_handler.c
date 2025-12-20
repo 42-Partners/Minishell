@@ -38,8 +38,9 @@ t_ast_node	*handle_high_level(t_node_type type,
 		ret->t_node.logical_node = *((t_logical_node *)ret_sub_node);
 	else if (type == PIPE)
 		ret->t_node.pipe_node = *((t_pipe_node *)ret_sub_node);
-	free_token(&right_tokens);
-	free_token(&left_tokens);
+	else
+		return (free(ret), NULL);
+	free(ret_sub_node);
 	return (ret);
 }
 
@@ -65,16 +66,17 @@ t_ast_node	*handle_low_level(t_token *tokens)
 		return (NULL);
 	}
 	ret->t_node.cmd_node = *cmd_node;
-	free_token(&tokens);
-	debug_flag("handle_low_level OK");
+	// free_token(&tokens);
+	free(cmd_node);
 	return (ret);
 }
 
 static void	*new_high_level_node( t_node_type type,
-	t_token *right_tokens, t_token *left_tokens)
+	t_token *left_tokens, t_token *right_tokens)
 {
 	void	*ret;
 
+	ret = NULL;
 	if (type == LOGICAL)
 		ret = malloc(sizeof(t_logical_node));
 	else if (type == PIPE)
