@@ -18,27 +18,34 @@
 t_cmd_node			*consume_tokens(t_token *tokens);
 static int			count_args(t_token *tokens);
 static void			get_args(t_cmd_node **node, t_token *tokens);
+static	t_cmd_node	*new_cmd_node(void);
+static void			fill_args(t_cmd_node **node, t_token *tokens);
 
 t_cmd_node	*consume_tokens(t_token *tokens)
 {
 	t_cmd_node	*ret;
 
-	ret = malloc(sizeof(t_cmd_node));
+	ret = new_cmd_node();
 	if (!ret)
 		return (NULL);
-	if (tokens->type == TOKEN_WORD)
+	get_args(&ret, tokens);
+	get_redirects(&ret, tokens);
+	while (tokens && tokens->type != TOKEN_PIPE)
 	{
-		ret->cmd = tokens->value;
-		tokens = tokens->next;
-		get_args(&(ret), tokens);
-		if (!ret)
-			return (NULL);
-		while (tokens && tokens->type == TOKEN_WORD)
+		if (tokens->type == TOKEN_WORD)
+		{
+			ret->cmd = tokens->value;
+			break ;
+		}
+		if (tokens->type != TOKEN_WORD)
+		{
 			tokens = tokens->next;
-		get_redirects(&(ret), tokens);
+			if (tokens)
+				tokens = tokens->next;
+		}
+		else
+			tokens = tokens->next;
 	}
-	else
-		ret->cmd = NULL;
 	return (ret);
 }
 
@@ -47,28 +54,28 @@ static int	count_args(t_token *tokens)
 	int	arg_size;
 
 	arg_size = 0;
-	while (tokens)
+	while (tokens && tokens->type != TOKEN_PIPE)
 	{
-		if (tokens->type == TOKEN_PIPE)
-			break ;
-		if (tokens->type != TOKEN_WORD)
-			tokens = tokens->next;
-		else
+		if (tokens->type == TOKEN_WORD)
+		{
 			arg_size++;
-		if (tokens)
 			tokens = tokens->next;
+		}
+		else
+		{
+			tokens = tokens->next;
+			if (tokens)
+				tokens = tokens->next;
+		}
 	}
 	return (arg_size);
 }
 
 static void	get_args(t_cmd_node **node, t_token *tokens)
 {
-	int	i;
-
-	i = 0;
 	if (!node || !*node)
 		return ;
-	if (!tokens && count_args(tokens) == 0)
+	if (!tokens || count_args(tokens) == 0)
 	{
 		(*node)->args = NULL;
 		return ;
@@ -80,16 +87,41 @@ static void	get_args(t_cmd_node **node, t_token *tokens)
 		*node = NULL;
 		return ;
 	}
-	while (tokens)
+	fill_args(node, tokens);
+}
+
+static void	fill_args(t_cmd_node **node, t_token *tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens && tokens->type != TOKEN_PIPE)
 	{
-		if (tokens->type == TOKEN_PIPE)
-			break ;
-		if (tokens->type != TOKEN_WORD)
-			tokens = tokens->next;
-		else
+		if (tokens->type == TOKEN_WORD)
+		{
 			(*node)->args[i++] = tokens->value;
-		if (tokens)
 			tokens = tokens->next;
+		}
+		else
+		{
+			tokens = tokens->next;
+			if (tokens)
+				tokens = tokens->next;
+		}
 	}
 	(*node)->args[i] = NULL;
+}
+
+static t_cmd_node	*new_cmd_node(void)
+{
+	t_cmd_node	*ret;
+
+	ret = malloc(sizeof(t_cmd_node));
+	if (!ret)
+		return (NULL);
+	ret->cmd = NULL;
+	ret->args = NULL;
+	ret->redirect_count = 0;
+	ret->redirects = NULL;
+	return (ret);
 }

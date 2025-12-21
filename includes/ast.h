@@ -13,6 +13,8 @@
 #ifndef AST_H
 # define AST_H
 
+# include "lexer.h"
+
 typedef struct s_ast_node	t_ast_node;
 
 typedef enum e_node_type
@@ -82,8 +84,10 @@ t_cmd_node	*consume_tokens(t_token *tokens);
 t_ast_node	*handle_low_level(t_token *tokens);
 t_ast_node	*handle_high_level(t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
+void		validate_ast(t_ast_node **ast);
 
 /*DEBUG*/
 void		print_ast(t_ast_node *ast);
+void		debug_flag(char *print_mgs);
 
 #endif

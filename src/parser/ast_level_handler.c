@@ -50,10 +50,7 @@ t_ast_node	*handle_low_level(t_token *tokens)
 	t_cmd_node	*cmd_node;
 
 	if (!tokens)
-	{
-		debug_flag("handle_low_level received NULL!");
 		return (NULL);
-	}
 	ret = malloc(sizeof(t_ast_node));
 	if (!ret)
 		return (NULL);
@@ -66,7 +63,6 @@ t_ast_node	*handle_low_level(t_token *tokens)
 		return (NULL);
 	}
 	ret->t_node.cmd_node = *cmd_node;
-	// free_token(&tokens);
 	free(cmd_node);
 	return (ret);
 }

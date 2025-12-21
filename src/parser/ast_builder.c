@@ -38,7 +38,6 @@ t_ast_node	*build_ast(t_token *tokens)
 	else
 		ast = handle_high_level(PIPE,
 				divide_left(tokens, aux), divide_right(tokens, aux));
-	debug_flag("build_ast OK");
 	return (ast);
 }
 

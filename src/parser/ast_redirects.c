@@ -26,15 +26,13 @@ void	get_redirects(t_cmd_node **node, t_token *tokens)
 
 	i = 0;
 	aux = tokens;
-	while (aux
-		&& (aux->type == TOKEN_HEREDOC || aux->type == TOKEN_REDIRECT_IN
-			|| aux->type == TOKEN_REDIRECT_OUT
-			|| aux->type == TOKEN_REDIRECT_APPEND))
+	while (aux)
 	{
-		i++;
+		if (aux->type == TOKEN_HEREDOC || aux->type == TOKEN_REDIRECT_IN
+			|| aux->type == TOKEN_REDIRECT_OUT
+			|| aux->type == TOKEN_REDIRECT_APPEND)
+			i++;
 		aux = aux->next;
-		if (aux)
-			aux = aux->next;
 	}
 	(*node)->redirect_count = i;
 	if (i == 0)
@@ -55,24 +53,24 @@ static void	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 	if (!(*redirect))
 		return ;
 	i = 0;
-	while (tokens
-		&& (tokens->type == TOKEN_HEREDOC || tokens->type == TOKEN_REDIRECT_IN
-			|| tokens->type == TOKEN_REDIRECT_OUT
-			|| tokens->type == TOKEN_REDIRECT_APPEND))
+	while (tokens)
 	{
-		(*redirect)[i] = malloc(sizeof(t_redirect));
-		if (!(*redirect)[i])
+		if (tokens->type == TOKEN_HEREDOC || tokens->type == TOKEN_REDIRECT_IN
+			|| tokens->type == TOKEN_REDIRECT_OUT
+			|| tokens->type == TOKEN_REDIRECT_APPEND)
 		{
-			while (i > 0)
-				free((*redirect)[--i]);
-			free(*redirect);
-			return ;
+			(*redirect)[i] = malloc(sizeof(t_redirect));
+			if (!(*redirect)[i])
+			{
+				while (i > 0)
+					free((*redirect)[--i]);
+				free(*redirect);
+				return ;
+			}
+			handle_redirect_token(&((*redirect)[i]), tokens);
+			i++;
 		}
-		handle_redirect_token(&((*redirect)[i]), tokens);
-		if (tokens->next && tokens->next->type == TOKEN_WORD)
-			tokens = tokens->next->next;
-		else
-			tokens = tokens->next;
+		tokens = tokens->next;
 	}
 	(*redirect)[i] = NULL;
 }
