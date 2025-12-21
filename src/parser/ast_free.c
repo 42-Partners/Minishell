@@ -20,7 +20,7 @@ void	free_ast(t_ast_node **ast)
 	t_ast_node	*node;
 
 	if (!ast || !*ast)
-		return;
+		return ;
 	node = *ast;
 	if (node->type == CMD)
 		free_cmd(node->t_node.cmd_node);

@@ -20,7 +20,8 @@
 #include <readline/history.h>
 
 static int	input_process(char *input);
-static	int	is_exit_cmd(char *input);
+static int	is_exit_cmd(char *input);
+static int	parse_and_expand(t_token *tokens);
 
 int	main(void)
 {
@@ -55,13 +56,7 @@ static int	input_process(char *input)
 	free(input);
 	if (!token)
 		return (1);
-	print_tokens(token, "@Initial tokens= ");
-	t_ast_node *ast = build_ast(token);
-	print_ast(ast);
-	validate_ast(&ast);
-	free_ast(&ast);
-	free_token(&token);
-	return (1);
+	return (parse_and_expand(token));
 }
 
 static	int	is_exit_cmd(char *input)
@@ -74,4 +69,18 @@ static	int	is_exit_cmd(char *input)
 		return (*input == '\0');
 	}
 	return (0);
+}
+
+static int	parse_and_expand(t_token *token)
+{
+	t_ast_node	*ast;
+
+	print_tokens(token, "@Tokens= ");
+	ast = build_ast(token);
+	free_token(&token);
+	print_ast(ast);
+	validate_ast(&ast);
+	if (ast)
+		free_ast(&ast);
+	return (1);
 }
