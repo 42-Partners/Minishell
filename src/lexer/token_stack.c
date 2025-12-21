@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_stack.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/19 03:19:49 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/19 15:33:58 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
