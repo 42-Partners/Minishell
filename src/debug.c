@@ -16,72 +16,7 @@
 
 void		debug_flag(char *print_mgs);
 void		print_tokens(t_token *tokens, char *custom);
-void		print_ast(t_ast_node *ast);
 static char	*get_token_type(t_token token);
-static void	print_idents_text(int ident_level, char *txt);
-static void	print_ast_identaded(t_ast_node *ast, int ident_level);
-
-void	print_ast(t_ast_node *ast)
-{
-	if (!ast)
-	printf("AST NULL\n");
-	else
-	{
-		printf("\nAST:\n");
-		print_ast_identaded(ast, 0);
-		printf("\n");
-	}
-}
-
-static void	print_ast_identaded(t_ast_node *ast, int ident_level)
-{
-	int	i;
-
-	i = 0;
-	if (!ast)
-	{
-		print_idents_text(ident_level, "<NULL/>");
-		return ;
-	}
-	if (ast->type == CMD)
-	{
-		print_idents_text(ident_level, NULL);
-		printf("<CMD NODE redirect_count=%d> %s",
-			ast->t_node.cmd_node.redirect_count, ast->t_node.cmd_node.cmd);
-		if (ast->t_node.cmd_node.args)
-		{
-			printf(" args=[");
-			i = 0;
-			while (ast->t_node.cmd_node.args[i])
-			{
-				printf("\"%s\"", ast->t_node.cmd_node.args[i]);
-				if (ast->t_node.cmd_node.args[i + 1])
-					printf(", ");
-				i++;
-			}
-			printf("]");
-		}
-		printf("<CMD NODE/>\n");
-	}
-	else if (ast->type == PIPE)
-	{
-		print_idents_text(ident_level, "<PIPE NODE>");
-		print_ast_identaded(ast->t_node.pipe_node.left, ident_level + 1);
-		print_ast_identaded(ast->t_node.pipe_node.right, ident_level + 1);
-		print_idents_text(ident_level, "<PIPE NODE/>");
-	}
-}
-
-static void	print_idents_text(int ident_level, char *txt)
-{
-	int	i;
-
-	i = -1;
-	while (++i < ident_level)
-		printf("	");
-	if (txt)
-		printf("%s\n", txt);
-}
 
 void	debug_flag(char *print_mgs)
 {

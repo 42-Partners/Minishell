@@ -52,12 +52,14 @@ t_cmd_node	*consume_tokens(t_token *tokens)
 
 static int	count_args(t_token *tokens)
 {
-	int	arg_size;
+	int				arg_size;
+	t_token_type	last;
 
-	arg_size = 0;
+	last = TOKEN_WORD;
+	arg_size = -1;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
-		if (tokens->type == TOKEN_WORD)
+		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
 		{
 			arg_size++;
 			tokens = tokens->next;
@@ -65,8 +67,11 @@ static int	count_args(t_token *tokens)
 		else
 		{
 			tokens = tokens->next;
-			if (tokens)
+			if (tokens && tokens->type == TOKEN_WORD)
+			{
+				last = tokens->type;
 				tokens = tokens->next;
+			}
 		}
 	}
 	return (arg_size);
@@ -76,7 +81,7 @@ static void	get_args(t_cmd_node **node, t_token *tokens)
 {
 	if (!node || !*node)
 		return ;
-	if (!tokens || count_args(tokens) == 0)
+	if (!tokens || count_args(tokens) <= 0)
 	{
 		(*node)->args = NULL;
 		return ;
@@ -93,21 +98,28 @@ static void	get_args(t_cmd_node **node, t_token *tokens)
 
 static void	fill_args(t_cmd_node **node, t_token *tokens)
 {
-	int	i;
+	int				i;
+	t_token_type	last;
 
-	i = 0;
+	i = -1;
+	last = TOKEN_WORD;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
-		if (tokens->type == TOKEN_WORD)
+		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
 		{
-			(*node)->args[i++] = ft_strdup(tokens->value);
+			if (i >= 0)
+				(*node)->args[i] = ft_strdup(tokens->value);
 			tokens = tokens->next;
+			i++;
 		}
 		else
 		{
 			tokens = tokens->next;
-			if (tokens)
+			if (tokens && tokens->type == TOKEN_WORD)
+			{
+				last = tokens->type;
 				tokens = tokens->next;
+			}
 		}
 	}
 	(*node)->args[i] = NULL;
