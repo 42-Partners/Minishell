@@ -89,5 +89,7 @@ static void	*new_high_level_node( t_node_type type,
 		((t_pipe_node *)ret)->left = build_ast(left_tokens);
 		((t_pipe_node *)ret)->right = build_ast(right_tokens);
 	}
+	free_token(&left_tokens);
+	free_token(&right_tokens);
 	return (ret);
 }

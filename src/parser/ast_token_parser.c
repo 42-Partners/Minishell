@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 #include "ast.h"
+#include "minishell.h"
 
 #include <stdlib.h>
 
@@ -34,7 +35,7 @@ t_cmd_node	*consume_tokens(t_token *tokens)
 	{
 		if (tokens->type == TOKEN_WORD)
 		{
-			ret->cmd = tokens->value;
+			ret->cmd = ft_strdup(tokens->value);
 			break ;
 		}
 		if (tokens->type != TOKEN_WORD)
@@ -99,7 +100,7 @@ static void	fill_args(t_cmd_node **node, t_token *tokens)
 	{
 		if (tokens->type == TOKEN_WORD)
 		{
-			(*node)->args[i++] = tokens->value;
+			(*node)->args[i++] = ft_strdup(tokens->value);
 			tokens = tokens->next;
 		}
 		else

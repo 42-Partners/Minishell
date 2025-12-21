@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 #include "ast.h"
+#include "minishell.h"
 
 #include <stdlib.h>
 
@@ -89,7 +90,7 @@ static void	handle_redirect_token(t_redirect **redirect, t_token *token)
 		(*redirect)->type = HERE_DOC;
 		(*redirect)->fd = 0;
 		if (token->next && token->next->type == TOKEN_WORD)
-			(*redirect)->file_name = token->next->value;
+			(*redirect)->file_name = ft_strdup(token->next->value);
 		return ;
 	}
 	if (token->type == TOKEN_REDIRECT_IN)
@@ -100,5 +101,5 @@ static void	handle_redirect_token(t_redirect **redirect, t_token *token)
 		(*redirect)->type = REDIRECT_APPEND;
 	if (!token->next || token->next->type != TOKEN_WORD)
 		return ;
-	(*redirect)->file_name = token->next->value;
+	(*redirect)->file_name = ft_strdup(token->next->value);
 }

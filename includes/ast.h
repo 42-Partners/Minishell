@@ -85,6 +85,7 @@ t_ast_node	*handle_low_level(t_token *tokens);
 t_ast_node	*handle_high_level(t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
 void		validate_ast(t_ast_node **ast);
+void		free_ast(t_ast_node **ast);
 
 /*DEBUG*/
 void		print_ast(t_ast_node *ast);

@@ -26,7 +26,7 @@ void	validate_ast(t_ast_node **ast)
 		return ;
 	if (validate_ast_node(*ast) < 0)
 	{
-		free(*ast);
+		free_ast(ast);
 		return ;
 	}
 	debug_flag("No sintax errors...");

@@ -59,6 +59,8 @@ static int	input_process(char *input)
 	t_ast_node *ast = build_ast(token);
 	print_ast(ast);
 	validate_ast(&ast);
+	free_ast(&ast);
+	free_token(&token);
 	return (1);
 }
 
