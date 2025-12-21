@@ -48,8 +48,7 @@ static t_token	*divide_left(t_token *token_head, t_token *father)
 
 	if (!token_head || !father || token_head == father)
 		return (NULL);
-	ret = new_token(token_head->value,
-			token_head->quote_type, token_head->type);
+	ret = new_token(token_head->value, token_head->type);
 	if (!ret)
 		return (NULL);
 	aux = token_head->next;
@@ -57,7 +56,7 @@ static t_token	*divide_left(t_token *token_head, t_token *father)
 	{
 		if (aux == father)
 			break ;
-		token_add_back(&ret, aux->value, aux->quote_type, aux->type);
+		token_add_back(&ret, aux->value, aux->type);
 		aux = aux->next;
 	}
 	return (ret);
@@ -76,14 +75,13 @@ static t_token	*divide_right(t_token *token_head, t_token *father)
 		return (NULL);
 	else
 		token_head = token_head->next;
-	ret = new_token(token_head->value,
-			token_head->quote_type, token_head->type);
+	ret = new_token(token_head->value, token_head->type);
 	if (!ret)
 		return (NULL);
 	aux = token_head->next;
 	while (aux)
 	{
-		token_add_back(&ret, aux->value, aux->quote_type, aux->type);
+		token_add_back(&ret, aux->value, aux->type);
 		aux = aux->next;
 	}
 	return (ret);

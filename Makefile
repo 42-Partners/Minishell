@@ -36,7 +36,14 @@ SRC		:= \
 			src/lexer/token_checkers.c \
 			src/lexer/token_parse.c \
 			src/lexer/token_stack.c \
-			src/signals/signals.c
+			src/parser/ast_builder.c \
+			src/parser/ast_free.c \
+			src/parser/ast_level_handler.c \
+			src/parser/ast_redirects.c \
+			src/parser/ast_token_parser.c \
+			src/parser/ast_validate.c \
+			src/signals/signals.c \
+			src/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
 
 $(NAME): $(OBJ) $(LIBFT)

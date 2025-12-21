@@ -12,7 +12,7 @@
 
 #include "lexer.h"
 #include "ast.h"
-#include "minishell.h"
+#include "libft.h"
 
 #include <stdlib.h>
 

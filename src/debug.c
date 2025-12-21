@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "lexer.h"
 #include "ast.h"
 #include <stdio.h>
@@ -108,8 +107,6 @@ void	print_tokens(t_token *tokens, char *custom)
 		printf("<TOKEN type=%s", get_token_type(*tokens));
 		if (tokens->type == TOKEN_WORD && !silent)
 			printf(" content =\"%s\"", tokens->value);
-		if (tokens->quote_type != 0 && !silent)
-			printf(" quote=%c", tokens->quote_type);
 		printf("/>");
 		tokens = tokens->next;
 	}
