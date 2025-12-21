@@ -56,7 +56,9 @@ static int	input_process(char *input)
 	if (!token)
 		return (1);
 	print_tokens(token, "@Initial tokens= ");
-	print_ast(build_ast(token));
+	t_ast_node *ast = build_ast(token);
+	print_ast(ast);
+	validate_ast(&ast);
 	return (1);
 }
 

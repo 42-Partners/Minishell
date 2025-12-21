@@ -25,9 +25,13 @@ static void	print_ast_identaded(t_ast_node *ast, int ident_level);
 void	print_ast(t_ast_node *ast)
 {
 	if (!ast)
-		printf("AST NULL\n");
+	printf("AST NULL\n");
 	else
+	{
+		printf("\nAST:\n");
 		print_ast_identaded(ast, 0);
+		printf("\n");
+	}
 }
 
 static void	print_ast_identaded(t_ast_node *ast, int ident_level)
