@@ -16,10 +16,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-t_ast_node			*build_ast(t_token *tokens);
 static t_token		*divide_left(t_token *token_head, t_token *father);
 static t_token		*divide_right(t_token *token_head, t_token *father);
-t_node_type			detect_next_node_type(t_token *tokens);
 
 t_ast_node	*build_ast(t_token *tokens)
 {

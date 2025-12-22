@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ast.h"
+
 #include <stdlib.h>
 
 static void	free_cmd(t_cmd_node node);

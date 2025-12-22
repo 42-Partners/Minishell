@@ -16,6 +16,7 @@
 
 #include "ast.h"
 #include "minishell.h"
+#include "ast.h"
 
 static int	check_cmd_node(t_ast_node *node, char *envv[]);
 static int	exec_ast_node(t_ast_node *node, char *envv[]);
