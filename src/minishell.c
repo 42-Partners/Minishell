@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/22 12:06:10 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/22 19:46:19 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static int	input_process(char *input, char **envv);
+static int	input_process(char *input, char *envv[]);
 static int	is_exit_cmd(char *input);
 static int	parse_and_expand(t_token *tokens, char *envv[]);
 
@@ -76,6 +76,7 @@ static	int	is_exit_cmd(char *input)
 static int	parse_and_expand(t_token *token, char *envv[])
 {
 	t_ast_node	*ast;
+	int			ret;
 
 	print_tokens(token, "@Tokens= ");
 	ast = build_ast(token);
@@ -83,7 +84,8 @@ static int	parse_and_expand(t_token *token, char *envv[])
 	print_ast(ast);
 	validate_ast(&ast);
 	check_cmds(&ast, envv);
+	ret = exec_ast(ast, envv);
 	if (ast)
 		free_ast(&ast);
-	return (1);
+	return (ret);
 }
