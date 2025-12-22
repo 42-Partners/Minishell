@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/22 12:38:31 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/22 12:45:00 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "libft.h"
 
 static char	**get_bin_paths(char **envv);
-static void	free_paths(char **paths);
 static char	*verify_cmd_in_bin_paths(char *cmd, char **bin_paths);
 static char	*construct_path(char *bin_path, char *cmd);
 
@@ -32,11 +31,11 @@ int	validate_cmd(char *cmd, char **envv)
 	if (aux == NULL)
 	{
 		ft_printf("Command not found: %s\n", cmd);
-		free_paths(bin_paths);
+		ft_free_arr(bin_paths);
 		return (-1);
 	}
 	free(aux);
-	free_paths(bin_paths);
+	ft_free_arr(bin_paths);
 	return (1);
 }
 
@@ -52,10 +51,10 @@ char	*get_cmd_path(char *cmd, char *envv[])
 	if (aux == NULL)
 	{
 		ft_printf("Command not found: %s\n", cmd);
-		free_paths(bin_paths);
+		ft_free_arr(bin_paths);
 		return (NULL);
 	}
-	free_paths(bin_paths);
+	ft_free_arr(bin_paths);
 	return (aux);
 }
 
@@ -106,14 +105,4 @@ static char	**get_bin_paths(char **envv)
 	if (!res)
 		return (NULL);
 	return (res);
-}
-
-static void	free_paths(char **paths)
-{
-	int	i;
-
-	i = 0;
-	while (paths[i] != NULL)
-		free(paths[i++]);
-	free(paths);
 }

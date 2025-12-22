@@ -43,6 +43,7 @@ SRC :=	src/basic/ft_isalnum.c \
 	src/basic/ft_memcpy.c \
 	src/basic/ft_strdup.c \
 	src/basic/ft_calloc.c \
+	src/basic/ft_free_arr.c \
 	src/basic/ft_putchar_fd.c \
 	src/basic/ft_putstr_fd.c \
 	src/basic/ft_putendl_fd.c \
