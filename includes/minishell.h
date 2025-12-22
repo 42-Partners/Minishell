@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/22 12:06:39 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/22 12:24:06 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	register_sig_handlers(void);
 
 // exec
 int		validate_cmd(char *cmd, char **envv);
-char	*get_path(char *cmd, char *envv[]);
+char	*get_cmd_path(char *cmd, char *envv[]);
 void	check_cmds(t_ast_node **ast, char *envv[]);
 
 #endif

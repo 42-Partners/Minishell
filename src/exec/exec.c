@@ -20,15 +20,19 @@ static int	check_cmd_node(t_ast_node *node, char *envv[]);
 void	check_cmds(t_ast_node **ast, char *envv[])
 {
 	if (!*ast)
-		return;
+		return ;
 	if (check_cmd_node(*ast, envv) == -1)
 		free_ast(ast);
 }
 
 static int	check_cmd_node(t_ast_node *node, char *envv[])
 {
-	if (node->type == CMD && node->t_node.cmd_node.cmd)
-		return (validate_cmd(node->t_node.cmd_node.cmd, envv));
+	if (node->type == CMD)
+	{
+		if (node->t_node.cmd_node.cmd != NULL)
+			return (validate_cmd(node->t_node.cmd_node.cmd, envv));
+		return (1);
+	}
 	else if (node->type == LOGICAL)
 	{
 		if (check_cmd_node(node->t_node.logical_node.left, envv) != -1)

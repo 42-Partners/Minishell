@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/22 12:15:14 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/22 12:38:31 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ int	validate_cmd(char *cmd, char **envv)
 	char	**bin_paths;
 	char	*aux;
 
+	if (access(cmd, X_OK) == 0)
+		return (1);
 	bin_paths = get_bin_paths(envv);
 	aux = verify_cmd_in_bin_paths(cmd, bin_paths);
 	if (aux == NULL)
@@ -38,11 +40,13 @@ int	validate_cmd(char *cmd, char **envv)
 	return (1);
 }
 
-char	*get_path(char *cmd, char *envv[])
+char	*get_cmd_path(char *cmd, char *envv[])
 {
 	char	**bin_paths;
 	char	*aux;
 
+	if (access(cmd, X_OK) == 0)
+		return (ft_strdup(cmd));
 	bin_paths = get_bin_paths(envv);
 	aux = verify_cmd_in_bin_paths(cmd, bin_paths);
 	if (aux == NULL)
@@ -98,7 +102,6 @@ static char	**get_bin_paths(char **envv)
 			break ;
 		envv++;
 	}
-	
 	res = ft_split((*envv + 5), ':');
 	if (!res)
 		return (NULL);
