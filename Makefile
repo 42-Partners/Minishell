@@ -43,6 +43,8 @@ SRC		:= \
 			src/parser/ast_token_parser.c \
 			src/parser/ast_validate.c \
 			src/signals/signals.c \
+			src/exec/exec.c \
+			src/exec/validate_cmd.c \
 			src/debug_ast.c \
 			src/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))

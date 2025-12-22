@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/20 02:10:28 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/22 12:06:10 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,27 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static int	input_process(char *input);
+static int	input_process(char *input, char **envv);
 static int	is_exit_cmd(char *input);
-static int	parse_and_expand(t_token *tokens);
+static int	parse_and_expand(t_token *tokens, char *envv[]);
 
-int	main(void)
+int	main(int argc, char *argv[], char *envv[])
 {
 	char	*input;
 
+	(void)argc;
+	(void)argv;
 	register_sig_handlers();
 	while (1)
 	{
 		input = readline(PROMPT);
-		if (!input_process(input))
+		if (!input_process(input, envv))
 			break ;
 	}
 	return (0);
 }
 
-static int	input_process(char *input)
+static int	input_process(char *input, char *envv[])
 {
 	t_token	*token;
 	int		i;
@@ -56,7 +58,7 @@ static int	input_process(char *input)
 	free(input);
 	if (!token)
 		return (1);
-	return (parse_and_expand(token));
+	return (parse_and_expand(token, envv));
 }
 
 static	int	is_exit_cmd(char *input)
@@ -71,7 +73,7 @@ static	int	is_exit_cmd(char *input)
 	return (0);
 }
 
-static int	parse_and_expand(t_token *token)
+static int	parse_and_expand(t_token *token, char *envv[])
 {
 	t_ast_node	*ast;
 
@@ -80,6 +82,7 @@ static int	parse_and_expand(t_token *token)
 	free_token(&token);
 	print_ast(ast);
 	validate_ast(&ast);
+	check_cmds(&ast, envv);
 	if (ast)
 		free_ast(&ast);
 	return (1);
