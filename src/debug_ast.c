@@ -79,8 +79,8 @@ static void	print_cmd(t_cmd_node node, int ident_level)
 		printf("]");
 	}
 	if (node.redirect_count > 0)
-		printf(" redirects=%d ", node.redirect_count);
-	printf("<CMD/>\n");
+		printf(" redirects=%d", node.redirect_count);
+	printf(" <CMD/>\n");
 }
 
 static void	print_idents_text(int ident_level, char *txt)
