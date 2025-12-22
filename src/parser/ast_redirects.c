@@ -16,7 +16,6 @@
 
 #include <stdlib.h>
 
-void			get_redirects(t_cmd_node **node, t_token *tokens);
 static void		parse_redirect_tokens(t_redirect ***redirect, t_token *tokens);
 static void		handle_redirect_token(t_redirect **redirect, t_token *token);
 

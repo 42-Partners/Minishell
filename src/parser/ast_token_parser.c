@@ -16,7 +16,6 @@
 
 #include <stdlib.h>
 
-t_cmd_node			*consume_tokens(t_token *tokens);
 static int			count_args(t_token *tokens);
 static void			get_args(t_cmd_node **node, t_token *tokens);
 static	t_cmd_node	*new_cmd_node(void);

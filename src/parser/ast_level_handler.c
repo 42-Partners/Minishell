@@ -15,9 +15,6 @@
 
 #include <stdlib.h>
 
-t_ast_node	*handle_low_level(t_token *tokens);
-t_ast_node	*handle_high_level(t_node_type type,
-				t_token *right_tokens, t_token *left_tokens);
 static void	*new_high_level_node( t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
 

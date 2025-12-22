@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/22 12:06:10 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:02:14 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static int	input_process(char *input, char **envv);
+static int	input_process(char *input, char *envv[]);
 static int	is_exit_cmd(char *input);
 static int	parse_and_expand(t_token *tokens, char *envv[]);
 
