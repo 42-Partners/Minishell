@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/22 18:02:14 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/23 04:41:50 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,12 @@ static int	parse_and_expand(t_token *token, char *envv[])
 	print_tokens(token, "@Tokens= ");
 	ast = build_ast(token);
 	free_token(&token);
-	print_ast(ast);
+	if (!ast)
+		return (1);
 	validate_ast(&ast);
 	check_cmds(&ast, envv);
-	if (ast)
-		free_ast(&ast);
+	expand_ast(ast);
+	print_ast(ast);
+	free_ast(&ast);
 	return (1);
 }

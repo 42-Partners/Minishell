@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/21 03:21:17 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/23 04:22:43 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_token	*tokenize(char *input);
 t_token	*new_token(char *value, t_token_type type);
 int		token_add_back(t_token **token, char *value, t_token_type type);
 void	free_token(t_token **token);
+int		is_quote(int c);
 
 /* Debug (remove on project delivery) */
 void	print_tokens(t_token *tokens, char *custom);
