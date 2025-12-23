@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/23 19:26:27 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/23 19:47:22 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ static	int	is_exit_cmd(char *input)
 static int	parse_and_expand(t_token *token, char *envv[])
 {
 	t_ast_node	*ast;
-	int			ret;
 
 	ast = build_ast(token);
 	free_token(&token);
@@ -84,9 +83,11 @@ static int	parse_and_expand(t_token *token, char *envv[])
 		return (1);
 	validate_ast(&ast);
 	check_cmds(&ast, envv);
+	if (!ast)
+		return (1);
 	expand_ast(ast);
 	print_ast(ast);
-	exec_ast(ast);
+	exec_ast(ast, envv);
 	free_ast(&ast);
 	return (1);
 }

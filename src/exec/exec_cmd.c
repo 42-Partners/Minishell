@@ -17,6 +17,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+static void	wait_child(void);
+
 int	exec_cmd(t_cmd_node cmd, char *envv[])
 {
 	pid_t	pid;
@@ -26,6 +28,8 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 	if (!cmd.cmd)
 		return (1);
 	exec = get_cmd_path(cmd.cmd, envv);
+	if (!exec)
+		return (-1);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -40,8 +44,13 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 		execve(exec, cmd.args, envv);
 		return (-1);
 	}
-	while (wait(NULL) > 0)
-		;
+	wait_child();
 	free(exec);
 	return (1);
+}
+
+static void	wait_child(void)
+{
+	while (wait(NULL) > 0)
+		;
 }

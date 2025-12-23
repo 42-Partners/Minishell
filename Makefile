@@ -43,7 +43,6 @@ SRC		:= \
 			src/parser/ast_redirects.c \
 			src/parser/ast_token_parser.c \
 			src/parser/ast_validate.c \
-			src/signals/signals.c \
 			src/expansion/expand_ast.c \
 			src/expansion/expand_handlers.c \
 			src/expansion/expand_utils.c \
