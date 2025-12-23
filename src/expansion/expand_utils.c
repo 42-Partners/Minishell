@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 23:51:37 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/23 04:39:44 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/23 04:47:07 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 #include <stdlib.h>
 
 static int	is_var_char(int c);
-char	*strjoin_free(char *s1, char *s2);
+char		*strjoin_free(char *s1, char *s2);
 
 void	expand_env(char **result, char *s, int *index)
 {
 	char	*env;
 	char	*fragment;
-	int	i;
+	int		i;
 
 	i = *index;
 	while (s[i] && is_var_char(s[i]))
@@ -39,7 +39,7 @@ void	expand_env(char **result, char *s, int *index)
 void	append_fragment(char **result, char *s, int start, int i)
 {
 	char	*fragment;
-	
+
 	fragment = ft_substr(s + start, 0, i - start);
 	*result = strjoin_free(*result, fragment);
 	free(fragment);

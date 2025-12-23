@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:38:34 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/23 04:37:59 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/23 04:48:09 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 #include <stdlib.h>
 
 static void	expand_string(char **s);
-void	handle_single_quote(char **result, char *s, int *index);
-void	handle_double_quote(char **result, char *s, int *index);
-void	handle_dollar(char **result, char *s, int *index);
-void	handle_literal(char **result, char *s, int *index);
-void	expand_env(char **result, char *s, int *index);
+void		handle_single_quote(char **result, char *s, int *index);
+void		handle_double_quote(char **result, char *s, int *index);
+void		handle_dollar(char **result, char *s, int *index);
+void		handle_literal(char **result, char *s, int *index);
+void		expand_env(char **result, char *s, int *index);
 
 void	expand_ast(t_ast_node *ast)
 {
@@ -44,7 +44,7 @@ void	expand_ast(t_ast_node *ast)
 static void	expand_string(char **s)
 {
 	char	*result;
-	int	i;
+	int		i;
 
 	i = 0;
 	result = ft_strdup("");
@@ -53,7 +53,7 @@ static void	expand_string(char **s)
 		if ((*s)[i] == '\'')
 			handle_single_quote(&result, *s, &i);
 		else if ((*s)[i] == '"')
-				handle_double_quote(&result, *s, &i);
+			handle_double_quote(&result, *s, &i);
 		else if ((*s)[i] == '$')
 			handle_dollar(&result, *s, &i);
 		else

@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/23 04:39:31 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/23 04:47:49 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	handle_double_quote(char **result, char *s, int *index)
 void	handle_dollar(char **result, char *s, int *index)
 {
 	int	i;
-	
+
 	i = *index + 1;
 	if (ft_isalpha(s[i]) || s[i] == '_')
 		expand_env(result, s, &i);
