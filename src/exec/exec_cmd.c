@@ -45,8 +45,7 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 		return (-1);
 	}
 	wait_child();
-	free(exec);
-	return (1);
+	return (free(exec), 1);
 }
 
 static void	wait_child(void)
