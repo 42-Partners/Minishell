@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/22 19:46:19 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/23 19:26:27 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,15 @@ static int	parse_and_expand(t_token *token, char *envv[])
 	t_ast_node	*ast;
 	int			ret;
 
-	print_tokens(token, "@Tokens= ");
 	ast = build_ast(token);
 	free_token(&token);
-	print_ast(ast);
+	if (!ast)
+		return (1);
 	validate_ast(&ast);
 	check_cmds(&ast, envv);
-	ret = exec_ast(ast, envv);
-	if (ast)
-		free_ast(&ast);
-	return (ret);
+	expand_ast(ast);
+	print_ast(ast);
+	exec_ast(ast);
+	free_ast(&ast);
+	return (1);
 }

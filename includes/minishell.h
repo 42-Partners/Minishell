@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/23 12:37:41 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/23 19:25:57 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 # define PROMPT "42Partners@minishell: "
 
-# include <signal.h>
 # include "ast.h"
+
+# include <signal.h>
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -30,5 +31,8 @@ void	check_cmds(t_ast_node **ast, char *envv[]);
 int		exec_redirects(t_cmd_node *node);
 int		exec_ast(t_ast_node *node, char *envv[]);
 int		exec_cmd(t_cmd_node cmd, char *envv[]);
+
+// variable_expansion
+void	expand_ast(t_ast_node *ast);
 
 #endif
