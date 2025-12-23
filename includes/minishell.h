@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/22 19:12:02 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/23 12:19:37 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ int		validate_cmd(char *cmd, char **envv);
 char	*get_cmd_path(char *cmd, char *envv[]);
 void	check_cmds(t_ast_node **ast, char *envv[]);
 int     exec_redirects(t_cmd_node *node);
-int	    exec_ast(t_ast_node *node, char *envv[]);
+int     exec_ast(t_ast_node *node, char *envv[]);
 
 #endif
