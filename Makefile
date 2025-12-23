@@ -43,6 +43,7 @@ SRC		:= \
 			src/parser/ast_token_parser.c \
 			src/parser/ast_validate.c \
 			src/signals/signals.c \
+			src/exec/exec_cmd.c \
 			src/exec/exec_redirects.c \
 			src/exec/exec.c \
 			src/exec/validate_cmd.c \

@@ -19,7 +19,7 @@
 #include "ast.h"
 
 static int	check_cmd_node(t_ast_node *node, char *envv[]);
-static int	exec_ast_node(t_ast_node *node, char *envv[]);
+static int	exec_high_level_node(t_ast_node *node, char *envv[]);
 
 void	check_cmds(t_ast_node **ast, char *envv[])
 {
@@ -34,26 +34,32 @@ int	exec_ast(t_ast_node *node, char *envv[])
 	int	ret;
 	int	std[2];
 
-	std[0] = dup(STDIN_FILENO);
-	std[1] = dup(STDOUT_FILENO);
-	ret = exec_ast_node(node, envv);
-	dup2(std[0], STDIN_FILENO);
-	dup2(std[1], STDOUT_FILENO);
-	close(std[0]);
-	close(std[1]);
-	return (ret);
-}
-
-static int	exec_ast_node(t_ast_node *node, char *envv[])
-{
-	if (!node)
-		return (-1);
+	ret = -1;
 	if (node->type == CMD)
 	{
+		std[0] = dup(STDIN_FILENO);
+		std[1] = dup(STDOUT_FILENO);
+		if (std[0] == -1 || std[1] == -1)
+		{
+			close(std[0]);
+			close(std[1]);
+			return (-1);
+		}
 		if (exec_redirects(&node->t_node.cmd_node) != -1)
-			return (1); // return exec_cmd
+			ret = exec_cmd(node->t_node.cmd_node, envv);
+		dup2(std[0], STDIN_FILENO);
+		dup2(std[1], STDOUT_FILENO);
+		close(std[0]);
+		close(std[1]);
+		return (ret);
 	}
-	else if (node->type == LOGICAL)
+	else
+		return (exec_high_level_node(node, envv));
+}
+
+static int	exec_high_level_node(t_ast_node *node, char *envv[])
+{
+	if (node->type == LOGICAL)
 	{
 		if (exec_ast(node->t_node.logical_node.left, envv) != -1)
 		{
@@ -61,6 +67,8 @@ static int	exec_ast_node(t_ast_node *node, char *envv[])
 				return (exec_ast(node->t_node.logical_node.right, envv));
 			return (1);
 		}
+		else if (node->t_node.logical_node.type == OR)
+			return (exec_ast(node->t_node.logical_node.right, envv));
 	}
 	else if (node->type == PIPE)
 	{
