@@ -76,6 +76,7 @@ static	int	is_exit_cmd(char *input)
 static int	parse_and_expand(t_token *token, char *envv[])
 {
 	t_ast_node	*ast;
+	int			ret;
 
 	print_tokens(token, "@Tokens= ");
 	ast = build_ast(token);
