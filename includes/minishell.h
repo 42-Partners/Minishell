@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/24 11:06:54 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 13:15:34 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ extern volatile sig_atomic_t	g_signal;
 
 // signal
 void	register_sig_handlers(void);
+void	signal_handler(int signum);
+void	heredoc_handler(int signum);
 
 // exec
 int		validate_cmd(char *cmd, char **envv);

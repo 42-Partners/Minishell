@@ -69,6 +69,7 @@ static char	*get_here_doc_content(char *delimiter)
 	char	*aux;
 	int		delimiter_size;
 
+	signal(SIGINT, heredoc_handler);
 	delimiter_size = ft_strlen(delimiter);
 	content = ft_strdup("");
 	while (content && g_signal == 0)
@@ -84,11 +85,8 @@ static char	*get_here_doc_content(char *delimiter)
 		content = aux;
 		free(buff);
 	}
+	signal(SIGINT, signal_handler);
 	if (g_signal != 0)
-	{
-		free(content);
-		return (NULL);
-	}
-	free(buff);
-	return (content);
+		return (free(content), NULL);
+	return (free(buff), content);
 }

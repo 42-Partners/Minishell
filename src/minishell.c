@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/24 12:04:13 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 13:17:07 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int argc, char *argv[], char *envv[])
 	while (1)
 	{
 		input = readline(PROMPT);
+		g_signal = 0;
 		if (!input_process(input, envv))
 			break ;
 	}
@@ -45,7 +46,6 @@ static int	input_process(char *input, char *envv[])
 	int		i;
 
 	i = 0;
-	g_signal = 0;
 	if (!input)
 		return (0);
 	while (ft_isspace(input[i]))
