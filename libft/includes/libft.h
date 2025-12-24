@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:50:47 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/22 12:43:53 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 10:19:56 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 
 # include "ft_printf.h"
+# include "gnl.h"
 
 typedef struct s_list
 {

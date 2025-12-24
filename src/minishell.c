@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/23 19:47:22 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 12:04:13 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static int	input_process(char *input, char *envv[])
 	int		i;
 
 	i = 0;
+	g_signal = 0;
 	if (!input)
 		return (0);
 	while (ft_isspace(input[i]))
@@ -58,7 +59,7 @@ static int	input_process(char *input, char *envv[])
 	free(input);
 	if (!token)
 		return (1);
-	return (parse_and_expand(token, envv));
+	return (parse_and_expand(token, envv) == 0);
 }
 
 static	int	is_exit_cmd(char *input)
@@ -84,10 +85,12 @@ static int	parse_and_expand(t_token *token, char *envv[])
 	validate_ast(&ast);
 	check_cmds(&ast, envv);
 	if (!ast)
-		return (1);
+		return (0);
+	if (read_all_here_docs(ast) == -1)
+		return(free_ast(&ast), 0);
 	expand_ast(ast);
 	print_ast(ast);
 	exec_ast(ast, envv);
 	free_ast(&ast);
-	return (1);
+	return (0);
 }
