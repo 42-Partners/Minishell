@@ -29,7 +29,6 @@ void	validate_ast(t_ast_node **ast)
 		free_ast(ast);
 		return ;
 	}
-	debug_flag("No sintax errors...");
 }
 
 static int	validate_ast_node(t_ast_node *node)

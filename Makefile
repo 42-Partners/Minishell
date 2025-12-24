@@ -46,6 +46,8 @@ SRC		:= \
 			src/expansion/expand_ast.c \
 			src/expansion/expand_handlers.c \
 			src/expansion/expand_utils.c \
+			src/exec/exec_cmd.c \
+			src/exec/exec_redirects.c \
 			src/exec/exec.c \
 			src/exec/validate_cmd.c \
 			src/debug_ast.c \

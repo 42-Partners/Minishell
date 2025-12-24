@@ -82,10 +82,10 @@ static void	get_args(t_cmd_node **node, t_token *tokens)
 		return ;
 	if (!tokens || count_args(tokens) <= 0)
 	{
-		(*node)->args = NULL;
-		return ;
+		(*node)->args = malloc(sizeof(char *) * 2);
 	}
-	(*node)->args = malloc(sizeof(char *) * (count_args(tokens) + 1));
+	else
+		(*node)->args = malloc(sizeof(char *) * (count_args(tokens) + 2));
 	if (!(*node)->args)
 	{
 		free(*node);
@@ -100,16 +100,14 @@ static void	fill_args(t_cmd_node **node, t_token *tokens)
 	int				i;
 	t_token_type	last;
 
-	i = -1;
+	i = 0;
 	last = TOKEN_WORD;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
 		{
-			if (i >= 0)
-				(*node)->args[i] = ft_strdup(tokens->value);
+			(*node)->args[i++] = ft_strdup(tokens->value);
 			tokens = tokens->next;
-			i++;
 		}
 		else
 		{
