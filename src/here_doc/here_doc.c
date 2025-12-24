@@ -18,8 +18,9 @@
 
 #include <fcntl.h>
 
-static char	*get_here_doc_content(char *delimiter);
 static int	read_here_docs(t_cmd_node cmd);
+static char	*get_here_doc_content(char *delimiter);
+static char	*get_here_doc_line(void);
 
 int	read_all_here_docs(t_ast_node *ast)
 {
@@ -75,7 +76,7 @@ static char	*get_here_doc_content(char *delimiter)
 	content = ft_strdup("");
 	while (content && g_signal == 0)
 	{
-		buff = get_next_line(0);
+		buff = get_here_doc_line();
 		if (!buff)
 			break ;
 		if (ft_strncmp(buff, delimiter, delimiter_size) == 0
@@ -90,4 +91,10 @@ static char	*get_here_doc_content(char *delimiter)
 	if (g_signal != 0)
 		return (free(content), NULL);
 	return (free(buff), content);
+}
+
+static char	*get_here_doc_line(void)
+{
+	write(1, "> ", 2);
+	return (get_next_line(0));
 }
