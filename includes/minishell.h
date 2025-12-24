@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/23 19:25:57 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 13:20:39 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ extern volatile sig_atomic_t	g_signal;
 
 // signal
 void	register_sig_handlers(void);
+void	signal_handler(int signum);
+void	heredoc_handler(int signum);
 
 // exec
 int		validate_cmd(char *cmd, char **envv);
@@ -34,5 +36,8 @@ int		exec_cmd(t_cmd_node cmd, char *envv[]);
 
 // variable_expansion
 void	expand_ast(t_ast_node *ast);
+
+// here_doc
+int		read_all_here_docs(t_ast_node *ast);
 
 #endif

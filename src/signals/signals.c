@@ -14,19 +14,12 @@
 #include "libft.h"
 
 #include <unistd.h>
-#include <readline/readline.h> 
-
-static void	signal_handler(int signum);
+#include <readline/readline.h>
+#include <sys/ioctl.h>
 
 volatile sig_atomic_t	g_signal = 0;
 
-void	register_sig_handlers(void)
-{
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-static void	signal_handler(int signum)
+void	signal_handler(int signum)
 {
 	g_signal = signum;
 	if (signum != SIGINT)
@@ -35,4 +28,22 @@ static void	signal_handler(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
+}
+
+void	heredoc_handler(int signum)
+{
+	g_signal = signum;
+	if (signum == SIGINT)
+	{
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		write(STDOUT_FILENO, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+	}
+}
+
+void	register_sig_handlers(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
