@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/24 13:15:34 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 13:20:39 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ int		exec_cmd(t_cmd_node cmd, char *envv[]);
 void	expand_ast(t_ast_node *ast);
 
 // here_doc
-int	read_all_here_docs(t_ast_node *ast);
+int		read_all_here_docs(t_ast_node *ast);
 
 #endif

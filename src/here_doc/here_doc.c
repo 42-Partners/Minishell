@@ -51,7 +51,8 @@ static int	read_here_docs(t_cmd_node cmd)
 			continue ;
 		content = get_here_doc_content(cmd.redirects[i]->file_name);
 		if (!content)
-			return (ft_printf("An error ocurred while reading here_doc :(\n"), -1);
+			return (
+				ft_printf("An error ocurred while reading here_doc :(\n"), -1);
 		if (pipe(aux) == -1)
 			return (free(content), -1);
 		cmd.redirects[i]->fd = aux[0];

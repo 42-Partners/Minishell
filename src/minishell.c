@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/24 13:17:07 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 13:20:16 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static int	parse_and_expand(t_token *token, char *envv[])
 	if (!ast)
 		return (0);
 	if (read_all_here_docs(ast) == -1)
-		return(free_ast(&ast), 0);
+		return (free_ast(&ast), 0);
 	expand_ast(ast);
 	print_ast(ast);
 	exec_ast(ast, envv);
