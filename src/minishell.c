@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/24 13:20:16 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/24 17:56:32 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ static int	input_process(char *input, char *envv[])
 		return (0);
 	while (ft_isspace(input[i]))
 		i++;
-	if (is_exit_cmd(&input[i]))
-		return (free(input), 0);
 	if (!input[i])
 		return (free(input), 1);
 	add_history(input);
@@ -60,18 +58,6 @@ static int	input_process(char *input, char *envv[])
 	if (!token)
 		return (1);
 	return (parse_and_expand(token, envv) == 0);
-}
-
-static	int	is_exit_cmd(char *input)
-{
-	if (ft_strncmp(input, "exit", 4) == 0)
-	{
-		input += 4;
-		while (ft_isspace(*input))
-			input++;
-		return (*input == '\0');
-	}
-	return (0);
 }
 
 static int	parse_and_expand(t_token *token, char *envv[])
