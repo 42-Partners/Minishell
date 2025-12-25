@@ -17,13 +17,14 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-static void	wait_child(void);
+static int	wait_child(int pid);
 
 int	exec_cmd(t_cmd_node cmd, char *envv[])
 {
 	pid_t	pid;
 	char	*exec;
 	int		i;
+	int		ret;
 
 	if (!cmd.cmd)
 		return (1);
@@ -32,10 +33,7 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 		return (-1);
 	pid = fork();
 	if (pid == -1)
-	{
-		ft_printf("Fork error:\n");
-		return (-1);
-	}
+		return (ft_printf("Fork error:\n"), -1);
 	if (pid == 0)
 	{
 		i = 3;
@@ -44,12 +42,16 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 		execve(exec, cmd.args, envv);
 		return (-1);
 	}
-	wait_child();
-	return (free(exec), 1);
+	ret = wait_child(pid);
+	return (free(exec), ret);
 }
 
-static void	wait_child(void)
+static int	wait_child(int pid)
 {
+	int	ret;
+
+	waitpid(pid, &ret, 0);
 	while (wait(NULL) > 0)
 		;
+	return (ret >> 8);
 }

@@ -19,7 +19,7 @@
 #include "ast.h"
 
 static int	check_cmd_node(t_ast_node *node, char *envv[]);
-static int	exec_high_level_node(t_ast_node *node, char *envv[]);
+static int	exec_high_level_node(t_ast_node *node, char *envv[], int *stts);
 
 void	check_cmds(t_ast_node **ast, char *envv[])
 {
@@ -29,7 +29,7 @@ void	check_cmds(t_ast_node **ast, char *envv[])
 		free_ast(ast);
 }
 
-int	exec_ast(t_ast_node *node, char *envv[])
+int	exec_ast(t_ast_node *node, char *envv[], int *status)
 {
 	int	ret;
 	int	std[2];
@@ -45,35 +45,39 @@ int	exec_ast(t_ast_node *node, char *envv[])
 			close(std[1]);
 			return (-1);
 		}
+		expand_ast(node, status);
 		if (exec_redirects(&node->t_node.cmd_node) != -1)
 			ret = exec_cmd(node->t_node.cmd_node, envv);
 		dup2(std[0], STDIN_FILENO);
 		dup2(std[1], STDOUT_FILENO);
 		close(std[0]);
 		close(std[1]);
+		*status = ret;
 		return (ret);
 	}
-	else
-		return (exec_high_level_node(node, envv));
+	return (exec_high_level_node(node, envv, status));
 }
 
-static int	exec_high_level_node(t_ast_node *node, char *envv[])
+static int	exec_high_level_node(t_ast_node *node, char *envv[], int *stts)
 {
+	int	ret;
+
 	if (node->type == LOGICAL)
 	{
-		if (exec_ast(node->t_node.logical_node.left, envv) != -1)
+		ret = exec_ast(node->t_node.logical_node.left, envv, stts);
+		if (ret == 0)
 		{
 			if (node->t_node.logical_node.type == AND)
-				return (exec_ast(node->t_node.logical_node.right, envv));
-			return (1);
+				return (exec_ast(node->t_node.logical_node.right, envv, stts));
+			return (ret);
 		}
-		else if (node->t_node.logical_node.type == OR)
-			return (exec_ast(node->t_node.logical_node.right, envv));
+		else if (node->t_node.logical_node.type == OR && ret != -1)
+			return (exec_ast(node->t_node.logical_node.right, envv, stts));
 	}
 	else if (node->type == PIPE)
 	{
-		if (exec_ast(node->t_node.pipe_node.left, envv) != -1)
-			return (exec_ast(node->t_node.pipe_node.right, envv));
+		if (exec_ast(node->t_node.pipe_node.left, envv, stts) != -1)
+			return (exec_ast(node->t_node.pipe_node.right, envv, stts));
 	}
 	return (-1);
 }
