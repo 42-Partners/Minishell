@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/25 17:08:13 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/25 17:21:54 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "lexer.h"
 
 void	append_fragment(char **result, char *s, int start, int i);
-void	handle_dollar(char **result, char *s, int *index, int* status);
+void	handle_dollar(char **result, char *s, int *index, int *status);
 void	expand_env(char **result, char *s, int *index);
 char	*strjoin_free(char *s1, char *s2);
 
@@ -29,7 +29,7 @@ void	handle_single_quote(char **result, char *s, int *index)
 	*index = i + 1;
 }
 
-void	handle_double_quote(char **result, char *s, int *index, int* status)
+void	handle_double_quote(char **result, char *s, int *index, int *status)
 {
 	int	start;
 	int	i;
@@ -52,7 +52,7 @@ void	handle_double_quote(char **result, char *s, int *index, int* status)
 	*index = i;
 }
 
-void	handle_dollar(char **result, char *s, int *index, int* status)
+void	handle_dollar(char **result, char *s, int *index, int *status)
 {
 	int		i;
 	char	*aux;
