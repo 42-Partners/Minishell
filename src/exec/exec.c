@@ -45,8 +45,7 @@ int	exec_ast(t_ast_node *node, char *envv[])
 			close(std[1]);
 			return (-1);
 		}
-		if (exec_redirects(&node->t_node.cmd_node) != -1)
-			ret = exec_cmd(node->t_node.cmd_node, envv);
+		ret = exec_cmd(node->t_node.cmd_node, envv);
 		dup2(std[0], STDIN_FILENO);
 		dup2(std[1], STDOUT_FILENO);
 		close(std[0]);
