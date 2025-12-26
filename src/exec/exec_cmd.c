@@ -19,7 +19,7 @@
 
 static int	redirect_without_cmd(t_cmd_node *cmd);
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
-static void	wait_child(void);
+static int	wait_child(int pid);
 
 int	exec_cmd(t_cmd_node cmd, char *envv[])
 {
@@ -33,14 +33,10 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 		return (-1);
 	pid = fork();
 	if (pid == -1)
-	{
-		ft_printf("Fork error:\n");
-		return (-1);
-	}
+		return (ft_printf("Fork error:\n"), -1);
 	if (pid == 0)
 		exec_and_redirect(exec, &cmd, envv);
-	wait_child();
-	return (free(exec), 1);
+	return (free(exec), wait_child(pid));
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
@@ -64,19 +60,24 @@ static int	redirect_without_cmd(t_cmd_node *cmd)
 	if (pid == -1)
 	{
 		ft_printf("Fork error:\n");
-		return (-1);
+		exit(1);
 	}
 	if (pid == 0)
 	{
-		if (exec_redirects(cmd) != -1)
-			return (-1);
+		if (exec_redirects(cmd) == -1)
+			exit(1);
 		exit(0);
 	}
+	waitpid(pid, NULL, 0);
 	return (0);
 }
 
-static void	wait_child(void)
+static int	wait_child(int pid)
 {
+	int	ret;
+
+	waitpid(pid, &ret, 0);
 	while (wait(NULL) > 0)
 		;
+	return (ret >> 8);
 }
