@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/26 16:17:54 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/27 15:58:43 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	main(int argc, char *argv[], char *envv[])
 	{
 		input = readline(PROMPT);
 		g_signal = 0;
-		if (!input_process(input, envv, &status))
+		if (input_process(input, envv, &status) < 0)
 			break ;
 	}
 	return (0);
@@ -44,21 +44,28 @@ int	main(int argc, char *argv[], char *envv[])
 static int	input_process(char *input, char *envv[], int *status)
 {
 	t_token	*token;
-	int		i;
+	char	*line;
+	int		ret;
 
-	i = 0;
-	if (!input)
+	line = input;
+	ret = 1;
+	if (!line)
 		return (0);
-	while (ft_isspace(input[i]))
-		i++;
-	if (!input[i])
+	while (ft_isspace(*line))
+		line++;
+	if (!*line)
 		return (free(input), 1);
 	add_history(input);
-	token = tokenize(&input[i]);
-	free(input);
-	if (!token)
-		return (1);
-	return (parse_and_execute(token, envv, status) == 0);
+	while (*line)
+	{
+		token = tokenize(&line);
+		if (!token)
+			return (free(input), -1);
+		ret = parse_and_execute(token, envv, status);
+		if (ret != 1)
+			return (free(input), ret);
+	}
+	return (free(input), 1);
 }
 
 static int	parse_and_execute(t_token *token, char *envv[], int *status)
@@ -68,10 +75,10 @@ static int	parse_and_execute(t_token *token, char *envv[], int *status)
 	ast = build_ast(token);
 	free_token(&token);
 	if (!ast)
-		return (1);
+		return (-1);
 	validate_ast(&ast);
 	if (!ast)
-		return (1);
+		return (0);
 	check_cmds(&ast, envv);
 	if (!ast)
 		return (*status = 127, 0);
@@ -82,5 +89,5 @@ static int	parse_and_execute(t_token *token, char *envv[], int *status)
 	}
 	exec_ast(ast, envv, status);
 	free_ast(&ast);
-	return (0);
+	return (1);
 }
