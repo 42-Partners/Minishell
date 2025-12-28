@@ -16,7 +16,7 @@ static char	*build_env(char *name, char *value);
 static int	ft_getenv_index(char *env, char *envv[]);
 static int	expand_envv(char **envv[]);
 
-char    *ft_getenv(char *env, char *envv[])
+char	*ft_getenv(char *env, char *envv[])
 {
 	int	index;
 
@@ -34,7 +34,7 @@ int	ft_setenv(char *name, char *value, char **envv[])
 	index = ft_getenv_index(name, *envv);
 	full_env = build_env(name, value);
 	if (!full_env)
-			return (ft_printf("Malloc Error:"), -1);
+		return (ft_printf("Malloc Error:"), -1);
 	if (index < 0)
 	{
 		if (expand_envv(envv) < 0)
@@ -51,7 +51,7 @@ int	ft_setenv(char *name, char *value, char **envv[])
 	return (1);
 }
 
-static int ft_getenv_index(char *env, char *envv[])
+static int	ft_getenv_index(char *env, char *envv[])
 {
 	int		i;
 	char	*aux;
@@ -60,9 +60,9 @@ static int ft_getenv_index(char *env, char *envv[])
 	aux = build_env(env, NULL);
 	while (envv[i] != NULL)
 	{
-			if (ft_strncmp(envv[i], aux, ft_strlen(aux)) == 0)
-					return (free(aux), i);
-			i++;
+		if (ft_strncmp(envv[i], aux, ft_strlen(aux)) == 0)
+			return (free(aux), i);
+		i++;
 	}
 	free(aux);
 	return (-1);
@@ -97,9 +97,8 @@ static int	expand_envv(char **envv[])
 	return (1);
 }
 
-static char *build_env(char *name, char *value)
+static char	*build_env(char *name, char *value)
 {
-
 	char	*full_env;
 	char	*aux;
 

@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 23:51:37 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/28 18:32:35 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/28 19:14:34 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include <stdlib.h>
 
-extern char	**environ;
 static int	is_var_char(int c);
 char		*strjoin_free(char *s1, char *s2);
 
