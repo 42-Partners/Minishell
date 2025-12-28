@@ -10,13 +10,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "lexer.h"
 #include "ast.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
 static void	*new_high_level_node( t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
+
+t_ast_node	*handle_low_level(t_token *tokens)
+{
+	t_ast_node	*ret;
+	t_cmd_node	*cmd_node;
+
+	if (!tokens)
+		return (NULL);
+	ret = malloc(sizeof(t_ast_node));
+	if (!ret)
+		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
+	ret->type = CMD;
+	cmd_node = consume_tokens(tokens);
+	if (!cmd_node)
+	{
+		debug_flag("consume_tokens coudn't handle tokens and retorned NULL!");
+		return (free(ret), NULL);
+	}
+	ret->t_node.cmd_node = *cmd_node;
+	free(cmd_node);
+	return (ret);
+}
 
 t_ast_node	*handle_high_level(t_node_type type,
 				t_token *right_tokens, t_token *left_tokens)
@@ -28,7 +52,7 @@ t_ast_node	*handle_high_level(t_node_type type,
 		return (NULL);
 	ret = malloc(sizeof(t_ast_node));
 	if (!ret)
-		return (NULL);
+		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
 	ret->type = type;
 	ret_sub_node = new_high_level_node(type, right_tokens, left_tokens);
 	if (type == LOGICAL)
@@ -41,30 +65,7 @@ t_ast_node	*handle_high_level(t_node_type type,
 	return (ret);
 }
 
-t_ast_node	*handle_low_level(t_token *tokens)
-{
-	t_ast_node	*ret;
-	t_cmd_node	*cmd_node;
-
-	if (!tokens)
-		return (NULL);
-	ret = malloc(sizeof(t_ast_node));
-	if (!ret)
-		return (NULL);
-	ret->type = CMD;
-	cmd_node = consume_tokens(tokens);
-	if (!cmd_node)
-	{
-		debug_flag("consume_tokens coudn't handle tokens and retorned NULL!");
-		free(ret);
-		return (NULL);
-	}
-	ret->t_node.cmd_node = *cmd_node;
-	free(cmd_node);
-	return (ret);
-}
-
-static void	*new_high_level_node( t_node_type type,
+static void	*new_high_level_node(t_node_type type,
 	t_token *left_tokens, t_token *right_tokens)
 {
 	void	*ret;
@@ -75,7 +76,7 @@ static void	*new_high_level_node( t_node_type type,
 	else if (type == PIPE)
 		ret = malloc(sizeof(t_pipe_node));
 	if (!ret)
-		return (NULL);
+		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
 	if (type == LOGICAL)
 	{
 		((t_logical_node *)ret)->left = build_ast(left_tokens);

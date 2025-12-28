@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   error_handling.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 16:12:29 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/27 16:24:27 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/27 17:20:17 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#ifndef ERROR_HANDLING_H
+# define ERROR_HANDLING_H
 
 # define ERR_SYNTAX "Error: syntax error\n"
 # define ERR_UNCLOSED_QUOTE "Error: syntax error: unclosed quote\n"
@@ -23,9 +23,9 @@
 
 typedef enum e_error_type
 {
-	ERROR = -1,
-	FAIL = 0,
-	OK = 1
+	ERROR = -1, // erro grave, encerra minishell
+	FAIL = 0, // erro leve, retorna novo prompt
+	OK = 1 // tudo certo
 }	t_error_type;
 
 #endif

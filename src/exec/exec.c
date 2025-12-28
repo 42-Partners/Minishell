@@ -15,19 +15,20 @@
 #include <fcntl.h>
 
 #include "ast.h"
-#include "minishell.h"
-#include "ast.h"
+#include "exec.h"
+#include "error_handling.h"
 
 static int	check_cmd_node(t_ast_node *node, char *envv[]);
 static int	exec_high_level_node(t_ast_node *node, char *envv[], int *stts);
 
-void	check_cmds(t_ast_node **ast, char *envv[])
+int	check_cmds(t_ast_node **ast, char *envv[])
 {
 	if (!*ast)
-		return ;
-	if (check_cmd_node(*ast, envv) == -1)
-		free_ast(ast);
-}
+		return (ERROR);
+	if (check_cmd_node(*ast, envv) == FAIL)
+		return (free_ast(ast), FAIL);
+	return (OK);
+}	
 
 int	exec_ast(t_ast_node *node, char *envv[], int *status)
 {
@@ -69,7 +70,7 @@ static int	check_cmd_node(t_ast_node *node, char *envv[])
 	{
 		if (node->t_node.cmd_node.cmd != NULL)
 			return (validate_cmd(node->t_node.cmd_node.cmd, envv));
-		return (1);
+		return (OK); //! aqui estava 1, mas se nao tem CMD e nao é um redirect, nao é erro de malloc la na funçao consume_tokens?
 	}
 	else if (node->type == LOGICAL)
 	{
@@ -81,5 +82,5 @@ static int	check_cmd_node(t_ast_node *node, char *envv[])
 		if (check_cmd_node(node->t_node.pipe_node.left, envv) != -1)
 			return (check_cmd_node(node->t_node.pipe_node.right, envv));
 	}
-	return (-1);
+	return (FAIL);
 }

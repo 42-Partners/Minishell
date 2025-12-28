@@ -15,6 +15,7 @@
 #include "minishell.h"
 #include "libft.h"
 #include "ast.h"
+#include "error_handling.h"
 
 #include <fcntl.h>
 
@@ -61,7 +62,7 @@ static int	read_here_docs(t_cmd_node cmd)
 		close (aux[1]);
 		free(content);
 	}
-	return (1);
+	return (OK);
 }
 
 static char	*get_here_doc_content(char *delimiter)

@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/27 15:58:43 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/27 19:42:39 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "libft.h"
 #include "lexer.h"
 #include "ast.h"
+#include "exec.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -31,11 +33,11 @@ int	main(int argc, char *argv[], char *envv[])
 	(void)argv;
 	status = 0;
 	register_sig_handlers();
-	while (1)
+	while (OK)
 	{
 		input = readline(PROMPT);
 		g_signal = 0;
-		if (input_process(input, envv, &status) < 0)
+		if (input_process(input, envv, &status) == ERROR)
 			break ;
 	}
 	return (0);
@@ -50,22 +52,22 @@ static int	input_process(char *input, char *envv[], int *status)
 	line = input;
 	ret = 1;
 	if (!line)
-		return (0);
+		return (ERROR);
 	while (ft_isspace(*line))
 		line++;
 	if (!*line)
-		return (free(input), 1);
+		return (free(input), OK);
 	add_history(input);
 	while (*line)
 	{
 		token = tokenize(&line);
 		if (!token)
-			return (free(input), -1);
+			return (free(input), ERROR);
 		ret = parse_and_execute(token, envv, status);
-		if (ret != 1)
+		if (ret != OK)
 			return (free(input), ret);
 	}
-	return (free(input), 1);
+	return (free(input), OK);
 }
 
 static int	parse_and_execute(t_token *token, char *envv[], int *status)
@@ -75,19 +77,17 @@ static int	parse_and_execute(t_token *token, char *envv[], int *status)
 	ast = build_ast(token);
 	free_token(&token);
 	if (!ast)
-		return (-1);
-	validate_ast(&ast);
-	if (!ast)
-		return (0);
-	check_cmds(&ast, envv);
-	if (!ast)
-		return (*status = 127, 0);
-	if (read_all_here_docs(ast) == -1)
+		return (ERROR);
+	if (!validate_ast(&ast))
+		return (FAIL);
+	if (!check_cmds(&ast, envv))
+		return (*status = 127, FAIL);
+	if (read_all_here_docs(ast) == ERROR)
 	{
 		free_ast(&ast);
-		return (0);
+		return (FAIL);
 	}
 	exec_ast(ast, envv, status);
 	free_ast(&ast);
-	return (1);
+	return (OK);
 }

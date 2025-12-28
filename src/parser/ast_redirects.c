@@ -13,13 +13,14 @@
 #include "lexer.h"
 #include "ast.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
 static void		parse_redirect_tokens(t_redirect ***redirect, t_token *tokens);
 static void		handle_redirect_token(t_redirect **redirect, t_token *token);
 
-void	get_redirects(t_cmd_node **node, t_token *tokens)
+void	get_redirects(t_cmd_node **node, t_token *tokens) //! verificar
 {
 	t_token	*aux;
 	int		i;
@@ -40,9 +41,9 @@ void	get_redirects(t_cmd_node **node, t_token *tokens)
 	else
 	{
 		(*node)->redirects = malloc(sizeof(t_redirect *) * (i + 1));
-		parse_redirect_tokens(&(*node)->redirects, tokens);
 		if (!(*node)->redirects)
-			free(*node);
+			return (ft_putstr_fd(ERR_MALLOC, 2), free(*node));
+		parse_redirect_tokens(&(*node)->redirects, tokens);
 	}
 }
 
@@ -50,7 +51,7 @@ static void	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 {
 	int	i;
 
-	if (!(*redirect))
+	if (!(*redirect)) 
 		return ;
 	i = 0;
 	while (tokens)

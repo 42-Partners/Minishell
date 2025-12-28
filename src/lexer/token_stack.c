@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   token_stack.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/19 15:33:58 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/27 19:29:03 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
 #include "libft.h"
+#include "lexer.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
@@ -21,7 +22,7 @@ t_token	*new_token(char *value, t_token_type type)
 
 	node = malloc(sizeof(t_token));
 	if (!node)
-		return (NULL);
+		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
 	node->type = type;
 	node->value = ft_strdup(value);
 	if (!node->value)
@@ -35,11 +36,9 @@ int	token_add_back(t_token **token, char *value, t_token_type type)
 	t_token	*new;
 	t_token	*temp;
 
-	if (!token)
-		return (0);
 	new = new_token(value, type);
 	if (!new)
-		return (ft_putstr_fd("malloc error\n", 2), 0);
+		return (ERROR);
 	if (!*token)
 		*token = new;
 	else

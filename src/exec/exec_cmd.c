@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ast.h"
-#include "minishell.h"
+#include "exec.h"
 #include "libft.h"
 
 #include <unistd.h>
@@ -33,7 +33,7 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 		return (-1);
 	pid = fork();
 	if (pid == -1)
-		return (ft_printf("Fork error:\n"), -1);
+		return (perror("Error"), ERROR);
 	if (pid == 0)
 		exec_and_redirect(exec, &cmd, envv);
 	return (free(exec), wait_child(pid));
@@ -59,7 +59,7 @@ static int	redirect_without_cmd(t_cmd_node *cmd)
 	pid = fork();
 	if (pid == -1)
 	{
-		ft_printf("Fork error:\n");
+		perror("Error");
 		exit(1);
 	}
 	if (pid == 0)

@@ -6,12 +6,13 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 18:50:05 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/27 15:59:35 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/27 19:27:03 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
 #include "libft.h"
+#include "lexer.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
@@ -59,14 +60,14 @@ static t_token	*set_token(t_token **token, char *input)
 			break ;
 		if (is_invalid_token(*input))
 		{
-			ft_putstr_fd("syntax error: invalid token\n", 2);
+			ft_putstr_fd(ERR_INVALID_CHAR, 2);
 			return (free_token(token), NULL);
 		}
 		else if (is_operator(*input))
 			ret = get_operator(token, &input);
 		else
 			ret = get_word(token, &input);
-		if (!ret)
+		if (ret == ERROR)
 			return (free_token(token), NULL);
 	}
 	return (*token);
