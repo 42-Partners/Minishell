@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:38:34 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/28 18:57:04 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/28 19:39:00 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 void		expand_string(char **s, int *status, char *envv[]);
 void		handle_single_quote(char **result, char *s, int *index);
 void		handle_double_quote(char **result, char *s, int *index,
-				int *status, char *envv[]);
+				t_shell_env shell);
 void		handle_dollar(char **result,
-				char *s, int *index, int *status, char *envv[]);
+				char *s, int *index, t_shell_env shell);
 void		handle_literal(char **result, char *s, int *index);
 void		expand_env(char **result, char *s, int *index, char *envv[]);
 
@@ -42,8 +42,8 @@ void	expand_cmd(t_cmd_node *cmd, int *status, char *envv[])
 
 void	expand_string(char **s, int *status, char *envv[])
 {
-	char	*result;
-	int		i;
+	char		*result;
+	int			i;
 
 	i = 0;
 	result = ft_strdup("");
@@ -52,9 +52,9 @@ void	expand_string(char **s, int *status, char *envv[])
 		if ((*s)[i] == '\'')
 			handle_single_quote(&result, *s, &i);
 		else if ((*s)[i] == '"')
-			handle_double_quote(&result, *s, &i, status, envv);
+			handle_double_quote(&result, *s, &i, (t_shell_env){status, &envv});
 		else if ((*s)[i] == '$')
-			handle_dollar(&result, *s, &i, status, envv);
+			handle_dollar(&result, *s, &i, (t_shell_env){status, &envv});
 		else
 			handle_literal(&result, *s, &i);
 	}

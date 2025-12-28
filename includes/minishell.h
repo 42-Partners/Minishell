@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/28 19:14:20 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/28 19:33:06 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "ast.h"
 
 # include <signal.h>
+
+extern volatile sig_atomic_t	g_signal;
 
 // signal
 void	register_sig_handlers(void);

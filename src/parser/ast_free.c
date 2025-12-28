@@ -52,8 +52,7 @@ static void	free_cmd(t_cmd_node node)
 	i = 0;
 	while (i < node.redirect_count)
 	{
-		if (node.redirects[i]->file_name)
-			free(node.redirects[i]->file_name);
+		free(node.redirects[i]->file_name);
 		free(node.redirects[i++]);
 	}
 	free(node.args);
