@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/27 15:58:43 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/28 15:00:53 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	input_process(char *input, char *envv[], int *status)
 	line = input;
 	ret = 1;
 	if (!line)
-		return (0);
+		return (-1);
 	while (ft_isspace(*line))
 		line++;
 	if (!*line)
