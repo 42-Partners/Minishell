@@ -17,26 +17,31 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-static int	redirect_without_cmd(t_cmd_node *cmd);
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
 static int	wait_child(int pid);
 
-int	exec_cmd(t_cmd_node cmd, char *envv[])
+int	exec_cmd(t_cmd_node cmd, int *status, char *envv[])
 {
 	pid_t	pid;
 	char	*exec;
 
-	if (!cmd.cmd)
-		return (redirect_without_cmd(&cmd));
-	exec = get_cmd_path(cmd.cmd, envv);
+	expand_cmd(&cmd, status, envv);
+	if (cmd.cmd)
+		exec = get_cmd_path(cmd.cmd, envv);
 	if (!exec)
 		return (-1);
 	pid = fork();
 	if (pid == -1)
 		return (ft_printf("Fork error:\n"), -1);
 	if (pid == 0)
+	{
+		if (!cmd.cmd)
+			exit (exec_redirects(&cmd));
 		exec_and_redirect(exec, &cmd, envv);
-	return (free(exec), wait_child(pid));
+	}
+	if (cmd.cmd)
+		free(exec);
+	return (wait_child(pid));
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
@@ -50,26 +55,6 @@ static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
 		close(i++);
 	execve(exec, cmd->args, envv);
 	exit(1);
-}
-
-static int	redirect_without_cmd(t_cmd_node *cmd)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		ft_printf("Fork error:\n");
-		exit(1);
-	}
-	if (pid == 0)
-	{
-		if (exec_redirects(cmd) == -1)
-			exit(1);
-		exit(0);
-	}
-	waitpid(pid, NULL, 0);
-	return (0);
 }
 
 static int	wait_child(int pid)

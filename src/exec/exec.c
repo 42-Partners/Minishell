@@ -33,7 +33,7 @@ int	exec_ast(t_ast_node *node, char *envv[], int *status)
 {
 	if (node->type == CMD)
 	{
-		*status = exec_cmd(node->t_node.cmd_node, envv);
+		*status = exec_cmd(node->t_node.cmd_node, status, envv);
 		return (*status);
 	}
 	return (exec_high_level_node(node, envv, status));

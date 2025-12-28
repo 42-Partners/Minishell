@@ -3,21 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 23:51:37 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/23 04:47:07 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2025/12/28 18:32:35 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "minishell.h"
 
 #include <stdlib.h>
 
+extern char	**environ;
 static int	is_var_char(int c);
 char		*strjoin_free(char *s1, char *s2);
 
-void	expand_env(char **result, char *s, int *index)
+void	expand_env(char **result, char *s, int *index, char *envv[])
 {
 	char	*env;
 	char	*fragment;
@@ -27,11 +29,12 @@ void	expand_env(char **result, char *s, int *index)
 	while (s[i] && is_var_char(s[i]))
 		i++;
 	fragment = ft_substr(s, *index, i - *index);
-	env = getenv(fragment);
+	env = ft_getenv(fragment, envv);
 	if (!env)
 		*result = strjoin_free(*result, "");
 	else
 		*result = strjoin_free(*result, env);
+	free(env);
 	free(fragment);
 	*index = i;
 }

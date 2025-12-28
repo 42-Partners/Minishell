@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/28 15:00:53 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/28 19:05:14 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ int	main(int argc, char *argv[], char *envv[])
 
 	(void)argc;
 	(void)argv;
+	envv = ft_str_arr_dup(envv);
 	status = 0;
 	register_sig_handlers();
+	ft_setenv("VAR", "GUS", &envv);
 	while (1)
 	{
 		input = readline(PROMPT);
@@ -38,6 +40,10 @@ int	main(int argc, char *argv[], char *envv[])
 		if (input_process(input, envv, &status) < 0)
 			break ;
 	}
+	ft_free_arr(&envv);
+	close(STDERR_FILENO);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 	return (0);
 }
 

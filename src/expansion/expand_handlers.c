@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/25 17:21:54 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/28 18:29:25 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include "lexer.h"
 
 void	append_fragment(char **result, char *s, int start, int i);
-void	handle_dollar(char **result, char *s, int *index, int *status);
-void	expand_env(char **result, char *s, int *index);
+void	handle_dollar(char **result,
+			char *s, int *index, int *status, char *envv[]);
+void	expand_env(char **result, char *s, int *index, char *envv[]);
 char	*strjoin_free(char *s1, char *s2);
 
 void	handle_single_quote(char **result, char *s, int *index)
@@ -29,7 +30,8 @@ void	handle_single_quote(char **result, char *s, int *index)
 	*index = i + 1;
 }
 
-void	handle_double_quote(char **result, char *s, int *index, int *status)
+void	handle_double_quote(char **result,
+			char *s, int *index, int *status, char *envv[])
 {
 	int	start;
 	int	i;
@@ -41,7 +43,7 @@ void	handle_double_quote(char **result, char *s, int *index, int *status)
 		if (s[i] == '$')
 		{
 			append_fragment(result, s, start, i);
-			handle_dollar(result, s, &i, status);
+			handle_dollar(result, s, &i, status, envv);
 			start = i;
 		}
 		else
@@ -52,15 +54,16 @@ void	handle_double_quote(char **result, char *s, int *index, int *status)
 	*index = i;
 }
 
-void	handle_dollar(char **result, char *s, int *index, int *status)
+void	handle_dollar(char **result,
+	char *s, int *index, int *status, char *envv[])
 {
 	int		i;
 	char	*aux;
 
 	i = *index + 1;
 	if (ft_isalpha(s[i]) || s[i] == '_')
-		expand_env(result, s, &i);
-	if (s[i] == '?')
+		expand_env(result, s, &i, envv);
+	else if (s[i] == '?')
 	{
 		aux = ft_itoa(*status);
 		*result = strjoin_free(*result, aux);

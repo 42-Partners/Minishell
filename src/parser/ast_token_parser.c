@@ -34,7 +34,7 @@ t_cmd_node	*consume_tokens(t_token *tokens)
 	{
 		if (tokens->type == TOKEN_WORD)
 		{
-			ret->cmd = ft_strdup(tokens->value);
+			ret->cmd = ret->args[0];
 			break ;
 		}
 		if (tokens->type != TOKEN_WORD)

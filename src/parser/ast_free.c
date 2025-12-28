@@ -56,8 +56,6 @@ static void	free_cmd(t_cmd_node node)
 			free(node.redirects[i]->file_name);
 		free(node.redirects[i++]);
 	}
-	if (node.cmd)
-		free(node.cmd);
 	free(node.args);
 	free(node.redirects);
 }
