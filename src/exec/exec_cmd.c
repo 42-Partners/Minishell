@@ -26,10 +26,9 @@ int	exec_cmd(t_cmd_node cmd, int *status, char *envv[])
 	char	*exec;
 
 	expand_cmd(&cmd, status, envv);
+	exec = NULL;
 	if (cmd.cmd)
 		exec = get_cmd_path(cmd.cmd, envv);
-	if (!exec)
-		return (-1);
 	pid = fork();
 	if (pid == -1)
 		return (ft_printf("Fork error:\n"), -1);
