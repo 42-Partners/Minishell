@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/25 17:23:22 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/30 02:32:07 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,17 @@ char	*get_cmd_path(char *cmd, char *envv[]);
 void	check_cmds(t_ast_node **ast, char *envv[]);
 int		exec_redirects(t_cmd_node *node);
 int		exec_ast(t_ast_node *node, char *envv[], int *status);
-int		exec_cmd(t_cmd_node cmd, char *envv[]);
+int		exec_cmd(t_cmd_node *cmd, int *status, char *envv[]);
 
 // variable_expansion
-void	expand_ast(t_ast_node *ast, int *status);
+void	expand_cmd(t_cmd_node *cmd, int *status, char *envv[]);
+void	expand_string(char **s, int *status, char *envv[]);
 
 // here_doc
 int		read_all_here_docs(t_ast_node *ast);
+
+// env management
+char	*ft_getenv(char *env, char *envv[]);
+int		ft_setenv(char *name, char *value, char **envv[]);
 
 #endif

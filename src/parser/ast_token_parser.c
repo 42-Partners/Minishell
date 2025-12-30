@@ -30,22 +30,8 @@ t_cmd_node	*consume_tokens(t_token *tokens)
 		return (NULL);
 	get_args(&ret, tokens);
 	get_redirects(&ret, tokens);
-	while (tokens && tokens->type != TOKEN_PIPE)
-	{
-		if (tokens->type == TOKEN_WORD)
-		{
-			ret->cmd = ft_strdup(tokens->value);
-			break ;
-		}
-		if (tokens->type != TOKEN_WORD)
-		{
-			tokens = tokens->next;
-			if (tokens)
-				tokens = tokens->next;
-		}
-		else
-			tokens = tokens->next;
-	}
+	if (ret->args)
+		ret->cmd = ret->args[0];
 	return (ret);
 }
 
@@ -55,7 +41,7 @@ static int	count_args(t_token *tokens)
 	t_token_type	last;
 
 	last = TOKEN_WORD;
-	arg_size = -1;
+	arg_size = 0;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
@@ -65,12 +51,8 @@ static int	count_args(t_token *tokens)
 		}
 		else
 		{
+			last = tokens->type;
 			tokens = tokens->next;
-			if (tokens && tokens->type == TOKEN_WORD)
-			{
-				last = tokens->type;
-				tokens = tokens->next;
-			}
 		}
 	}
 	return (arg_size);
@@ -80,17 +62,19 @@ static void	get_args(t_cmd_node **node, t_token *tokens)
 {
 	if (!node || !*node)
 		return ;
-	if (!tokens || count_args(tokens) <= 0)
-	{
+	if (!tokens || count_args(tokens) == 0)
+		(*node)->args = NULL;
+	else if (count_args(tokens) == 1)
 		(*node)->args = malloc(sizeof(char *) * 2);
-	}
 	else
-		(*node)->args = malloc(sizeof(char *) * (count_args(tokens) + 2));
-	if (!(*node)->args)
 	{
-		free(*node);
-		*node = NULL;
-		return ;
+		(*node)->args = malloc(sizeof(char *) * (count_args(tokens) + 1));
+		if (!(*node)->args)
+		{
+			free(*node);
+			*node = NULL;
+			return ;
+		}
 	}
 	fill_args(node, tokens);
 }
@@ -102,6 +86,8 @@ static void	fill_args(t_cmd_node **node, t_token *tokens)
 
 	i = 0;
 	last = TOKEN_WORD;
+	if (!(*node)->args)
+		return ;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
@@ -111,12 +97,8 @@ static void	fill_args(t_cmd_node **node, t_token *tokens)
 		}
 		else
 		{
+			last = tokens->type;
 			tokens = tokens->next;
-			if (tokens && tokens->type == TOKEN_WORD)
-			{
-				last = tokens->type;
-				tokens = tokens->next;
-			}
 		}
 	}
 	(*node)->args[i] = NULL;
