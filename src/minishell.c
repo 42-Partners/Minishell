@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/29 21:49:47 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/30 02:36:47 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ static int	parse_and_execute(t_token *token, char *envv[], int *status)
 		free_ast(&ast);
 		return (0);
 	}
+	print_ast(ast);
 	exec_ast(ast, envv, status);
 	free_ast(&ast);
 	return (1);

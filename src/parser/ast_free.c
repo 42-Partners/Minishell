@@ -14,7 +14,7 @@
 
 #include <stdlib.h>
 
-static void	free_cmd(t_cmd_node node);
+static void	free_cmd(t_cmd_node *node);
 
 void	free_ast(t_ast_node **ast)
 {
@@ -24,7 +24,7 @@ void	free_ast(t_ast_node **ast)
 		return ;
 	node = *ast;
 	if (node->type == CMD)
-		free_cmd(node->t_node.cmd_node);
+		free_cmd(&node->t_node.cmd_node);
 	else if (node->type == LOGICAL)
 	{
 		free_ast(&node->t_node.logical_node.left);
@@ -39,22 +39,22 @@ void	free_ast(t_ast_node **ast)
 	*ast = NULL;
 }
 
-static void	free_cmd(t_cmd_node node)
+static void	free_cmd(t_cmd_node *node)
 {
 	int	i;
 
 	i = 0;
-	if (node.args)
+	if (node->args)
 	{
-		while (node.args[i])
-			free(node.args[i++]);
+		while (node->args[i])
+			free(node->args[i++]);
 	}
 	i = 0;
-	while (i < node.redirect_count)
+	while (i < node->redirect_count)
 	{
-		free(node.redirects[i]->file_name);
-		free(node.redirects[i++]);
+		free(node->redirects[i]->file_name);
+		free(node->redirects[i++]);
 	}
-	free(node.args);
-	free(node.redirects);
+	free(node->args);
+	free(node->redirects);
 }

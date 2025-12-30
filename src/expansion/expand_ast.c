@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:38:34 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/28 19:39:00 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/30 01:03:57 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ void	expand_cmd(t_cmd_node *cmd, int *status, char *envv[])
 {
 	int	i;
 
-	if (!cmd || !cmd->cmd)
+	if (!cmd)
 		return ;
+	if (cmd->cmd)
+	{
+		i = -1;
+		while (cmd->args[++i])
+			expand_string(&cmd->args[i], status, envv);
+		cmd->cmd = cmd->args[0];
+	}
 	i = -1;
-	while (cmd->args[++i])
-		expand_string(&cmd->args[i], status, envv);
-	i = -1;
-	cmd->cmd = cmd->args[0];
 	while (++i < cmd->redirect_count)
 		expand_string(&(cmd->redirects[i]->file_name),
 			status, envv);

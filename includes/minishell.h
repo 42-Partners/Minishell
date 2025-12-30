@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/28 19:33:06 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/30 02:32:07 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_cmd_path(char *cmd, char *envv[]);
 void	check_cmds(t_ast_node **ast, char *envv[]);
 int		exec_redirects(t_cmd_node *node);
 int		exec_ast(t_ast_node *node, char *envv[], int *status);
-int		exec_cmd(t_cmd_node cmd, int *status, char *envv[]);
+int		exec_cmd(t_cmd_node *cmd, int *status, char *envv[]);
 
 // variable_expansion
 void	expand_cmd(t_cmd_node *cmd, int *status, char *envv[]);

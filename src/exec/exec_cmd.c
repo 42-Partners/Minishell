@@ -20,25 +20,29 @@
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
 static int	wait_child(int pid);
 
-int	exec_cmd(t_cmd_node cmd, int *status, char *envv[])
+int	exec_cmd(t_cmd_node *cmd, int *status, char *envv[])
 {
 	pid_t	pid;
 	char	*exec;
 
-	expand_cmd(&cmd, status, envv);
 	exec = NULL;
-	if (cmd.cmd)
-		exec = get_cmd_path(cmd.cmd, envv);
+	if (cmd->cmd)
+		exec = get_cmd_path(cmd->cmd, envv);
 	pid = fork();
 	if (pid == -1)
 		return (ft_printf("Fork error:\n"), -1);
 	if (pid == 0)
 	{
-		if (!cmd.cmd)
-			exit (exec_redirects(&cmd));
-		exec_and_redirect(exec, &cmd, envv);
+		expand_cmd(cmd, status, envv);
+		if (!cmd->cmd)
+		{
+			exec_redirects(cmd);
+			execve("/usr/bin/true", (char *[]){NULL}, envv);
+		}
+		else
+			exec_and_redirect(exec, cmd, envv);
 	}
-	if (cmd.cmd)
+	if (cmd->cmd)
 		free(exec);
 	return (wait_child(pid));
 }

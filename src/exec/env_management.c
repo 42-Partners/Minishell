@@ -58,6 +58,8 @@ static int	ft_getenv_index(char *env, char *envv[])
 
 	i = 0;
 	aux = build_env(env, NULL);
+	if (!aux)
+		return (-1);
 	while (envv[i] != NULL)
 	{
 		if (ft_strncmp(envv[i], aux, ft_strlen(aux)) == 0)
@@ -108,12 +110,14 @@ static char	*build_env(char *name, char *value)
 		value = "";
 	full_env = ft_strdup(name);
 	if (!full_env)
-		return (NULL);
+		return (ft_printf("Malloc error:"), NULL);
 	aux = ft_strjoin(full_env, "=");
 	free(full_env);
 	if (!aux)
-		return (NULL);
+		return (ft_printf("Malloc error:"), NULL);
 	full_env = ft_strjoin(aux, value);
 	free(aux);
+	if (!full_env)
+		return (ft_printf("Malloc error:"), NULL);
 	return (full_env);
 }
