@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 06:45:55 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/31 20:36:32 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/31 21:43:17 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,6 @@ static void	find_builtin(char *cmd, char **args, char *envp[])
 {
 	if (ft_strcmp(cmd, "echo") == 0)
 		ft_echo(args, envp);
+	if (ft_strcmp(cmd, "pwd") == 0)
+		ft_pwd(args, envp);
 }
