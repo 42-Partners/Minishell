@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:31:57 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/19 03:20:28 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/01 01:46:26 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	get_operator(t_token **token, char **input)
 {
 	int	ret;
 
+	ret = -1;
 	if ((*input)[0] == '>' && (*input)[1] == '>')
 	{
 		ret = token_add_back(token, ">>", TOKEN_REDIRECT_APPEND);
