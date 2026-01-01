@@ -23,13 +23,13 @@ int	exec_redirects(t_cmd_node *node)
 
 	i = -1;
 	if (!node)
-		return (-1);
+		return (ERROR);
 	while (++i < node->redirect_count)
 	{
-		if (redirect(node->redirects[i]) == -1)
-			return (-1);
+		if (redirect(node->redirects[i]) == ERROR)
+			return (ERROR);
 	}
-	return (1);
+	return (OK);
 }
 
 static int	redirect(t_redirect *red)
@@ -45,12 +45,14 @@ static int	redirect(t_redirect *red)
 	if (red->fd < 0)
 	{
 		ft_printf("%s: No such file or directory :(\n", red->file_name);
-		return (-1);
+		return (FAIL);
 	}
 	if (red->type == REDIRECT_IN || red->type == HERE_DOC)
 		ret = dup2(red->fd, STDIN_FILENO);
 	else
 		ret = dup2(red->fd, STDOUT_FILENO);
 	close(red->fd);
-	return (ret);
+	if (ret < 0)
+		return (ERROR);
+	return (OK);
 }

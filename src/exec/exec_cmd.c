@@ -26,11 +26,11 @@ int	exec_cmd(t_cmd_node cmd, char *envv[])
 	pid_t	pid;
 	char	*exec;
 
-	if (!cmd.cmd)
+	if (!cmd.cmd) //! precisa verificar o malloc em consume_token pra isso ser safe
 		return (redirect_without_cmd(&cmd));
 	exec = get_cmd_path(cmd.cmd, envv);
 	if (!exec)
-		return (-1);
+		return (ERROR);
 	pid = fork();
 	if (pid == -1)
 		return (perror("Error"), ERROR);
@@ -43,12 +43,12 @@ static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
 {
 	int	i;
 
-	if (exec_redirects(cmd) == -1)
-		exit(1);
+	if (exec_redirects(cmd) == ERROR)
+		exit(1); //! isso encerra o shell? nesse caso precisamos encerrar
 	i = 3;
 	while (i < 1024)
 		close(i++);
-	execve(exec, cmd->args, envv);
+	execve(exec, cmd->args, envv); //! adicionar leitura de erro aqui, permissao negada, comando nao encontrado... 
 	exit(1);
 }
 
@@ -64,12 +64,12 @@ static int	redirect_without_cmd(t_cmd_node *cmd)
 	}
 	if (pid == 0)
 	{
-		if (exec_redirects(cmd) == -1)
+		if (exec_redirects(cmd) == ERROR)
 			exit(1);
 		exit(0);
 	}
 	waitpid(pid, NULL, 0);
-	return (0);
+	return (0); // isso aqui vai ser guardado no status, nao sei se mexo porque OK é 1.
 }
 
 static int	wait_child(int pid)

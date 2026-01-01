@@ -27,7 +27,7 @@ void	signal_handler(int signum);
 void	heredoc_handler(int signum);
 
 // variable_expansion
-void	expand_ast(t_ast_node *ast, int *status);
+int	expand_ast(t_ast_node *ast, int *status);
 
 // here_doc
 int		read_all_here_docs(t_ast_node *ast);

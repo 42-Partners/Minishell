@@ -29,16 +29,15 @@ int	validate_cmd(char *cmd, char **envv)
 		return (OK);
 	bin_paths = get_bin_paths(envv);
 	if (!bin_paths)
-		return (ERROR); //! aqui eu nao sei qual colocar, a funçao retorna NULL pra erro de malloc (ERROR) e NULL pra caso nao encontre PATH= certo? Mas isso deveria parar o minishell?
+		return (ERROR); //! aqui depende do que vamos fazer com o retorno dessa função
 	aux = verify_cmd_in_bin_paths(cmd, bin_paths);
+	ft_free_arr(bin_paths);
 	if (aux == NULL)
 	{
 		ft_printf("Command not found: %s\n", cmd); //! aqui tambem pode ser erro de malloc, retorna diferente
-		ft_free_arr(bin_paths);
 		return (FAIL);
 	}
 	free(aux);
-	ft_free_arr(bin_paths);
 	return (OK);
 }
 
@@ -48,70 +47,67 @@ char	*get_cmd_path(char *cmd, char *envv[])
 	char	*aux;
 
 	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
+		return (ft_strdup(cmd)); // se NULL, erro de malloc
 	bin_paths = get_bin_paths(envv);
 	if (!bin_paths)
-		return (NULL);
+		return (NULL); //! erro de malloc ou caminho nao encontrado
 	aux = verify_cmd_in_bin_paths(cmd, bin_paths);
-	if (aux == NULL)
-	{
-		ft_printf("Command not found: %s\n", cmd); //! aqui tambem pode ser erro de malloc
-		ft_free_arr(bin_paths);
-		return (NULL);
-	}
 	ft_free_arr(bin_paths);
+	if (!aux)
+	{
+		ft_printf("Command not found: %s\n", cmd); //! aqui tambem pode ser erro de malloc + tem que estar na saida de erro
+		return (NULL); //!depende
+	}
 	return (aux);
 }
 
-static char	*verify_cmd_in_bin_paths(char *cmd, char **bin_paths)
+static char	*verify_cmd_in_bin_paths(char *cmd, char **bin_paths) //! outra funçao com mesmo retorno mas duas ações
 {
 	char	*full_bin_path;
 
-	while (*bin_paths != NULL)
+	while (*bin_paths)
 	{
-		full_bin_path = construct_path(*bin_paths, cmd); //! aqui tem malloc, mas nao tem verificaçao
-		if (!full_bin_path) // adicionei aqui
-			return (NULL);
+		full_bin_path = construct_path(*bin_paths, cmd);
+		if (!full_bin_path)
+			return (NULL); //!erro de malloc
 		if (access(full_bin_path, X_OK) == 0)
 			return (full_bin_path);
-		bin_paths++;
 		free(full_bin_path);
+		bin_paths++;
 	}
-	return (NULL);
+	return (NULL); //!cmd nao encontrado
 }
 
 static char	*construct_path(char *bin_path, char *cmd)
 {
 	char	*res;
-	char	*aux;
+	size_t	len;
 
-	res = ft_calloc(ft_strlen(bin_path)
-			+ ft_strlen(cmd) + 2, sizeof(char));
+	len = ft_strlen(bin_path) + ft_strlen(cmd) + 2;
+	res = ft_calloc(len, sizeof(char));
 	if (!res)
 		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
-	ft_strlcat(res, bin_path, ft_strlen(bin_path) + 1);
-	aux = res + ft_strlen(res);
-	if (*aux != '/')
-		ft_strlcat(aux, "/", 2);
-	aux = res + ft_strlen(res);
-	ft_strlcat(aux, cmd, ft_strlen(cmd) + 1);
+	ft_strlcpy(res, bin_path, len);
+	if (ft_strlen(res) > 0 && res[ft_strlen(res) -1] != '/')
+		ft_strlcat(res, "/", len);
+	ft_strlcat(res, cmd, len);
 	return (res);
 }
 
-static char	**get_bin_paths(char **envv)
+static char	**get_bin_paths(char **envv) //! temos que pensar em algo aqui, podemos adicionar uma variavel de erro talvez.
 {
 	char	**res;
 
-	while (*envv != NULL)
+	while (*envv)
 	{
 		if (ft_strncmp(*envv, "PATH=", 5) == 0)
 			break ;
 		envv++;
 	}
 	if (*envv == NULL)
-		return (NULL);
+		return (NULL); //! nao encontrou
 	res = ft_split((*envv + 5), ':');
 	if (!res)
-		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
+		return (ft_putstr_fd(ERR_MALLOC, 2), NULL); //!erro de malloc
 	return (res);
 }
