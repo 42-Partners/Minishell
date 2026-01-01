@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 06:45:55 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/31 17:54:01 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/31 21:15:00 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ static void	find_builtin(char *cmd, char **args, char *envp[])
 {
 	if (ft_strcmp(cmd, "echo") == 0)
 		ft_echo(args, envp);
-	else if (ft_strcmp(cmd, "cd") == 0)
-		ft_cd(args, envp);
+}
+
+static void	handle_shellcmd(char *cmd, char **args, char *envp[], int *status)
+{
+	if (ft_strcmp(cmd, "cd") == 0)
+		status = ft_cd(args, envp, status);
 }

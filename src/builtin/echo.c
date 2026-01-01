@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 08:16:20 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/30 08:36:57 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/31 20:21:01 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ int	ft_echo(char **args, char *envp[])
 		ft_putstr_fd(args[i++], STDOUT_FILENO);
 	if (endline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	execve("/usr/bin/true", (char *[]){NULL}, envp);
+	return (0);
 }
