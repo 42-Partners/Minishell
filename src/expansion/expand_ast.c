@@ -15,52 +15,64 @@
 
 #include <stdlib.h>
 
-static void	expand_string(char **s, int *status);
-void		handle_single_quote(char **result, char *s, int *index);
-void		handle_double_quote(char **result, char *s, int *index,
+static int	expand_string(char **s, int *status);
+int		handle_single_quote(char **result, char *s, int *index);
+int		handle_double_quote(char **result, char *s, int *index,
 				int *status);
-void		handle_dollar(char **result, char *s, int *index, int *status);
-void		handle_literal(char **result, char *s, int *index);
-void		expand_env(char **result, char *s, int *index);
+int		handle_dollar(char **result, char *s, int *index, int *status);
+int		handle_literal(char **result, char *s, int *index);
+int		expand_env(char **result, char *s, int *index);
 
-void	expand_ast(t_ast_node *ast, int *status)
+int	expand_ast(t_ast_node *ast, int *status)
 {
+	int	ret;
 	int	i;
 
 	if (!ast)
-		return ;
+		return (ERROR);
+	ret = OK;
 	i = 0;
 	if (ast->type == CMD)
 	{
 		if (ast->t_node.cmd_node.cmd)
-			expand_string(&(ast->t_node.cmd_node.cmd), status);
-		while (ast->t_node.cmd_node.args[i])
-			expand_string(&ast->t_node.cmd_node.args[i++], status);
+			ret = expand_string(&(ast->t_node.cmd_node.cmd), status);
+		while (ast->t_node.cmd_node.args[i] && ret == OK)
+			ret = expand_string(&(ast->t_node.cmd_node.args[i++]), status);
 		i = 0;
-		while (i < ast->t_node.cmd_node.redirect_count)
-			expand_string(&(ast->t_node.cmd_node.redirects[i]->file_name),
+		while (i < ast->t_node.cmd_node.redirect_count && ret == OK)
+			ret = expand_string(&(ast->t_node.cmd_node.redirects[i++]->file_name),
 				status);
 	}
+	if (ret != OK)
+		return (ERROR);
+	return (OK);
 }
 
-static void	expand_string(char **s, int *status)
+static int	expand_string(char **cmd, int *status)
 {
 	char	*result;
+	int		ret;
 	int		i;
 
+	ret = OK;
 	i = 0;
 	result = ft_strdup("");
-	while ((*s)[i])
+	if (!result)
+		return (ERROR);
+	while ((*cmd)[i] && ret == OK)
 	{
-		if ((*s)[i] == '\'')
-			handle_single_quote(&result, *s, &i);
-		else if ((*s)[i] == '"')
-			handle_double_quote(&result, *s, &i, status);
-		else if ((*s)[i] == '$')
-			handle_dollar(&result, *s, &i, status);
+		if ((*cmd)[i] == '\'')
+			ret = handle_single_quote(&result, *cmd, &i);
+		else if ((*cmd)[i] == '"')
+			ret = handle_double_quote(&result, *cmd, &i, status);
+		else if ((*cmd)[i] == '$')
+			ret = handle_dollar(&result, *cmd, &i, status);
 		else
-			handle_literal(&result, *s, &i);
+			ret = handle_literal(&result, *cmd, &i);
 	}
-	free(*s);
-	*s = result;
+	if (ret != OK)
+		return (free(result), ERROR);
+	free(*cmd);
+	*cmd = result;
+	return (OK);
 }

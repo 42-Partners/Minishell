@@ -17,32 +17,42 @@
 static int	is_var_char(int c);
 char		*strjoin_free(char *s1, char *s2);
 
-void	expand_env(char **result, char *s, int *index)
+int	expand_env(char **result, char *cmd, int *index)
 {
 	char	*env;
 	char	*fragment;
 	int		i;
 
 	i = *index;
-	while (s[i] && is_var_char(s[i]))
+	while (cmd[i] && is_var_char(cmd[i]))
 		i++;
-	fragment = ft_substr(s, *index, i - *index);
+	fragment = ft_substr(cmd, *index, i - *index);
+	if (!fragment)
+		return (ERROR);
 	env = getenv(fragment);
 	if (!env)
 		*result = strjoin_free(*result, "");
 	else
 		*result = strjoin_free(*result, env);
 	free(fragment);
+	if (!*result)
+		return (ERROR);
 	*index = i;
+	return (OK);
 }
 
-void	append_fragment(char **result, char *s, int start, int i)
+int	append_fragment(char **result, char *cmd, int start, int i)
 {
 	char	*fragment;
 
-	fragment = ft_substr(s + start, 0, i - start);
+	fragment = ft_substr(cmd, start, i - start);
+	if (!fragment)
+		return (ERROR);
 	*result = strjoin_free(*result, fragment);
 	free(fragment);
+	if (!*result)
+		return (ERROR);
+	return (OK);
 }
 
 static int	is_var_char(int c)
@@ -66,7 +76,10 @@ char	*strjoin_free(char *s1, char *s2)
 	str_len = s1_len + s2_len;
 	str = malloc(str_len + 1);
 	if (!str)
+	{
+		free(s1);
 		return (NULL);
+	}
 	ft_memcpy(str, s1, s1_len);
 	ft_memcpy(str + s1_len, s2, s2_len);
 	str[str_len] = '\0';
