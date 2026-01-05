@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/23 14:59:33 by gustaoli         ###   ########.fr       */
+/*   Updated: 2025/12/29 23:59:38 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ int	validate_cmd(char *cmd, char **envv)
 	if (aux == NULL)
 	{
 		ft_printf("Command not found: %s\n", cmd);
-		ft_free_arr(bin_paths);
+		ft_free_arr(&bin_paths);
 		return (-1);
 	}
 	free(aux);
-	ft_free_arr(bin_paths);
+	ft_free_arr(&bin_paths);
 	return (1);
 }
 
@@ -55,10 +55,10 @@ char	*get_cmd_path(char *cmd, char *envv[])
 	if (aux == NULL)
 	{
 		ft_printf("Command not found: %s\n", cmd);
-		ft_free_arr(bin_paths);
+		ft_free_arr(&bin_paths);
 		return (NULL);
 	}
-	ft_free_arr(bin_paths);
+	ft_free_arr(&bin_paths);
 	return (aux);
 }
 

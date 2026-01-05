@@ -95,6 +95,11 @@ static char	*get_here_doc_content(char *delimiter)
 
 static char	*get_here_doc_line(void)
 {
+	char	*buf;
+
 	write(1, "> ", 2);
-	return (get_next_line(0));
+	buf = get_next_line(0);
+	if (!buf)
+		write(1, "\n", 1);
+	return (buf);
 }

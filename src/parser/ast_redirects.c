@@ -77,20 +77,12 @@ static void	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 
 static void	handle_redirect_token(t_redirect **redirect, t_token *token)
 {
-	if (!redirect || !*redirect || !token)
-	{
-		debug_flag("bad use of handle_redirect_token!");
-		return ;
-	}
 	(*redirect)->file_name = NULL;
 	(*redirect)->fd = -1;
 	if (token->type == TOKEN_HEREDOC)
 	{
 		(*redirect)->type = HERE_DOC;
 		(*redirect)->fd = 0;
-		if (token->next && token->next->type == TOKEN_WORD)
-			(*redirect)->file_name = ft_strdup(token->next->value);
-		return ;
 	}
 	if (token->type == TOKEN_REDIRECT_IN)
 		(*redirect)->type = REDIRECT_IN;
@@ -98,7 +90,6 @@ static void	handle_redirect_token(t_redirect **redirect, t_token *token)
 		(*redirect)->type = REDIRECT_OUT;
 	else if (token->type == TOKEN_REDIRECT_APPEND)
 		(*redirect)->type = REDIRECT_APPEND;
-	if (!token->next || token->next->type != TOKEN_WORD)
-		return ;
-	(*redirect)->file_name = ft_strdup(token->next->value);
+	if (token->next && token->next->type == TOKEN_WORD)
+		(*redirect)->file_name = ft_strdup(token->next->value);
 }
