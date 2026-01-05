@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/27 19:42:39 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/05 20:35:18 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,20 +73,26 @@ static int	input_process(char *input, char *envv[], int *status)
 static int	parse_and_execute(t_token *token, char *envv[], int *status)
 {
 	t_ast_node	*ast;
+	int			ret;
 
 	ast = build_ast(token);
 	free_token(&token);
+	ret = OK;
 	if (!ast)
 		return (ERROR);
-	if (!validate_ast(&ast))
-		return (FAIL);
-	if (!check_cmds(&ast, envv))
-		return (*status = 127, FAIL);
-	if (read_all_here_docs(ast) == ERROR)
+	ret = validate_ast(&ast);
+	if (ret != OK)
+		return (free_ast(&ast), ret);
+	ret = check_cmds(&ast, envv);
+	if (ret == FAIL)
 	{
-		free_ast(&ast);
-		return (FAIL);
+		*status = 127;
+		return (ret);
 	}
+	else if (ret == ERROR)
+		return (free_ast(&ast), ret);
+	if (read_all_here_docs(ast, status) != OK)
+		return (free_ast(&ast), ret);
 	exec_ast(ast, envv, status);
 	free_ast(&ast);
 	return (OK);

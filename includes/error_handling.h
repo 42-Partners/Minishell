@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 16:12:29 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/27 17:20:17 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/05 18:38:32 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 typedef enum e_error_type
 {
 	ERROR = -1, // erro grave, encerra minishell
-	FAIL = 0, // erro leve, retorna novo prompt
-	OK = 1 // tudo certo
+	OK = 0, // erro leve, retorna novo prompt
+	FAIL = 1 // tudo certo
 }	t_error_type;
 
 #endif

@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   expand_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/25 17:21:54 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/04 20:28:59 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "lexer.h"
+#include "error_handling.h"
 
-int	append_fragment(char **result, char *s, int start, int i);
-int	handle_dollar(char **result, char *s, int *index, int *status);
-int	expand_env(char **result, char *s, int *index);
+int		append_fragment(char **result, char *s, int start, int i);
+int		handle_dollar(char **result, char *s, int *index, int *status);
+int		expand_env(char **result, char *s, int *index);
 char	*strjoin_free(char *s1, char *s2);
 
 int	handle_single_quote(char **result, char *cmd, int *index)
@@ -91,7 +92,7 @@ int	handle_literal(char **result, char *cmd, int *index)
 	int	i;
 
 	i = *index;
-	while (cmd[i] && !is_quote(cmd[i]) && cmd[i] != '$')
+	while (cmd[i] && !ft_isquote(cmd[i]) && cmd[i] != '$')
 		i++;
 	if (append_fragment(result, cmd, *index, i) != OK)
 		return (ERROR);

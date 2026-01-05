@@ -61,3 +61,19 @@ static void	free_cmd(t_cmd_node node)
 	free(node.args);
 	free(node.redirects);
 }
+
+void	free_array(void **array, int count)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	while (i < count)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	array = NULL;
+}

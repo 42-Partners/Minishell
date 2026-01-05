@@ -51,6 +51,7 @@ SRC		:= \
 			src/exec/exec.c \
 			src/exec/validate_cmd.c \
 			src/here_doc/here_doc.c \
+			src/here_doc/here_doc_utils.c \
 			src/debug_ast.c \
 			src/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))

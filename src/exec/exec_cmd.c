@@ -13,30 +13,53 @@
 #include "ast.h"
 #include "exec.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <unistd.h>
+#include <stdio.h>
 #include <sys/wait.h>
 
-static int	redirect_without_cmd(t_cmd_node *cmd);
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
+static void	launch_command(t_cmd_node *cmd, char *envv[], char *exec, int **status);
 static int	wait_child(int pid);
 
-int	exec_cmd(t_cmd_node cmd, char *envv[])
+int	exec_cmd(t_cmd_node *cmd, char *envv[], int **status)
 {
 	pid_t	pid;
 	char	*exec;
+	int		ret;
 
-	if (!cmd.cmd) //! precisa verificar o malloc em consume_token pra isso ser safe
-		return (redirect_without_cmd(&cmd));
-	exec = get_cmd_path(cmd.cmd, envv);
-	if (!exec)
-		return (ERROR);
+	ret = OK;
+	exec = NULL;
+	if (cmd->cmd)
+		ret = get_cmd_path(&exec, cmd->cmd, envv);
+	if (ret != OK)
+		return (ret);
 	pid = fork();
-	if (pid == -1)
-		return (perror("Error"), ERROR);
-	if (pid == 0)
-		exec_and_redirect(exec, &cmd, envv);
-	return (free(exec), wait_child(pid));
+	if (pid == ERROR)
+		ft_putstr_fd("Fork error\n", 2);
+	if (pid == OK)
+		launch_command(cmd, envv, exec, status);
+	if (cmd->cmd)
+		free(exec);
+	**status = wait_child(pid);
+	if (**status > 0)
+		return (FAIL);
+	return (OK);
+}
+
+static void	launch_command(t_cmd_node *cmd, char *envv[], char *exec, int **status)
+{
+	expand_cmd(cmd, *status, envv);
+	if (!cmd->cmd)
+	{
+		exec_redirects(cmd);
+		execve("/usr/bin/true", (char[]){NULL}, envv);
+		perror("Error");
+		exit (FAIL);
+	}
+	else
+		exec_and_redirect(exec, cmd, envv);
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
@@ -44,32 +67,13 @@ static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
 	int	i;
 
 	if (exec_redirects(cmd) == ERROR)
-		exit(1); //! isso encerra o shell? nesse caso precisamos encerrar
+		exit(FAIL);
 	i = 3;
 	while (i < 1024)
 		close(i++);
-	execve(exec, cmd->args, envv); //! adicionar leitura de erro aqui, permissao negada, comando nao encontrado... 
-	exit(1);
-}
-
-static int	redirect_without_cmd(t_cmd_node *cmd)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("Error");
-		exit(1);
-	}
-	if (pid == 0)
-	{
-		if (exec_redirects(cmd) == ERROR)
-			exit(1);
-		exit(0);
-	}
-	waitpid(pid, NULL, 0);
-	return (0); // isso aqui vai ser guardado no status, nao sei se mexo porque OK é 1.
+	execve(exec, cmd->args, envv);
+	perror("Error");
+	exit(FAIL);
 }
 
 static int	wait_child(int pid)

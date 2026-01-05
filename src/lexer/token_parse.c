@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:31:57 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/19 03:20:28 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/04 20:29:18 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <stdlib.h>
 
 int	token_add_back(t_token **token, char *value, t_token_type type);
-int	is_quote(int c);
 int	is_word(int c);
 
 int	get_operator(t_token **token, char **input)
@@ -53,7 +52,7 @@ int	get_word(t_token **token, char **input)
 	i = 0;
 	while ((*input)[i] && is_word((*input)[i]))
 	{
-		if (is_quote((*input)[i]))
+		if (ft_isquote((*input)[i]))
 		{
 			quote = (*input)[i++];
 			while ((*input)[i] && (*input)[i] != quote)

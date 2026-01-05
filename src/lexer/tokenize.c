@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 18:50:05 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/27 19:27:03 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/04 20:29:05 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int				get_operator(t_token **token, char **input);
 int				get_word(t_token **token, char **input);
 int				is_invalid_token(int c);
 int				is_operator(int c);
-int				is_quote(int c);
 
 t_token	*tokenize(char **input)
 {
@@ -81,7 +80,7 @@ static char	*find_end_of_command(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (is_quote(input[i]))
+		if (ft_isquote(input[i]))
 		{
 			quote = input[i++];
 			while (input[i] && input[i] != quote)

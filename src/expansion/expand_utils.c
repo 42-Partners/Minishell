@@ -6,11 +6,12 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 23:51:37 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/23 04:47:07 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/04 16:28:03 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 

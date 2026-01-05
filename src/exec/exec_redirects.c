@@ -10,24 +10,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-
 #include "ast.h"
 #include "libft.h"
+#include "error_handling.h"
+
+#include <fcntl.h>
 
 static int	redirect(t_redirect *red);
 
 int	exec_redirects(t_cmd_node *node)
 {
 	int	i;
+	int	ret;
 
+	ret = OK;
 	i = -1;
 	if (!node)
 		return (ERROR);
 	while (++i < node->redirect_count)
 	{
-		if (redirect(node->redirects[i]) == ERROR)
-			return (ERROR);
+		ret = redirect(node->redirects[i]);
+		if (ret != OK)
+			return (ret);
 	}
 	return (OK);
 }

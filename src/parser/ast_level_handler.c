@@ -33,10 +33,7 @@ t_ast_node	*handle_low_level(t_token *tokens)
 	ret->type = CMD;
 	cmd_node = consume_tokens(tokens);
 	if (!cmd_node)
-	{
-		debug_flag("consume_tokens coudn't handle tokens and retorned NULL!");
 		return (free(ret), NULL);
-	}
 	ret->t_node.cmd_node = *cmd_node;
 	free(cmd_node);
 	return (ret);
