@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/30 02:32:07 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/06 19:25:05 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,24 @@
 
 extern volatile sig_atomic_t	g_signal;
 
+typedef struct s_shell
+{
+	int		status;
+	char	**envv;
+}	t_shell;
+
 // signal
 void	register_sig_handlers(void);
 void	signal_handler(int signum);
 void	heredoc_handler(int signum);
 
-// exec
-int		validate_cmd(char *cmd, char **envv);
-char	*get_cmd_path(char *cmd, char *envv[]);
-void	check_cmds(t_ast_node **ast, char *envv[]);
-int		exec_redirects(t_cmd_node *node);
-int		exec_ast(t_ast_node *node, char *envv[], int *status);
-int		exec_cmd(t_cmd_node *cmd, int *status, char *envv[]);
-
 // variable_expansion
-void	expand_cmd(t_cmd_node *cmd, int *status, char *envv[]);
-void	expand_string(char **s, int *status, char *envv[]);
+int		expand_cmd(t_cmd_node *cmd, t_shell *shell);
+int		expand_string(char **cmd, t_shell *shell);
+char	*strjoin_free(char *s1, char *s2);
 
 // here_doc
-int		read_all_here_docs(t_ast_node *ast);
+int		read_all_here_docs(t_ast_node *ast, t_shell *shell);
 
 // env management
 char	*ft_getenv(char *env, char *envv[]);

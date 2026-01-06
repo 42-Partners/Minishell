@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   token_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:31:57 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/29 20:37:42 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/06 18:23:23 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
 int	token_add_back(t_token **token, char *value, t_token_type type);
-int	is_quote(int c);
 int	is_word(int c);
 
 int	get_operator(t_token **token, char **input)
@@ -54,7 +54,7 @@ int	get_word(t_token **token, char **input)
 	i = 0;
 	while ((*input)[i] && is_word((*input)[i]))
 	{
-		if (is_quote((*input)[i]))
+		if (ft_isquote((*input)[i]))
 		{
 			quote = (*input)[i++];
 			while ((*input)[i] && (*input)[i] != quote)
@@ -66,7 +66,7 @@ int	get_word(t_token **token, char **input)
 	}
 	value = ft_substr(*input, 0, i);
 	if (!value)
-		return (ft_putstr_fd("malloc error\n", 2), 0);
+		return (ft_putstr_fd(ERR_MALLOC, 2), 0);
 	ret = token_add_back(token, value, TOKEN_WORD);
 	free(value);
 	*input += i;

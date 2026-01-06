@@ -10,54 +10,71 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.h"
 #include "minishell.h"
+#include "ast.h"
+#include "exec.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <unistd.h>
+#include <stdio.h>
 #include <sys/wait.h>
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
+static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell);
 static int	wait_child(int pid);
 
-int	exec_cmd(t_cmd_node *cmd, int *status, char *envv[])
+int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	char	*exec;
+	int		ret;
 
+	ret = OK;
 	exec = NULL;
 	if (cmd->cmd)
-		exec = get_cmd_path(cmd->cmd, envv);
+		ret = get_cmd_path(&exec, cmd->cmd, shell->envv);
+	if (ret != OK)
+		return (ret);
 	pid = fork();
-	if (pid == -1)
-		return (ft_printf("Fork error:\n"), -1);
-	if (pid == 0)
-	{
-		expand_cmd(cmd, status, envv);
-		if (!cmd->cmd)
-		{
-			exec_redirects(cmd);
-			execve("/usr/bin/true", (char *[]){NULL}, envv);
-		}
-		else
-			exec_and_redirect(exec, cmd, envv);
-	}
+	if (pid == ERROR)
+		perror("Error");
+	if (pid == OK)
+		launch_command(cmd, exec, shell);
 	if (cmd->cmd)
 		free(exec);
-	return (wait_child(pid));
+	shell->status = wait_child(pid);
+	if (shell->status > 0)
+		return (FAIL);
+	return (OK);
+}
+
+static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
+{
+	expand_cmd(cmd, shell);
+	if (!cmd->cmd)
+	{
+		exec_redirects(cmd);
+		execve("/usr/bin/true", (char *[]){NULL}, shell->envv);
+		perror("Error");
+		exit (FAIL);
+	}
+	else
+		exec_and_redirect(exec, cmd, shell->envv);
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
 {
 	int	i;
 
-	if (exec_redirects(cmd) == -1)
-		exit(1);
+	if (exec_redirects(cmd) == ERROR)
+		exit(FAIL);
 	i = 3;
 	while (i < 1024)
 		close(i++);
 	execve(exec, cmd->args, envv);
-	exit(1);
+	perror("Error");
+	exit(FAIL);
 }
 
 static int	wait_child(int pid)
