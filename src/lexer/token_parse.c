@@ -6,12 +6,13 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:31:57 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/04 20:29:18 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/06 18:23:23 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
@@ -22,6 +23,7 @@ int	get_operator(t_token **token, char **input)
 {
 	int	ret;
 
+	ret = 0;
 	if ((*input)[0] == '>' && (*input)[1] == '>')
 	{
 		ret = token_add_back(token, ">>", TOKEN_REDIRECT_APPEND);
@@ -64,7 +66,7 @@ int	get_word(t_token **token, char **input)
 	}
 	value = ft_substr(*input, 0, i);
 	if (!value)
-		return (ft_putstr_fd("malloc error\n", 2), 0);
+		return (ft_putstr_fd(ERR_MALLOC, 2), 0);
 	ret = token_add_back(token, value, TOKEN_WORD);
 	free(value);
 	*input += i;

@@ -14,12 +14,13 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#include "minishell.h"
 #include "ast.h"
 #include "exec.h"
 #include "error_handling.h"
 
 static int	check_cmd_node(t_ast_node *node, char *envv[]);
-static int	exec_high_level_node(t_ast_node *node, char *envv[], int *stts);
+static int	exec_high_level_node(t_ast_node *node, t_shell *shell);
 
 int	check_cmds(t_ast_node **ast, char *envv[])
 {
@@ -33,40 +34,40 @@ int	check_cmds(t_ast_node **ast, char *envv[])
 	return (OK);
 }
 
-int	exec_ast(t_ast_node *node, char *envv[], int *status)
+int	exec_ast(t_ast_node *node, t_shell *shell)
 {
 	int	ret;
 
 	ret = OK;
 	if (node->type == CMD)
 	{
-		ret = exec_cmd(&(node->t_node.cmd_node), envv, &status);
+		ret = exec_cmd(&(node->t_node.cmd_node), shell);
 		return (ret);
 	}
-	return (exec_high_level_node(node, envv, status));
+	return (exec_high_level_node(node, shell));
 }
 
-static int	exec_high_level_node(t_ast_node *node, char *envv[], int *stts)
+static int	exec_high_level_node(t_ast_node *node, t_shell *shell)
 {
 	int	ret;
 
 	ret = OK;
 	if (node->type == LOGICAL)
 	{
-		ret = exec_ast(node->t_node.logical_node.left, envv, stts);
+		ret = exec_ast(node->t_node.logical_node.left, shell);
 		if (ret == OK)
 		{
 			if (node->t_node.logical_node.type == AND)
-				return (exec_ast(node->t_node.logical_node.right, envv, stts));
+				return (exec_ast(node->t_node.logical_node.right, shell));
 			return (ret);
 		}
 		else if (node->t_node.logical_node.type == OR && ret != ERROR)
-			return (exec_ast(node->t_node.logical_node.right, envv, stts));
+			return (exec_ast(node->t_node.logical_node.right, shell));
 	}
 	else if (node->type == PIPE)
 	{
-		if (exec_ast(node->t_node.pipe_node.left, envv, stts) != ERROR)
-			return (exec_ast(node->t_node.pipe_node.right, envv, stts));
+		if (exec_ast(node->t_node.pipe_node.left, shell) != ERROR)
+			return (exec_ast(node->t_node.pipe_node.right, shell));
 	}
 	return (ERROR);
 }

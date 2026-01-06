@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 20:23:27 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/04 20:33:02 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/06 18:57:18 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	needs_expand(char **delimiter)
 	return (quote);
 }
 
-int	read_and_expand(char **delimiter, char **content, int *status)
+int	read_and_expand(char **delimiter, char **content, t_shell *shell)
 {
 	int	quote;
 	int	ret;
@@ -70,7 +70,7 @@ int	read_and_expand(char **delimiter, char **content, int *status)
 	if (ret != OK)
 		return (ret);
 	if (!quote)
-		expand_string(content, status);
+		expand_string(content, shell);
 	return (ret);
 }
 

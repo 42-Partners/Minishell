@@ -19,36 +19,36 @@
 
 #include <fcntl.h>
 
-int			read_and_expand(char **delimiter, char **content, int *status);
+int			read_and_expand(char **delimiter, char **content, t_shell *shell);
 int			write_here_doc(int *fd, char *content);
 int			needs_expand(char **delimiter);
-static int	read_here_docs(t_cmd_node cmd, int *status);
+static int	read_here_docs(t_cmd_node cmd, t_shell *shell);
 
-int	read_all_here_docs(t_ast_node *ast, int *status)
+int	read_all_here_docs(t_ast_node *ast, t_shell *shell)
 {
 	int	ret;
 
 	ret = OK;
 	if (ast->type == CMD)
-		return (read_here_docs(ast->t_node.cmd_node, status));
+		return (read_here_docs(ast->t_node.cmd_node, shell));
 	else if (ast->type == LOGICAL)
 	{
-		ret = read_all_here_docs(ast->t_node.logical_node.left, status);
+		ret = read_all_here_docs(ast->t_node.logical_node.left, shell);
 		if (ret != OK)
 			return (ret);
-		return (read_all_here_docs(ast->t_node.logical_node.right, status));
+		return (read_all_here_docs(ast->t_node.logical_node.right, shell));
 	}
 	else if (ast->type == PIPE)
 	{
-		ret = read_all_here_docs(ast->t_node.pipe_node.left, status);
+		ret = read_all_here_docs(ast->t_node.pipe_node.left, shell);
 		if (ret != OK)
 			return (ret);
-		return (read_all_here_docs(ast->t_node.pipe_node.right, status));
+		return (read_all_here_docs(ast->t_node.pipe_node.right, shell));
 	}
 	return (OK);
 }
 
-static int	read_here_docs(t_cmd_node cmd, int *status)
+static int	read_here_docs(t_cmd_node cmd, t_shell *shell)
 {
 	char	*content;
 	int		ret;
@@ -63,7 +63,7 @@ static int	read_here_docs(t_cmd_node cmd, int *status)
 		content = ft_strdup("");
 		if (!content)
 			return (ERROR);
-		ret = read_and_expand(&(cmd.redirects[i]->file_name), &content, status);
+		ret = read_and_expand(&(cmd.redirects[i]->file_name), &content, shell);
 		if (ret != OK)
 			return (ret);
 		ret = write_here_doc(&(cmd.redirects[i]->fd), content);

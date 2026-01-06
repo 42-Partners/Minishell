@@ -95,23 +95,22 @@ static int	fill_args(t_cmd_node **node, t_token *tokens)
 
 	i = 0;
 	last = TOKEN_WORD;
+	if (!(*node)->args)
+		return (ERROR);
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
 		{
-			(*node)->args[i++] = ft_strdup(tokens->value);
-			if (!(*node)->args[i])
+			(*node)->args[i] = ft_strdup(tokens->value);
+			if (!(*node)->args[i++])
 			{
 				ft_putstr_fd(ERR_MALLOC, 2);
 				return (free_array((void **)(*node)->args, i), ERROR);
 			}
-			tokens = tokens->next;
 		}
 		else
-		{
 			last = tokens->type;
-			tokens = tokens->next;
-		}
+		tokens = tokens->next;
 	}
 	(*node)->args[i] = NULL;
 	return (OK);

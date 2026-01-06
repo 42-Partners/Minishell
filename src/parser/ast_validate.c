@@ -23,7 +23,7 @@ static int	validate_cmd(t_cmd_node cmd);
 static int	validate_high_level(t_node_type type, t_ast_node *node);
 static int	validate_ast_children(t_ast_node *left, t_ast_node *right);
 
-int	validate_ast(t_ast_node **ast)
+int	validate_ast(t_ast_node **ast) //! retorno
 {
 	if (!ast || !*ast)
 		return (ERROR);
@@ -93,7 +93,7 @@ static int	validate_high_level(t_node_type type, t_ast_node *node)
 
 static int	validate_ast_children(t_ast_node *left, t_ast_node *right)
 {
-	int ret;
+	int	ret;
 
 	ret = validate_ast_node(left);
 	if (ret != OK)

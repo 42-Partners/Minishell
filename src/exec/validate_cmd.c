@@ -6,17 +6,18 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/05 19:06:56 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/06 18:41:54 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "libft.h"
 #include "error_handling.h"
 
-static int	get_bin_paths(char **envv, char **bin_paths);
+static int	get_bin_paths(char **envv, char ***bin_paths);
 static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **aux);
 static char	*construct_path(char *bin_path, char *cmd);
 
@@ -29,11 +30,11 @@ int	validate_cmd(char *cmd, char **envv)
 	ret = OK;
 	if (access(cmd, X_OK) == 0)
 		return (OK);
-	ret = get_bin_paths(envv, bin_paths);
+	ret = get_bin_paths(envv, &bin_paths);
 	if (ret != OK)
 		return (ret);
 	ret = verify_cmd_in_bin_paths(cmd, bin_paths, &aux);
-	ft_free_arr(bin_paths);
+	ft_free_arr(&bin_paths);
 	if (ret != OK)
 		return (ret);
 	free(aux);
@@ -52,11 +53,11 @@ int	get_cmd_path(char **exec, char *cmd, char *envv[])
 		if (!*exec)
 			return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
 	}
-	ret = get_bin_paths(envv, bin_paths);
+	ret = get_bin_paths(envv, &bin_paths);
 	if (ret != OK)
 		return (ret);
 	ret = verify_cmd_in_bin_paths(cmd, bin_paths, exec);
-	ft_free_arr(bin_paths);
+	ft_free_arr(&bin_paths);
 	if (ret != OK)
 		return (ret);
 	return (OK);
@@ -74,7 +75,7 @@ static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **aux)
 		free(*aux);
 		bin_paths++;
 	}
-	return (ft_putstr_fd("Command not found: %s\n", 2), FAIL);
+	return (ft_printf("Command not found: %s\n", cmd), FAIL);
 }
 
 static char	*construct_path(char *bin_path, char *cmd)
@@ -93,7 +94,7 @@ static char	*construct_path(char *bin_path, char *cmd)
 	return (res);
 }
 
-static int	get_bin_paths(char **envv, char **bin_paths)
+static int	get_bin_paths(char **envv, char ***bin_paths)
 {
 	while (*envv)
 	{
@@ -105,6 +106,6 @@ static int	get_bin_paths(char **envv, char **bin_paths)
 		return (FAIL);
 	*bin_paths = ft_split((*envv + 5), ':');
 	if (!*bin_paths)
-		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+		return (ft_putstr_fd("get_bin_paths", 2), ERROR);
 	return (OK);
 }

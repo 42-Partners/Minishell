@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "ast.h"
 #include "exec.h"
 #include "libft.h"
@@ -20,10 +21,10 @@
 #include <sys/wait.h>
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
-static void	launch_command(t_cmd_node *cmd, char *envv[], char *exec, int **status);
+static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell);
 static int	wait_child(int pid);
 
-int	exec_cmd(t_cmd_node *cmd, char *envv[], int **status)
+int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	char	*exec;
@@ -32,34 +33,34 @@ int	exec_cmd(t_cmd_node *cmd, char *envv[], int **status)
 	ret = OK;
 	exec = NULL;
 	if (cmd->cmd)
-		ret = get_cmd_path(&exec, cmd->cmd, envv);
+		ret = get_cmd_path(&exec, cmd->cmd, shell->envv);
 	if (ret != OK)
 		return (ret);
 	pid = fork();
 	if (pid == ERROR)
-		ft_putstr_fd("Fork error\n", 2);
+		perror("Error");
 	if (pid == OK)
-		launch_command(cmd, envv, exec, status);
+		launch_command(cmd, exec, shell);
 	if (cmd->cmd)
 		free(exec);
-	**status = wait_child(pid);
-	if (**status > 0)
+	shell->status = wait_child(pid);
+	if (shell->status > 0)
 		return (FAIL);
 	return (OK);
 }
 
-static void	launch_command(t_cmd_node *cmd, char *envv[], char *exec, int **status)
+static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 {
-	expand_cmd(cmd, *status, envv);
+	expand_cmd(cmd, shell);
 	if (!cmd->cmd)
 	{
 		exec_redirects(cmd);
-		execve("/usr/bin/true", (char[]){NULL}, envv);
+		execve("/usr/bin/true", (char *[]){NULL}, shell->envv);
 		perror("Error");
 		exit (FAIL);
 	}
 	else
-		exec_and_redirect(exec, cmd, envv);
+		exec_and_redirect(exec, cmd, shell->envv);
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])

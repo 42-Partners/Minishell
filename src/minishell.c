@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/05 20:35:18 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/06 19:13:21 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,29 +21,36 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static int	input_process(char *input, char *envv[], int *status);
-static int	parse_and_execute(t_token *tokens, char *envv[], int *status);
+static int	input_process(char *input, t_shell *shell);
+static int	parse_and_execute(t_token *token, t_shell *shell);
 
 int	main(int argc, char *argv[], char *envv[])
 {
+	t_shell	shell;
 	char	*input;
-	int		status;
 
 	(void)argc;
 	(void)argv;
-	status = 0;
+	shell.envv = ft_str_arr_dup(envv);
+	if (!shell.envv)
+		return (ERROR);
+	shell.status = 0;
 	register_sig_handlers();
-	while (OK)
+	while (1)
 	{
 		input = readline(PROMPT);
 		g_signal = 0;
-		if (input_process(input, envv, &status) == ERROR)
+		if (input_process(input, &shell) == ERROR)
 			break ;
 	}
-	return (0);
+	ft_free_arr(&(shell.envv));
+	close(STDERR_FILENO);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	return (OK);
 }
 
-static int	input_process(char *input, char *envv[], int *status)
+static int	input_process(char *input, t_shell *shell)
 {
 	t_token	*token;
 	char	*line;
@@ -63,14 +70,14 @@ static int	input_process(char *input, char *envv[], int *status)
 		token = tokenize(&line);
 		if (!token)
 			return (free(input), ERROR);
-		ret = parse_and_execute(token, envv, status);
+		ret = parse_and_execute(token, shell);
 		if (ret != OK)
 			return (free(input), ret);
 	}
 	return (free(input), OK);
 }
 
-static int	parse_and_execute(t_token *token, char *envv[], int *status)
+static int	parse_and_execute(t_token *token, t_shell *shell)
 {
 	t_ast_node	*ast;
 	int			ret;
@@ -82,18 +89,17 @@ static int	parse_and_execute(t_token *token, char *envv[], int *status)
 		return (ERROR);
 	ret = validate_ast(&ast);
 	if (ret != OK)
-		return (free_ast(&ast), ret);
-	ret = check_cmds(&ast, envv);
-	if (ret == FAIL)
+		return (ret);
+	ret = check_cmds(&ast, shell->envv);
+	if (ret != OK)
 	{
-		*status = 127;
+		if (ret == FAIL)
+			shell->status = 127;
 		return (ret);
 	}
-	else if (ret == ERROR)
+	if (read_all_here_docs(ast, shell) != OK)
 		return (free_ast(&ast), ret);
-	if (read_all_here_docs(ast, status) != OK)
-		return (free_ast(&ast), ret);
-	exec_ast(ast, envv, status);
+	exec_ast(ast, shell);
 	free_ast(&ast);
 	return (OK);
 }

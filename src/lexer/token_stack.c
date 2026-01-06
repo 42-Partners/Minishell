@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/27 19:29:03 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/06 18:13:06 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*new_token(char *value, t_token_type type)
 
 	node = malloc(sizeof(t_token));
 	if (!node)
-		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
+		return (ft_putstr_fd("new_token", 2), NULL);
 	node->type = type;
 	node->value = ft_strdup(value);
 	if (!node->value)
