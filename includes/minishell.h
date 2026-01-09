@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/06 19:25:05 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/09 06:49:10 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*strjoin_free(char *s1, char *s2);
 int		read_all_here_docs(t_ast_node *ast, t_shell *shell);
 
 // env management
-char	*ft_getenv(char *env, char *envv[]);
+int		ft_getenv(char *env, char *envv[], char **result);
 int		ft_setenv(char *name, char *value, char **envv[]);
 
 #endif

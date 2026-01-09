@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/06 19:06:21 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/09 06:54:26 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int		append_fragment(char **result, char *s, int start, int i);
 int		handle_dollar(char **result, char *cmd, int *index, t_shell *shell);
-int		expand_env(char **result, char *s, int *index);
+int		expand_env(char **result, char *cmd, int *index, char *envp[]);
 char	*strjoin_free(char *s1, char *s2);
 
 int	handle_single_quote(char **result, char *cmd, int *index)
@@ -69,7 +69,7 @@ int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
 	i = *index + 1;
 	if (ft_isalpha(cmd[i]) || cmd[i] == '_')
 	{
-		if (expand_env(result, cmd, &i) != OK)
+		if (expand_env(result, cmd, &i, shell->envv) != OK)
 			return (ERROR);
 	}
 	else if (cmd[i] == '?')
