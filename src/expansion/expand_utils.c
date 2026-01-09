@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 23:51:37 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/06 19:05:34 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/09 06:51:41 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 static int	is_var_char(int c);
 char		*strjoin_free(char *s1, char *s2);
 
-int	expand_env(char **result, char *cmd, int *index)
+int	expand_env(char **result, char *cmd, int *index, char *envp[])
 {
 	char	*env;
 	char	*fragment;
@@ -31,7 +31,9 @@ int	expand_env(char **result, char *cmd, int *index)
 	fragment = ft_substr(cmd, *index, i - *index);
 	if (!fragment)
 		return (ERROR);
-	env = getenv(fragment);
+	env = NULL;
+	if (ft_getenv(fragment, envp, &env) != OK)
+		return (free(fragment), ERROR);
 	if (!env)
 		*result = strjoin_free(*result, "");
 	else
