@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_checkers.c                                   :+:      :+:    :+:   */
+/*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 18:30:17 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/04 20:27:04 by devrafaelly      ###   ########.fr       */
+/*   Created: 2025/12/27 18:51:10 by devrafaelly       #+#    #+#             */
+/*   Updated: 2026/01/06 17:49:59 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
-#include "libft.h"
+#ifndef EXEC_H
+# define EXEC_H
 
-int	is_invalid_token(int c)
-{
-	return (c == ';' || c == '(' || c == ')');
-}
+# include "ast.h"
 
-int	is_operator(int c)
-{
-	return (c == '>' || c == '<' || c == '|');
-}
+int		validate_cmd(char *cmd, char **envv);
+int		get_cmd_path(char **exec, char *cmd, char *envv[]);
+int		check_cmds(t_ast_node **ast, char *envv[]);
+int		exec_redirects(t_cmd_node *node);
+int		exec_ast(t_ast_node *node, t_shell *shell);
+int		exec_cmd(t_cmd_node *cmd, t_shell *shell);
 
-int	is_word(int c)
-{
-	return (!is_invalid_token(c) && !ft_isspace(c) && !is_operator(c));
-}
+#endif
