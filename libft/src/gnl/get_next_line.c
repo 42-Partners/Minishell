@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:36:12 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/12 15:11:37 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/08 23:44:31 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ char	*get_next_line(int fd)
 	static char	*stash[MAX_FD];
 	char		*line;
 
+	if (fd == -1)
+		return (free(stash[0]), NULL);
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	stash[fd] = get_read_line(stash[fd], fd);

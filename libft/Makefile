@@ -20,6 +20,7 @@ SRC :=	src/basic/ft_isalnum.c \
 	src/basic/ft_isascii.c \
 	src/basic/ft_isdigit.c \
 	src/basic/ft_isprint.c \
+	src/basic/ft_isquote.c \
 	src/basic/ft_isspace.c \
 	src/basic/ft_strlen.c \
 	src/basic/ft_toupper.c \
@@ -55,6 +56,7 @@ SRC :=	src/basic/ft_isalnum.c \
 	src/basic/ft_itoa.c \
 	src/basic/ft_strtrim.c \
 	src/basic/ft_split.c \
+	src/basic/ft_str_arr_dup.c \
 	src/basic/ft_lstnew_bonus.c \
 	src/basic/ft_lstadd_front_bonus.c \
 	src/basic/ft_lstsize_bonus.c \
