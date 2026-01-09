@@ -6,7 +6,7 @@
 /*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 00:53:54 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/09 01:14:38 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2026/01/09 01:54:58 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,20 @@ int	handle_pipe(t_ast_node *node, t_shell *shell,
 		return (perror("Error"), FAIL);
 	*pid_left = fork();
 	if (*pid_left == -1)
+	{
+		close(pipe_cmd[0]);
+		close(pipe_cmd[1]);
 		return (perror("Error"), FAIL);
+	}
 	if (*pid_left == 0)
 		exec_pipe_child(node, shell, pipe_cmd, 1);
 	*pid_right = fork();
 	if (*pid_right == -1)
+	{
+		close(pipe_cmd[0]);
+		close(pipe_cmd[1]);
 		return (perror("Error"), FAIL);
+	}
 	if (*pid_right == 0)
 		exec_pipe_child(node, shell, pipe_cmd, 0);
 	close(pipe_cmd[0]);

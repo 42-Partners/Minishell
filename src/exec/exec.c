@@ -55,28 +55,17 @@ int	exec_ast(t_ast_node *node, t_shell *shell)
 
 static int	exec_high_level_node(t_ast_node *node, t_shell *shell)
 {
-	int		ret;
 	pid_t	pid_left;
 	pid_t	pid_right;
 
-	ret = OK;
-	if (node->type == LOGICAL)
+	if (node->type == PIPE)
 	{
-		ret = exec_ast(node->t_node.logical_node.left, shell);
-		if (ret == OK)
-		{
-			if (node->t_node.logical_node.type == AND)
-				return (exec_ast(node->t_node.logical_node.right, shell));
-			return (ret);
-		}
-		else if (node->t_node.logical_node.type == OR && ret != ERROR)
-			return (exec_ast(node->t_node.logical_node.right, shell));
-	}
-	else if (node->type == PIPE)
-	{
-		handle_pipe(node, shell, &pid_left, &pid_right);
+		if (handle_pipe(node, shell, &pid_left, &pid_right) != OK)
+			return (FAIL);
 		waitpid(pid_left, NULL, 0);
 		waitpid(pid_right, &shell->status, 0);
+		shell->status = shell->status >> 8;
+		return (OK);
 	}
 	return (ERROR);
 }
