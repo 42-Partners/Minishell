@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _GNU_SOURCE
-
 #include "minishell.h"
 #include "libft.h"
 #include "ast.h"
 #include "error_handling.h"
 
 #include <fcntl.h>
+
+#define _GNU_SOURCE
 
 int			read_and_expand(char **delimiter, char **content, t_shell *shell);
 int			write_here_doc(int *fd, char *content);

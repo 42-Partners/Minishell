@@ -23,12 +23,16 @@ static int	validate_cmd(t_cmd_node cmd);
 static int	validate_high_level(t_node_type type, t_ast_node *node);
 static int	validate_ast_children(t_ast_node *left, t_ast_node *right);
 
-int	validate_ast(t_ast_node **ast) //! retorno
+int	validate_ast(t_ast_node **ast)
 {
+	int	ret;
+
+	ret = OK;
 	if (!ast || !*ast)
 		return (ERROR);
-	if (validate_ast_node(*ast) != OK)
-		return (free_ast(ast), FAIL);
+	ret = validate_ast_node(*ast);
+	if (ret != OK)
+		return (free_ast(ast), ret);
 	return (OK);
 }
 
@@ -84,7 +88,7 @@ static int	validate_high_level(t_node_type type, t_ast_node *node)
 		left = node->t_node.pipe_node.left;
 		right = node->t_node.pipe_node.right;
 		if (!left || !right)
-			ft_putstr_fd("syntax error near token '|'\n", 2);
+			return (ft_putstr_fd("syntax error near token '|'\n", 2), FAIL);
 	}
 	else
 		return (ERROR);
