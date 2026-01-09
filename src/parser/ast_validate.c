@@ -88,7 +88,7 @@ static int	validate_high_level(t_node_type type, t_ast_node *node)
 		left = node->t_node.pipe_node.left;
 		right = node->t_node.pipe_node.right;
 		if (!left || !right)
-			ft_putstr_fd("syntax error near token '|'\n", 2);
+			return (ft_putstr_fd("syntax error near token '|'\n", 2), FAIL);
 	}
 	else
 		return (ERROR);
