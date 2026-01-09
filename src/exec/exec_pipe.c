@@ -6,7 +6,7 @@
 /*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 00:53:54 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/09 01:12:41 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2026/01/09 01:14:38 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int	exec_ast(t_ast_node *node, t_shell *shell);
+int		exec_ast(t_ast_node *node, t_shell *shell);
 void	exec_pipe_child(t_ast_node *node, t_shell *shell,
-	int pipe_cmd[2], int n);
-	
+			int pipe_cmd[2], int n);
+
 int	handle_pipe(t_ast_node *node, t_shell *shell,
 	pid_t *pid_left, pid_t *pid_right)
 {
