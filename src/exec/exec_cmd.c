@@ -32,6 +32,7 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 
 	ret = OK;
 	exec = NULL;
+	expand_cmd(cmd, shell);
 	if (cmd->cmd)
 		ret = get_cmd_path(&exec, cmd->cmd, shell->envv);
 	if (ret != OK)
@@ -51,7 +52,6 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 
 static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 {
-	expand_cmd(cmd, shell);
 	if (!cmd->cmd)
 	{
 		exec_redirects(cmd);
