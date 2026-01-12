@@ -3,64 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   expand_ast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:38:34 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/25 17:24:19 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/06 19:17:17 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "ast.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
-static void	expand_string(char **s, int *status);
-void		handle_single_quote(char **result, char *s, int *index);
-void		handle_double_quote(char **result, char *s, int *index,
-				int *status);
-void		handle_dollar(char **result, char *s, int *index, int *status);
-void		handle_literal(char **result, char *s, int *index);
-void		expand_env(char **result, char *s, int *index);
+int	expand_string(char **cmd, t_shell *shell);
+int	handle_single_quote(char **result, char *s, int *index);
+int	handle_double_quote(char **result, char *s, int *index, t_shell *shell);
+int	handle_dollar(char **result, char *s, int *index, t_shell *shell);
+int	handle_literal(char **result, char *s, int *index);
 
-void	expand_ast(t_ast_node *ast, int *status)
+int	expand_cmd(t_cmd_node *cmd, t_shell *shell)
 {
+	int	ret;
 	int	i;
 
-	if (!ast)
-		return ;
-	i = 0;
-	if (ast->type == CMD)
+	if (!cmd)
+		return (ERROR);
+	ret = OK;
+	if (cmd->cmd)
 	{
-		if (ast->t_node.cmd_node.cmd)
-			expand_string(&(ast->t_node.cmd_node.cmd), status);
-		while (ast->t_node.cmd_node.args[i])
-			expand_string(&ast->t_node.cmd_node.args[i++], status);
 		i = 0;
-		while (i < ast->t_node.cmd_node.redirect_count)
-			expand_string(&(ast->t_node.cmd_node.redirects[i]->file_name),
-				status);
+		while (cmd->args[i])
+		{
+			ret = expand_string(&cmd->args[i++], shell);
+			if (ret != OK)
+				return (ERROR);
+		}
+		cmd->cmd = cmd->args[0];
 	}
+	i = 0;
+	while (i < cmd->redirect_count)
+	{
+		ret = expand_string(&(cmd->redirects[i++]->file_name), shell);
+		if (ret != OK)
+			return (ERROR);
+	}
+	return (OK);
 }
 
-static void	expand_string(char **s, int *status)
+int	expand_string(char **cmd, t_shell *shell)
 {
 	char	*result;
+	int		ret;
 	int		i;
 
+	ret = OK;
 	i = 0;
 	result = ft_strdup("");
-	while ((*s)[i])
+	if (!result)
+		return (ERROR);
+	while ((*cmd)[i] && ret == OK)
 	{
-		if ((*s)[i] == '\'')
-			handle_single_quote(&result, *s, &i);
-		else if ((*s)[i] == '"')
-			handle_double_quote(&result, *s, &i, status);
-		else if ((*s)[i] == '$')
-			handle_dollar(&result, *s, &i, status);
+		if ((*cmd)[i] == '\'')
+			ret = handle_single_quote(&result, *cmd, &i);
+		else if ((*cmd)[i] == '"')
+			ret = handle_double_quote(&result, *cmd, &i, shell);
+		else if ((*cmd)[i] == '$')
+			ret = handle_dollar(&result, *cmd, &i, shell);
 		else
-			handle_literal(&result, *s, &i);
+			ret = handle_literal(&result, *cmd, &i);
 	}
-	free(*s);
-	*s = result;
+	if (ret != OK)
+		return (free(result), ERROR);
+	free(*cmd);
+	*cmd = result;
+	return (OK);
 }
