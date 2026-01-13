@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:38:34 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/06 19:17:17 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/12 20:10:26 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	expand_cmd(t_cmd_node *cmd, t_shell *shell)
 	if (!cmd)
 		return (ERROR);
 	ret = OK;
-	if (cmd->cmd)
+	if (cmd->args)
 	{
 		i = 0;
 		while (cmd->args[i])
