@@ -14,6 +14,7 @@
 #include "libft.h"
 #include "error_handling.h"
 
+#include <stdio.h>
 #include <fcntl.h>
 
 static int	redirect(t_redirect *red);
@@ -24,12 +25,12 @@ int	exec_redirects(t_cmd_node *node)
 	int	ret;
 
 	ret = OK;
-	i = -1;
+	i = 0;
 	if (!node)
 		return (ERROR);
-	while (++i < node->redirect_count)
+	while (i < node->redirect_count)
 	{
-		ret = redirect(node->redirects[i]);
+		ret = redirect(node->redirects[i++]);
 		if (ret != OK)
 			return (ret);
 	}
@@ -48,7 +49,7 @@ static int	redirect(t_redirect *red)
 		red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (red->fd < 0)
 	{
-		ft_printf("%s: No such file or directory :(\n", red->file_name);
+		perror(red->file_name);
 		return (FAIL);
 	}
 	if (red->type == REDIRECT_IN || red->type == HERE_DOC)

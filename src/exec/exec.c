@@ -21,7 +21,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
-int			handle_pipe(t_ast_node *node, t_shell *shell,
+int			exec_pipe(t_ast_node *node, t_shell *shell,
 				pid_t *pid_left, pid_t *pid_right);
 void		exec_pipe_child(t_ast_node *node, t_shell *shell,
 				int pipe_cmd[2], int n);
@@ -42,14 +42,8 @@ int	check_cmds(t_ast_node **ast, char *envv[])
 
 int	exec_ast(t_ast_node *node, t_shell *shell)
 {
-	int	ret;
-
-	ret = OK;
 	if (node->type == CMD)
-	{
-		ret = exec_cmd(&(node->t_node.cmd_node), shell);
-		return (ret);
-	}
+		return (exec_cmd(&(node->t_node.cmd_node), shell));
 	return (exec_high_level_node(node, shell));
 }
 
@@ -60,7 +54,7 @@ static int	exec_high_level_node(t_ast_node *node, t_shell *shell)
 
 	if (node->type == PIPE)
 	{
-		if (handle_pipe(node, shell, &pid_left, &pid_right) != OK)
+		if (exec_pipe(node, shell, &pid_left, &pid_right) != OK)
 			return (FAIL);
 		waitpid(pid_left, NULL, 0);
 		waitpid(pid_right, &shell->status, 0);
@@ -78,8 +72,7 @@ static int	check_cmd_node(t_ast_node *node, char *envv[])
 	if (node->type == CMD)
 	{
 		if (node->t_node.cmd_node.cmd != NULL)
-			ret = validate_cmd(node->t_node.cmd_node.cmd, envv);
-		return (ret);
+			return (validate_cmd(node->t_node.cmd_node.cmd, envv));
 	}
 	else if (node->type == LOGICAL)
 	{
