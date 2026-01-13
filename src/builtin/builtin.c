@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 06:45:55 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/12 21:34:04 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/12 21:52:53 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ int	is_builtin(t_cmd_node *cmd)
 	return (0);
 }
 
-int exec_builtin(t_cmd_node *cmd, t_shell *shell)
+int	exec_builtin(t_cmd_node *cmd, t_shell *shell)
 {
-	int stdin;
-	int stdout;
-	int ret;
+	int	stdin;
+	int	stdout;
+	int	ret;
 
 	stdin = dup(STDIN_FILENO);
 	stdout = dup(STDOUT_FILENO);
@@ -42,7 +42,6 @@ int exec_builtin(t_cmd_node *cmd, t_shell *shell)
 	dup2(stdout, STDOUT_FILENO);
 	close(stdin);
 	close(stdout);
-
 	return (OK);
 }
 
