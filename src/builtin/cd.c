@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 17:55:26 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/14 16:16:21 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 17:02:19 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 static int	get_cd(t_shell *shell, char **argv, char **cd);
 static int	change_directory(char **argv, char *cd);
+static void	cleanup(char *pwd, char *oldpwd);
 
 int	ft_cd(t_shell *shell, char **argv)
 {
@@ -25,24 +26,26 @@ int	ft_cd(t_shell *shell, char **argv)
 	char	*pwd;
 	char	*oldpwd;
 
+	shell->status = 1;
 	if (*(++argv) && *(argv + 1))
-		return (ft_printf("cd: too many arguments\n"), 1);
+		return (ft_putstr_fd("cd: too many arguments\n", 2), FAIL);
 	oldpwd = getcwd(NULL, 0);
 	if (!oldpwd)
-		return (perror("cd"), FAIL);
+		return (perror("cd"), ERROR);
 	cd = NULL;
 	if (get_cd(shell, argv, &cd) != OK)
 		return (ERROR);
-	change_directory(argv, cd);
+	if (change_directory(argv, cd) != OK)
+		return (FAIL);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		return (perror("cd"), FAIL);
 	if (ft_setenv("OLDPWD", oldpwd, &shell->envv) != OK)
-		return (ERROR);
+		return (cleanup(pwd, oldpwd), ERROR);
 	if (ft_setenv("PWD", pwd, &shell->envv) != OK)
-		return (ERROR);
-	free(oldpwd);
-	free(pwd);
+		return (cleanup(pwd, oldpwd), ERROR);
+	cleanup(pwd, oldpwd);
+	shell->status = 0;
 	return (OK);
 }
 
@@ -91,4 +94,10 @@ static int	change_directory(char **argv, char *cd)
 			return (perror("Error: cd"), FAIL);
 	}
 	return (OK);
+}
+
+static void	cleanup(char *pwd, char *oldpwd)
+{
+	free(oldpwd);
+	free(pwd);
 }
