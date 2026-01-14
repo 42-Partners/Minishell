@@ -57,6 +57,7 @@ SRC		:= \
 			src/builtin/builtin.c \
 			src/builtin/echo.c \
 			src/builtin/cd.c \
+			src/builtin/pwd.c \
 			src/debug_ast.c \
 			src/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
