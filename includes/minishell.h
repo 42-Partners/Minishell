@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/09 06:49:10 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/13 20:39:14 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ extern volatile sig_atomic_t	g_signal;
 
 typedef struct s_shell
 {
-	int		status;
-	char	**envv;
+	int			status;
+	char		**envv;
+	t_ast_node	*ast;
 }	t_shell;
 
 // signal

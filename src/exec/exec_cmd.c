@@ -55,9 +55,9 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 	if (!cmd->cmd)
 	{
 		exec_redirects(cmd);
-		execve("/usr/bin/true", (char *[]){NULL}, shell->envv);
-		perror("Error");
-		exit (FAIL);
+		free_ast(&shell->ast);
+		ft_free_arr(&shell->envv);
+		exit (OK);
 	}
 	else
 		exec_and_redirect(exec, cmd, shell->envv);

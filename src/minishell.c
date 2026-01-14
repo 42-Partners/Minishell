@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/06 19:13:21 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/13 20:39:33 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	main(int argc, char *argv[], char *envv[])
 	(void)argc;
 	(void)argv;
 	shell.envv = ft_str_arr_dup(envv);
+	shell.ast = NULL;
 	if (!shell.envv)
 		return (ERROR);
 	shell.status = 0;
@@ -79,27 +80,26 @@ static int	input_process(char *input, t_shell *shell)
 
 static int	parse_and_execute(t_token *token, t_shell *shell)
 {
-	t_ast_node	*ast;
 	int			ret;
 
-	ast = build_ast(token);
+	shell->ast = build_ast(token);
 	free_token(&token);
 	ret = OK;
-	if (!ast)
+	if (!shell->ast)
 		return (ERROR);
-	ret = validate_ast(&ast);
+	ret = validate_ast(&shell->ast);
 	if (ret != OK)
 		return (ret);
-	ret = check_cmds(&ast, shell->envv);
+	ret = check_cmds(&shell->ast, shell->envv);
 	if (ret != OK)
 	{
 		if (ret == FAIL)
 			shell->status = 127;
 		return (ret);
 	}
-	if (read_all_here_docs(ast, shell) != OK)
-		return (free_ast(&ast), ret);
-	exec_ast(ast, shell);
-	free_ast(&ast);
+	if (read_all_here_docs(shell->ast, shell) != OK)
+		return (free_ast(&shell->ast), ret);
+	exec_ast(shell->ast, shell);
+	free_ast(&shell->ast);
 	return (OK);
 }
