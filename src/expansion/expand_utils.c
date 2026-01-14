@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 23:51:37 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/09 06:51:41 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/13 10:54:04 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	expand_env(char **result, char *cmd, int *index, char *envp[])
 		*result = strjoin_free(*result, "");
 	else
 		*result = strjoin_free(*result, env);
+	free(env);
 	free(fragment);
 	if (!*result)
 		return (ERROR);
