@@ -3,64 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 06:45:55 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/31 21:15:00 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/13 21:14:42 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.h"
-#include "libft.h"
 #include "minishell.h"
+#include "ast.h"
+#include "exec.h"
+#include "libft.h"
+#include "error_handling.h"
 
-int	ft_echo(char **args, char *envp[]);
+int			ft_echo(t_shell *shell, char **args);
+int			ft_cd(t_shell *shell, char **argv);
+static int	find_builtin(t_shell *shell, char *cmd, char **args);
 
-int	is_builtin(t_cmd_node *cmd)
+int	is_builtin(char *cmd)
 {
-	char	*cmd_expanded;
-
-	cmd_expanded; //dup and expand cmd
-	if (!cmd->cmd)
-		return (0);
-	if (ft_strcmp(cmd->cmd, "echo") == 0)
-		return (1);
-	else if (ft_strcmp(cmd->cmd, "cd") == 0)
-		return (1);
-	return (0);
+	return (!ft_strcmp(cmd, "cd")
+			|| !ft_strcmp(cmd, "echo"));
 }
 
-void	exec_builtin(t_cmd_node *cmd, char **envp[], int *status)
+int	exec_builtin(t_cmd_node *cmd, t_shell *shell)
 {
-	pid_t	pid;
-	int		ret;
+	int	stdin;
+	int	stdout;
+	int	ret;
 
-	//expand cmd
-	pid = fork();
-	if (pid == -1)
-	{
-		ft_printf("Fork error:\n");
-		exit(1);
-	}
-	if (pid == 0)
-	{
-		if (exec_redirects(cmd) == -1)
-			exit(1);
-		find_builtin(cmd->cmd, cmd->args, envp);
-		exit(0);
-	}
-	ret = waitpid(pid, &ret, 0);
-	*status = ret >> 8;
+	stdin = dup(STDIN_FILENO);
+	stdout = dup(STDOUT_FILENO);
+	ret = exec_redirects(cmd);
+	if (ret != OK)
+		return (ret);
+	shell->status = find_builtin(shell, cmd->cmd, cmd->args);
+	dup2(stdin, STDIN_FILENO);
+	dup2(stdout, STDOUT_FILENO);
+	close(stdin);
+	close(stdout);
+	return (OK);
 }
 
-static void	find_builtin(char *cmd, char **args, char *envp[])
+static int	find_builtin(t_shell *shell, char *cmd, char **args)
 {
 	if (ft_strcmp(cmd, "echo") == 0)
-		ft_echo(args, envp);
-}
-
-static void	handle_shellcmd(char *cmd, char **args, char *envp[], int *status)
-{
-	if (ft_strcmp(cmd, "cd") == 0)
-		status = ft_cd(args, envp, status);
+		return (ft_echo(shell, args));
+	else if (ft_strcmp(cmd, "cd") == 0)
+		return (ft_cd(shell, args));
+	return (FAIL);
 }

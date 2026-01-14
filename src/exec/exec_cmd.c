@@ -10,66 +10,77 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ast.h"
 #include "minishell.h"
+#include "ast.h"
+#include "exec.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <unistd.h>
+#include <stdio.h>
 #include <sys/wait.h>
 
-static int	redirect_without_cmd(t_cmd_node *cmd);
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
+static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell);
 static int	wait_child(int pid);
 
-int	exec_cmd(t_cmd_node cmd, char *envv[])
+int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	char	*exec;
+	int		ret;
 
-	if (!cmd.cmd)
-		return (redirect_without_cmd(&cmd));
-	exec = get_cmd_path(cmd.cmd, envv);
-	if (!exec)
-		return (-1);
+	ret = OK;
+	exec = NULL;
+	if (expand_cmd(cmd, shell) != OK)
+		return (ERROR);
+	if (cmd->cmd)
+	{
+		if (is_builtin(cmd->cmd))
+			return (exec_builtin(cmd, shell));
+		ret = get_cmd_path(&exec, cmd->cmd, shell->envv);
+	}
+	if (ret != OK)
+		return (ret);
 	pid = fork();
 	if (pid == -1)
-		return (ft_printf("Fork error:\n"), -1);
+		return (perror("Error"), FAIL);
 	if (pid == 0)
-		exec_and_redirect(exec, &cmd, envv);
-	return (free(exec), wait_child(pid));
+		launch_command(cmd, exec, shell);
+	shell->status = wait_child(pid);
+	if (shell->status > 0)
+		return (FAIL);
+	return (OK);
+}
+
+static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
+{
+	if (!cmd->cmd)
+	{
+		exec_redirects(cmd);
+		execve("/usr/bin/true", (char *[]){NULL}, shell->envv);
+		perror("Error");
+		exit (0);
+	}
+	else
+	{
+		exec_and_redirect(exec, cmd, shell->envv);
+		free(exec);
+	}
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
 {
 	int	i;
 
-	if (exec_redirects(cmd) == -1)
-		exit(1);
+	if (exec_redirects(cmd) == ERROR)
+		exit(0);
 	i = 3;
 	while (i < 1024)
 		close(i++);
 	execve(exec, cmd->args, envv);
-	exit(1);
-}
-
-static int	redirect_without_cmd(t_cmd_node *cmd)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == -1)
-	{
-		ft_printf("Fork error:\n");
-		exit(1);
-	}
-	if (pid == 0)
-	{
-		if (exec_redirects(cmd) == -1)
-			exit(1);
-		exit(0);
-	}
-	waitpid(pid, NULL, 0);
-	return (0);
+	perror("Error");
+	exit(0);
 }
 
 static int	wait_child(int pid)

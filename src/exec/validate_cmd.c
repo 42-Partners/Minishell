@@ -3,112 +3,112 @@
 /*                                                        :::      ::::::::   */
 /*   validate_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/23 14:59:33 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/13 21:05:27 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+#include "minishell.h"
+#include "error_handling.h"
+
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
-#include "libft.h"
-
-static char	**get_bin_paths(char **envv);
-static char	*verify_cmd_in_bin_paths(char *cmd, char **bin_paths);
+static int	get_bin_paths(char **envv, char ***bin_paths);
+static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **aux);
 static char	*construct_path(char *bin_path, char *cmd);
 
 int	validate_cmd(char *cmd, char **envv)
 {
 	char	**bin_paths;
 	char	*aux;
+	int		ret;
 
+	ret = OK;
+	if (is_builtin(cmd))
+		return (OK);
 	if (access(cmd, X_OK) == 0)
-		return (1);
-	bin_paths = get_bin_paths(envv);
-	if (!bin_paths)
-		return (-1);
-	aux = verify_cmd_in_bin_paths(cmd, bin_paths);
-	if (aux == NULL)
-	{
-		ft_printf("Command not found: %s\n", cmd);
-		ft_free_arr(bin_paths);
-		return (-1);
-	}
+		return (OK);
+	ret = get_bin_paths(envv, &bin_paths);
+	if (ret != OK)
+		return (ret);
+	ret = verify_cmd_in_bin_paths(cmd, bin_paths, &aux);
+	ft_free_arr(&bin_paths);
+	if (ret != OK)
+		return (ret);
 	free(aux);
-	ft_free_arr(bin_paths);
-	return (1);
+	return (OK);
 }
 
-char	*get_cmd_path(char *cmd, char *envv[])
+int	get_cmd_path(char **exec, char *cmd, char *envv[])
 {
 	char	**bin_paths;
-	char	*aux;
+	int		ret;
 
+	ret = 1;
 	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
-	bin_paths = get_bin_paths(envv);
-	if (!bin_paths)
-		return (NULL);
-	aux = verify_cmd_in_bin_paths(cmd, bin_paths);
-	if (aux == NULL)
 	{
-		ft_printf("Command not found: %s\n", cmd);
-		ft_free_arr(bin_paths);
-		return (NULL);
+		*exec = ft_strdup(cmd);
+		if (!*exec)
+			return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
 	}
-	ft_free_arr(bin_paths);
-	return (aux);
+	ret = get_bin_paths(envv, &bin_paths);
+	if (ret != OK)
+		return (ret);
+	ret = verify_cmd_in_bin_paths(cmd, bin_paths, exec);
+	ft_free_arr(&bin_paths);
+	if (ret != OK)
+		return (ret);
+	return (OK);
 }
 
-static char	*verify_cmd_in_bin_paths(char *cmd, char **bin_paths)
+static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **aux)
 {
-	char	*full_bin_path;
-
-	while (*bin_paths != NULL)
+	while (*bin_paths)
 	{
-		full_bin_path = construct_path(*bin_paths, cmd);
-		if (access(full_bin_path, X_OK) == 0)
-			return (full_bin_path);
+		*aux = construct_path(*bin_paths, cmd);
+		if (!*aux)
+			return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+		if (access(*aux, X_OK) == 0)
+			return (OK);
+		free(*aux);
 		bin_paths++;
-		free(full_bin_path);
 	}
-	return (NULL);
+	return (ft_printf("Command not found: %s\n", cmd), FAIL);
 }
 
 static char	*construct_path(char *bin_path, char *cmd)
 {
 	char	*res;
-	char	*aux;
+	size_t	len;
 
-	res = ft_calloc(ft_strlen(bin_path)
-			+ ft_strlen(cmd) + 2, sizeof(char));
+	len = ft_strlen(bin_path) + ft_strlen(cmd) + 2;
+	res = ft_calloc(len, sizeof(char));
 	if (!res)
-		return (NULL);
-	ft_strlcat(res, bin_path, ft_strlen(bin_path) + 1);
-	aux = res + ft_strlen(res);
-	if (*aux != '/')
-		ft_strlcat(aux, "/", 2);
-	aux = res + ft_strlen(res);
-	ft_strlcat(aux, cmd, ft_strlen(cmd) + 1);
+		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
+	ft_strlcpy(res, bin_path, len);
+	if (ft_strlen(res) > 0 && res[ft_strlen(res) -1] != '/')
+		ft_strlcat(res, "/", len);
+	ft_strlcat(res, cmd, len);
 	return (res);
 }
 
-static char	**get_bin_paths(char **envv)
+static int	get_bin_paths(char **envv, char ***bin_paths)
 {
-	char	**res;
-
-	while (*envv != NULL)
+	while (*envv)
 	{
 		if (ft_strncmp(*envv, "PATH=", 5) == 0)
 			break ;
 		envv++;
 	}
 	if (*envv == NULL)
-		return (NULL);
-	res = ft_split((*envv + 5), ':');
-	if (!res)
-		return (NULL);
-	return (res);
+		return (FAIL);
+	*bin_paths = ft_split((*envv + 5), ':');
+	if (!*bin_paths)
+		return (ft_putstr_fd("get_bin_paths", 2), ERROR);
+	return (OK);
 }
