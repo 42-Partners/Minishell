@@ -46,11 +46,17 @@ SRC		:= \
 			src/expansion/expand_ast.c \
 			src/expansion/expand_handlers.c \
 			src/expansion/expand_utils.c \
+			src/exec/env_management.c \
 			src/exec/exec_cmd.c \
+			src/exec/exec_pipe.c \
 			src/exec/exec_redirects.c \
 			src/exec/exec.c \
 			src/exec/validate_cmd.c \
 			src/here_doc/here_doc.c \
+			src/here_doc/here_doc_utils.c \
+			src/builtin/builtin.c \
+			src/builtin/echo.c \
+			src/builtin/cd.c \
 			src/debug_ast.c \
 			src/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
