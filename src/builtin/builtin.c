@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 06:45:55 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/13 21:14:42 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 16:16:08 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	find_builtin(t_shell *shell, char *cmd, char **args);
 int	is_builtin(char *cmd)
 {
 	return (!ft_strcmp(cmd, "cd")
-			|| !ft_strcmp(cmd, "echo"));
+		|| !ft_strcmp(cmd, "echo"));
 }
 
 int	exec_builtin(t_cmd_node *cmd, t_shell *shell)

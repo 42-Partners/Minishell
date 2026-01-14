@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 17:55:26 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/14 15:40:48 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 16:16:21 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	change_directory(char **argv, char *cd)
 			free(cd);
 			return (perror("Error: cd"), FAIL);
 		}
-		free(cd);		
+		free(cd);
 	}
 	else
 	{
