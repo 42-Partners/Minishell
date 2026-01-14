@@ -35,7 +35,7 @@ void	heredoc_handler(int signum)
 	g_signal = signum;
 	if (signum == SIGINT)
 	{
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		ioctl(0, TIOCSTI, "\n");
 		write(STDOUT_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);

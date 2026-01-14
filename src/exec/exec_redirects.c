@@ -10,26 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-
 #include "ast.h"
 #include "libft.h"
+#include "error_handling.h"
+
+#include <stdio.h>
+#include <fcntl.h>
 
 static int	redirect(t_redirect *red);
 
 int	exec_redirects(t_cmd_node *node)
 {
 	int	i;
+	int	ret;
 
-	i = -1;
+	ret = OK;
+	i = 0;
 	if (!node)
-		return (-1);
-	while (++i < node->redirect_count)
+		return (ERROR);
+	while (i < node->redirect_count)
 	{
-		if (redirect(node->redirects[i]) == -1)
-			return (-1);
+		ret = redirect(node->redirects[i++]);
+		if (ret != OK)
+			return (ret);
 	}
-	return (1);
+	return (OK);
 }
 
 static int	redirect(t_redirect *red)
@@ -44,13 +49,15 @@ static int	redirect(t_redirect *red)
 		red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (red->fd < 0)
 	{
-		ft_printf("%s: No such file or directory :(\n", red->file_name);
-		return (-1);
+		perror(red->file_name);
+		return (FAIL);
 	}
 	if (red->type == REDIRECT_IN || red->type == HERE_DOC)
 		ret = dup2(red->fd, STDIN_FILENO);
 	else
 		ret = dup2(red->fd, STDOUT_FILENO);
 	close(red->fd);
-	return (ret);
+	if (ret < 0)
+		return (ERROR);
+	return (OK);
 }
