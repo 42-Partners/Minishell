@@ -20,7 +20,7 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
-static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[]);
+static void	exec_and_redirect(char *exec, t_cmd_node *cmd, t_shell *shell);
 static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell);
 static int	wait_child(int pid);
 
@@ -38,11 +38,13 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 		return (ret);
 	pid = fork();
 	if (pid == ERROR)
-		perror("Error");
+		ft_putstr_fd("pipe Error :(", 2);
 	if (pid == OK)
 		launch_command(cmd, exec, shell);
 	if (cmd->cmd)
 		free(exec);
+	if (pid == ERROR)
+		return (ERROR);
 	shell->status = wait_child(pid);
 	if (shell->status > 0)
 		return (FAIL);
@@ -55,26 +57,25 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 	if (!cmd->cmd)
 	{
 		exec_redirects(cmd);
-		free_ast(&shell->ast);
-		ft_free_arr(&shell->envv);
-		exit (OK);
+		exec_exit(shell, OK);
 	}
 	else
-		exec_and_redirect(exec, cmd, shell->envv);
+		exec_and_redirect(exec, cmd, shell);
 }
 
-static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
+static void	exec_and_redirect(char *exec, t_cmd_node *cmd, t_shell *shell)
 {
 	int	i;
 
 	if (exec_redirects(cmd) == ERROR)
-		exit(FAIL);
+		exec_exit(shell, FAIL);
 	i = 3;
 	while (i < 1024)
 		close(i++);
-	execve(exec, cmd->args, envv);
-	perror("Error");
-	exit(FAIL);
+	execve(exec, cmd->args, shell->envv);
+	ft_putstr_fd("execve failed :(\n", 2);
+	free(exec);
+	exec_exit(shell, FAIL);
 }
 
 static int	wait_child(int pid)

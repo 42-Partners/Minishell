@@ -48,6 +48,7 @@ SRC		:= \
 			src/expansion/expand_utils.c \
 			src/exec/env_management.c \
 			src/exec/exec_cmd.c \
+			src/exec/exec_exit.c \
 			src/exec/exec_pipe.c \
 			src/exec/exec_redirects.c \
 			src/exec/exec.c \
