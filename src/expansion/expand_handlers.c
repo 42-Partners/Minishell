@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/09 06:54:26 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/14 20:44:25 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,38 @@
 #include "lexer.h"
 #include "error_handling.h"
 
-int		append_fragment(char **result, char *s, int start, int i);
-int		handle_dollar(char **result, char *cmd, int *index, t_shell *shell);
-int		expand_env(char **result, char *cmd, int *index, char *envp[]);
-char	*strjoin_free(char *s1, char *s2);
+int			append_fragment(char **result, char *s, int start, int i);
+int			expand_env(char **result, char *cmd, int *index, char *envp[]);
+static int	handle_invalid_var_name(char **result, char *cmd, int *index);
+
+int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
+{
+	int		i;
+	char	*aux;
+
+	i = *index + 1;
+	if (ft_isalpha(cmd[i]) || cmd[i] == '_')
+	{
+		if (expand_env(result, cmd, &i, shell->envv) != OK)
+			return (ERROR);
+	}
+	else if (cmd[i] == '?')
+	{
+		aux = ft_itoa(shell->status);
+		if (!aux)
+			return (ERROR);
+		*result = ft_strjoin_free(*result, aux);
+		free(aux);
+		i++;
+	}
+	else
+	{
+		if (handle_invalid_var_name(result, cmd, &i) != OK)
+			return (ERROR);
+	}
+	*index = i;
+	return (OK);
+}
 
 int	handle_single_quote(char **result, char *cmd, int *index)
 {
@@ -61,34 +89,6 @@ int	handle_double_quote(char **result, char *cmd, int *index, t_shell *shell)
 	return (OK);
 }
 
-int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
-{
-	int		i;
-	char	*aux;
-
-	i = *index + 1;
-	if (ft_isalpha(cmd[i]) || cmd[i] == '_')
-	{
-		if (expand_env(result, cmd, &i, shell->envv) != OK)
-			return (ERROR);
-	}
-	else if (cmd[i] == '?')
-	{
-		aux = ft_itoa(shell->status);
-		if (!aux)
-			return (ERROR);
-		*result = strjoin_free(*result, aux);
-		free(aux);
-		i++;
-	}
-	else
-		*result = strjoin_free(*result, "$");
-	if (!*result)
-		return (ERROR);
-	*index = i;
-	return (OK);
-}
-
 int	handle_literal(char **result, char *cmd, int *index)
 {
 	int	i;
@@ -99,5 +99,18 @@ int	handle_literal(char **result, char *cmd, int *index)
 	if (append_fragment(result, cmd, *index, i) != OK)
 		return (ERROR);
 	*index = i;
+	return (OK);
+}
+
+static int	handle_invalid_var_name(char **result, char *cmd, int *index)
+{
+	if (cmd[*index] == '\0')
+	{
+		*result = ft_strjoin_free(*result, "$");
+		if (!*result)
+			return (ERROR);
+	}
+	else
+		(*index)++;
 	return (OK);
 }
