@@ -77,14 +77,14 @@ typedef struct s_ast_node
 	}			t_node;
 }	t_ast_node;
 
+int			build_ast(t_ast_node **ast, t_token *tokens);
 int			get_redirects(t_cmd_node **node, t_token *tokens);
-t_node_type	detect_next_node_type(t_token *tokens);
-t_ast_node	*build_ast(t_token *tokens);
-t_cmd_node	*consume_tokens(t_token *tokens);
-t_ast_node	*handle_low_level(t_token *tokens);
-t_ast_node	*handle_high_level(t_node_type type,
-				t_token *right_tokens, t_token *left_tokens);
+int			consume_tokens(t_cmd_node **cmd_node, t_token *tokens);
+int			handle_low_level(t_ast_node **ast, t_token *tokens);
+int			handle_high_level(t_ast_node **ast, t_node_type type,
+			t_token *right_tokens, t_token *left_tokens);
 int			validate_ast(t_ast_node **ast);
+t_node_type	detect_next_node_type(t_token *tokens);
 void		free_ast(t_ast_node **ast);
 
 /*DEBUG*/

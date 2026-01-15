@@ -20,10 +20,10 @@
 static t_token		*divide_left(t_token *token_head, t_token *father);
 static t_token		*divide_right(t_token *token_head, t_token *father);
 
-t_ast_node	*build_ast(t_token *tokens)
+int	build_ast(t_ast_node **ast, t_token *tokens)
 {
-	t_ast_node	*ast;
 	t_token		*aux;
+	int			ret;
 
 	aux = tokens;
 	while (aux)
@@ -33,11 +33,19 @@ t_ast_node	*build_ast(t_token *tokens)
 		aux = aux->next;
 	}
 	if (detect_next_node_type(tokens) == CMD)
-		ast = handle_low_level(tokens);
+	{
+		ret = handle_low_level(ast, tokens);
+		if (ret != OK)
+			return (free_ast(ast), ret);
+	}
 	else
-		ast = handle_high_level(PIPE,
-				divide_left(tokens, aux), divide_right(tokens, aux));
-	return (ast);
+	{
+		ret = handle_high_level(ast, PIPE,
+				divide_right(tokens, aux), divide_left(tokens, aux));
+		if (ret != OK)
+			return (free_ast(ast), ret);
+	}
+	return (OK);
 }
 
 t_node_type	detect_next_node_type(t_token *tokens)
@@ -53,29 +61,33 @@ t_node_type	detect_next_node_type(t_token *tokens)
 
 static t_token	*divide_left(t_token *token_head, t_token *father)
 {
-	t_token	*ret;
+	t_token	*token;
 	t_token	*aux;
+	int		ret;
 
 	if (!token_head || !father || token_head == father)
 		return (NULL);
-	ret = new_token(token_head->value, token_head->type);
-	if (!ret)
+	token = new_token(token_head->value, token_head->type);
+	if (!token)
 		return (NULL);
 	aux = token_head->next;
 	while (aux)
 	{
 		if (aux == father)
 			break ;
-		token_add_back(&ret, aux->value, aux->type);
+		ret = token_add_back(&token, aux->value, aux->type);
+		if (ret != OK)
+			return (free_token(&token), NULL);
 		aux = aux->next;
 	}
-	return (ret);
+	return (token);
 }
 
 static t_token	*divide_right(t_token *token_head, t_token *father)
 {
-	t_token	*ret;
+	t_token	*token;
 	t_token	*aux;
+	int		ret;
 
 	if (!token_head || !father)
 		return (NULL);
@@ -85,14 +97,16 @@ static t_token	*divide_right(t_token *token_head, t_token *father)
 		return (NULL);
 	else
 		token_head = token_head->next;
-	ret = new_token(token_head->value, token_head->type);
-	if (!ret)
+	token = new_token(token_head->value, token_head->type);
+	if (!token)
 		return (NULL);
 	aux = token_head->next;
 	while (aux)
 	{
-		token_add_back(&ret, aux->value, aux->type);
+		ret = token_add_back(&token, aux->value, aux->type);
+		if (ret != OK)
+			return (free_token(&token), NULL);
 		aux = aux->next;
 	}
-	return (ret);
+	return (token);
 }

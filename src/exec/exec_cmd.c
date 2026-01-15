@@ -40,11 +40,9 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 			return (ret);
 	}
 	pid = fork();
-	if (pid == OK)
+	if (pid == 0)
 		launch_command(cmd, exec, shell);
-	if (cmd->cmd)
-		free(exec);
-	if (pid == ERROR)
+	if (pid == -1)
 		return (ft_putstr_fd("pipe Error :(", 2), ERROR);
 	shell->status = wait_child(pid);
 	if (shell->status > 0)
@@ -60,7 +58,10 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 		exec_exit(shell, OK);
 	}
 	else
+	{
 		exec_and_redirect(exec, cmd, shell);
+		free(exec);
+	}
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, t_shell *shell)

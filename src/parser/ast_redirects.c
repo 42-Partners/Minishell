@@ -25,8 +25,10 @@ void			free_array(void **array, int count);
 int	get_redirects(t_cmd_node **node, t_token *tokens)
 {
 	int	i;
+	int	ret;
 
 	i = count_redirects(tokens);
+	ret = OK;
 	(*node)->redirect_count = i;
 	if (i == 0)
 		(*node)->redirects = NULL;
@@ -38,19 +40,20 @@ int	get_redirects(t_cmd_node **node, t_token *tokens)
 			ft_putstr_fd(ERR_MALLOC, 2);
 			return (ERROR);
 		}
-		if (parse_redirect_tokens(&(*node)->redirects, tokens) != OK)
-			return (ERROR);
+		ret = parse_redirect_tokens(&(*node)->redirects, tokens);
+		if (ret != OK)
+			return (ret);
 	}
 	return (OK);
 }
 
 static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
-{
+{     
 	int	i;
+	int	ret;
 
-	if (!(*redirect))
-		return (ERROR);
 	i = 0;
+	ret = OK;
 	while (tokens)
 	{
 		if (tokens->type == TOKEN_HEREDOC || tokens->type == TOKEN_REDIRECT_IN
@@ -60,8 +63,9 @@ static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 			(*redirect)[i] = malloc(sizeof(t_redirect));
 			if (!(*redirect)[i])
 				return (free_array((void **)(*redirect), i), ERROR);
-			if (handle_redirect_token(&((*redirect)[i]), tokens) != OK)
-				return (free_array((void **)(*redirect), i), ERROR);
+			ret = handle_redirect_token(&((*redirect)[i]), tokens);
+			if (ret != OK)
+				return (free_array((void **)(*redirect), i), ret);
 			i++;
 		}
 		tokens = tokens->next;
@@ -78,23 +82,18 @@ static int	handle_redirect_token(t_redirect **redirect, t_token *token)
 	{
 		(*redirect)->type = HERE_DOC;
 		(*redirect)->fd = 0;
-		if (token->next && token->next->type == TOKEN_WORD)
-			(*redirect)->file_name = ft_strdup(token->next->value);
-		if (!(*redirect)->file_name)
-			return (ERROR);
-		return (OK);
 	}
-	if (token->type == TOKEN_REDIRECT_IN)
+	else if (token->type == TOKEN_REDIRECT_IN)
 		(*redirect)->type = REDIRECT_IN;
 	else if (token->type == TOKEN_REDIRECT_OUT)
 		(*redirect)->type = REDIRECT_OUT;
 	else if (token->type == TOKEN_REDIRECT_APPEND)
 		(*redirect)->type = REDIRECT_APPEND;
 	if (!token->next || token->next->type != TOKEN_WORD)
-		return (OK);
+		return (FAIL);
 	(*redirect)->file_name = ft_strdup(token->next->value);
 	if (!(*redirect)->file_name)
-		return (ERROR);
+		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
 	return (OK);
 }
 
