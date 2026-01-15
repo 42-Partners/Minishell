@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 18:51:10 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/12 20:47:45 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 19:34:36 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "ast.h"
 
-int		validate_cmd(char *cmd, char **envv);
+int		validate_cmd(t_cmd_node *cmd, t_shell *shell);
 int		get_cmd_path(char **exec, char *cmd, char *envv[]);
-int		check_cmds(t_ast_node **ast, char *envv[]);
+int		check_cmds(t_ast_node **ast, t_shell *shell);
 int		exec_redirects(t_cmd_node *node);
 int		exec_ast(t_ast_node *node, t_shell *shell);
 int		exec_cmd(t_cmd_node *cmd, t_shell *shell);

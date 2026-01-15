@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/13 21:07:10 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 20:46:11 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	heredoc_handler(int signum);
 // variable_expansion
 int		expand_cmd(t_cmd_node *cmd, t_shell *shell);
 int		expand_string(char **cmd, t_shell *shell);
-char	*strjoin_free(char *s1, char *s2);
 
 // here_doc
 int		read_all_here_docs(t_ast_node *ast, t_shell *shell);

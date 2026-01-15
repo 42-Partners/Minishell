@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/12 19:06:05 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 19:27:00 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 	ret = validate_ast(&ast);
 	if (ret != OK)
 		return (ret);
-	ret = check_cmds(&ast, shell->envv);
+	ret = check_cmds(&ast, shell);
 	if (ret != OK)
 	{
 		if (ret == FAIL)
