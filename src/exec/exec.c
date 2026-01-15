@@ -14,7 +14,6 @@
 #include "ast.h"
 #include "exec.h"
 #include "error_handling.h"
-#include "libft.h" //! excluir
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
