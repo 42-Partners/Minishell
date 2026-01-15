@@ -30,21 +30,22 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 	char	*exec;
 	int		ret;
 
-	ret = OK;
 	exec = NULL;
 	if (cmd->cmd)
+	{
+		if (is_builtin(cmd->cmd))
+			return (exec_builtin(cmd, shell));
 		ret = get_cmd_path(&exec, cmd->cmd, shell->envv);
-	if (ret != OK)
-		return (ret);
+		if (ret != OK)
+			return (ret);
+	}
 	pid = fork();
-	if (pid == ERROR)
-		ft_putstr_fd("pipe Error :(", 2);
 	if (pid == OK)
 		launch_command(cmd, exec, shell);
 	if (cmd->cmd)
 		free(exec);
 	if (pid == ERROR)
-		return (ERROR);
+		return (ft_putstr_fd("pipe Error :(", 2), ERROR);
 	shell->status = wait_child(pid);
 	if (shell->status > 0)
 		return (FAIL);
@@ -53,7 +54,6 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 
 static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 {
-	expand_cmd(cmd, shell);
 	if (!cmd->cmd)
 	{
 		exec_redirects(cmd);

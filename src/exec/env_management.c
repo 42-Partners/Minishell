@@ -22,18 +22,20 @@ int	ft_getenv(char *env, char *envv[], char **result)
 	int	index;
 
 	index = 0;
-	if (ft_getenv_index(env, envv, &index) != OK)
+	if (ft_getenv_index(env, envv, &index))
 		return (ERROR);
 	if (index < 0)
 		return (OK);
-	*result = envv[index] + ft_strlen(env) + 1;
+	*result = ft_strdup(envv[index] + ft_strlen(env) + 1);
+	if (!*result)
+		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
 	return (OK);
 }
 
 int	ft_setenv(char *name, char *value, char **envv[])
 {
-	int		index;
 	char	*full_env;
+	int		index;
 
 	index = 0;
 	if (ft_getenv_index(name, *envv, &index) != OK)
@@ -44,7 +46,7 @@ int	ft_setenv(char *name, char *value, char **envv[])
 	if (index < 0)
 	{
 		if (expand_envv(envv) != OK)
-			return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+			return (free(full_env), ERROR);
 		while ((*envv)[++index])
 			;
 		(*envv)[index] = full_env;
@@ -75,35 +77,6 @@ static int	ft_getenv_index(char *env, char *envv[], int *index)
 	return (OK);
 }
 
-static int	expand_envv(char **envv[])
-{
-	char	**duplicate;
-	int		i;
-
-	i = 0;
-	while ((*envv)[i])
-		i++;
-	duplicate = malloc((i + 2) * sizeof(char *));
-	if (!duplicate)
-		return (ERROR);
-	i = -1;
-	while ((*envv)[++i])
-	{
-		duplicate[i] = ft_strdup((*envv)[i]);
-		if (!duplicate[i])
-		{
-			while (--i >= 0)
-				free(duplicate[i]);
-			return (free(duplicate), ERROR);
-		}
-	}
-	duplicate[i] = NULL;
-	duplicate[i + 1] = NULL;
-	ft_free_arr(envv);
-	*envv = duplicate;
-	return (OK);
-}
-
 static char	*build_env(char *name, char *value)
 {
 	char	*full_env;
@@ -125,4 +98,32 @@ static char	*build_env(char *name, char *value)
 	if (!full_env)
 		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
 	return (full_env);
+}
+
+static int	expand_envv(char **envv[])
+{
+	char	**duplicate;
+	int		i;
+
+	i = 0;
+	while ((*envv)[i])
+		i++;
+	duplicate = malloc((i + 2) * sizeof(char *));
+	if (!duplicate)
+		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+	i = -1;
+	while ((*envv)[++i])
+	{
+		duplicate[i] = ft_strdup((*envv)[i]);
+		if (!duplicate[i])
+		{
+			ft_free_arr(&duplicate);
+			return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+		}
+	}
+	duplicate[i] = NULL;
+	duplicate[i + 1] = NULL;
+	ft_free_arr(envv);
+	*envv = duplicate;
+	return (OK);
 }

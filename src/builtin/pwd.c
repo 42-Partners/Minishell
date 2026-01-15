@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/27 18:51:10 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/14 19:34:36 by devrafaelly      ###   ########.fr       */
+/*   Created: 2025/12/31 21:22:09 by gustaoli          #+#    #+#             */
+/*   Updated: 2026/01/14 17:35:20 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_H
-# define EXEC_H
+#include "libft.h"
+#include "minishell.h"
+#include "error_handling.h"
 
-# include "ast.h"
+#include <stdio.h>
 
-int		validate_cmd(t_cmd_node *cmd, t_shell *shell);
-int		get_cmd_path(char **exec, char *cmd, char *envv[]);
-int		check_cmds(t_ast_node **ast, t_shell *shell);
-int		exec_redirects(t_cmd_node *node);
-int		exec_ast(t_ast_node *node, t_shell *shell);
-int		exec_cmd(t_cmd_node *cmd, t_shell *shell);
+int	ft_pwd(t_shell *shell, char **args)
+{
+	char	*pwd;
 
-#endif
+	shell->status = 1;
+	if (*(args + 1))
+	{
+		ft_putstr_fd("pwd: too many arguments\n", 2);
+		return (FAIL);
+	}
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (perror("pwd"), FAIL);
+	ft_putendl_fd(pwd, 1);
+	free(pwd);
+	shell->status = 0;
+	return (OK);
+}

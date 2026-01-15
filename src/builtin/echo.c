@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.h                                             :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/27 18:51:10 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/14 19:34:36 by devrafaelly      ###   ########.fr       */
+/*   Created: 2025/12/30 08:16:20 by gustaoli          #+#    #+#             */
+/*   Updated: 2026/01/13 19:19:14 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXEC_H
-# define EXEC_H
+#include "libft.h"
+#include "minishell.h"
 
-# include "ast.h"
+int	ft_echo(t_shell *shell, char **args)
+{
+	int	i;
+	int	newline;
 
-int		validate_cmd(t_cmd_node *cmd, t_shell *shell);
-int		get_cmd_path(char **exec, char *cmd, char *envv[]);
-int		check_cmds(t_ast_node **ast, t_shell *shell);
-int		exec_redirects(t_cmd_node *node);
-int		exec_ast(t_ast_node *node, t_shell *shell);
-int		exec_cmd(t_cmd_node *cmd, t_shell *shell);
-
-#endif
+	i = 0;
+	newline = 1;
+	while (args[++i] && ft_strcmp(args[i], "-n") == 0)
+		newline = 0;
+	while (args[i])
+	{
+		ft_putstr_fd(args[i++], STDOUT_FILENO);
+		if (args [i])
+			ft_putchar_fd(' ', STDOUT_FILENO);
+	}
+	if (newline)
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	shell->status = 0;
+	return (0);
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 23:51:37 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/09 06:51:41 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/14 20:45:19 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <stdlib.h>
 
 static int	is_var_char(int c);
-char		*strjoin_free(char *s1, char *s2);
 
 int	expand_env(char **result, char *cmd, int *index, char *envp[])
 {
@@ -35,9 +34,10 @@ int	expand_env(char **result, char *cmd, int *index, char *envp[])
 	if (ft_getenv(fragment, envp, &env) != OK)
 		return (free(fragment), ERROR);
 	if (!env)
-		*result = strjoin_free(*result, "");
+		*result = ft_strjoin_free(*result, "");
 	else
-		*result = strjoin_free(*result, env);
+		*result = ft_strjoin_free(*result, env);
+	free(env);
 	free(fragment);
 	if (!*result)
 		return (ERROR);
@@ -52,7 +52,7 @@ int	append_fragment(char **result, char *cmd, int start, int i)
 	fragment = ft_substr(cmd, start, i - start);
 	if (!fragment)
 		return (ERROR);
-	*result = strjoin_free(*result, fragment);
+	*result = ft_strjoin_free(*result, fragment);
 	free(fragment);
 	if (!*result)
 		return (ERROR);
@@ -62,32 +62,4 @@ int	append_fragment(char **result, char *cmd, int start, int i)
 static int	is_var_char(int c)
 {
 	return (ft_isalnum(c) || c == '_');
-}
-
-char	*strjoin_free(char *s1, char *s2)
-{
-	char	*str;
-	size_t	s1_len;
-	size_t	s2_len;
-	size_t	str_len;
-
-	if (!s1)
-		return (NULL);
-	s1_len = ft_strlen(s1);
-	s2_len = 0;
-	if (s2)
-		s2_len = ft_strlen(s2);
-	str_len = s1_len + s2_len;
-	str = malloc(str_len + 1);
-	if (!str)
-	{
-		free(s1);
-		return (NULL);
-	}
-	ft_memcpy(str, s1, s1_len);
-	ft_memcpy(str + s1_len, s2, s2_len);
-	str[str_len] = '\0';
-	free(s1);
-	s1 = str;
-	return (s1);
 }

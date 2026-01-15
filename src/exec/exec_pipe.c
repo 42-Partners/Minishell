@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 00:53:54 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/14 21:23:43 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/12 20:55:39 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int		exec_ast(t_ast_node *node, t_shell *shell);
-void	exec_pipe_child(t_ast_node *node, t_shell *shell,
-			int pipe_cmd[2], int n);
+int			exec_ast(t_ast_node *node, t_shell *shell);
+static void	exec_pipe_child(t_ast_node *node, t_shell *shell,
+				int pipe_cmd[2], int n);
 
-int	handle_pipe(t_ast_node *node, t_shell *shell,
+int	exec_pipe(t_ast_node *node, t_shell *shell,
 	pid_t *pid_left, pid_t *pid_right)
 {
 	int		pipe_cmd[2];
@@ -54,7 +54,7 @@ int	handle_pipe(t_ast_node *node, t_shell *shell,
 	return (OK);
 }
 
-void	exec_pipe_child(t_ast_node *node, t_shell *shell,
+static void	exec_pipe_child(t_ast_node *node, t_shell *shell,
 	int pipe_cmd[2], int n)
 {
 	if (n == 1)

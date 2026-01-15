@@ -3,37 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   validate_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/06 18:41:54 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 10:05:33 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
+#include "minishell.h"
+#include "error_handling.h"
 
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "libft.h"
-#include "error_handling.h"
-
 static int	get_bin_paths(char **envv, char ***bin_paths);
 static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **aux);
 static char	*construct_path(char *bin_path, char *cmd);
 
-int	validate_cmd(char *cmd, char **envv)
+int	validate_cmd(t_cmd_node *cmd, t_shell *shell)
 {
 	char	**bin_paths;
 	char	*aux;
 	int		ret;
 
-	ret = OK;
-	if (access(cmd, X_OK) == 0)
+	if (expand_cmd(cmd, shell) != OK)
+		return (ERROR);
+	if (is_builtin(cmd->cmd))
 		return (OK);
-	ret = get_bin_paths(envv, &bin_paths);
+	if (access(cmd->cmd, X_OK) == 0)
+		return (OK);
+	ret = get_bin_paths(shell->envv, &bin_paths);
 	if (ret != OK)
 		return (ret);
-	ret = verify_cmd_in_bin_paths(cmd, bin_paths, &aux);
+	ret = verify_cmd_in_bin_paths(cmd->cmd, bin_paths, &aux);
 	ft_free_arr(&bin_paths);
 	if (ret != OK)
 		return (ret);

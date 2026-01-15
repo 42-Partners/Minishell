@@ -51,6 +51,7 @@ SRC :=	src/basic/ft_isalnum.c \
 	src/basic/ft_putnbr_fd.c \
 	src/basic/ft_substr.c \
 	src/basic/ft_strjoin.c \
+	src/basic/ft_strjoin_free.c \
 	src/basic/ft_strmapi.c \
 	src/basic/ft_striteri.c \
 	src/basic/ft_itoa.c \
