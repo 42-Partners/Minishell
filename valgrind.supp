@@ -18,6 +18,14 @@
    fun:add_history
 }
 
+{
+   readline_comprehensive
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libreadline.so.*
+}
+
 # Readline internal structures
 {
    readline_internal_1

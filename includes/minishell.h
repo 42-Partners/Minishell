@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/14 20:46:11 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 21:00:54 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ extern volatile sig_atomic_t	g_signal;
 
 typedef struct s_shell
 {
-	int		status;
-	char	**envv;
+	int			status;
+	char		**envv;
+	t_ast_node	*ast;
 }	t_shell;
 
 // signal
@@ -46,5 +47,8 @@ int		ft_setenv(char *name, char *value, char **envv[]);
 // builtin
 int		is_builtin(char *cmd);
 int		exec_builtin(t_cmd_node *cmd, t_shell *shell);
+
+// exit
+void	exec_exit(t_shell *shell, int status);
 
 #endif

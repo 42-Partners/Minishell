@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 #include "ast.h"
+#include "libft.h"
 #include "error_handling.h"
 
 #include <stdlib.h>
@@ -29,13 +30,13 @@ int	exec_pipe(t_ast_node *node, t_shell *shell,
 	int		pipe_cmd[2];
 
 	if (pipe(pipe_cmd) == -1)
-		return (perror("Error"), FAIL);
+		return (ft_putstr_fd("pipe Error :(", 2), FAIL);
 	*pid_left = fork();
 	if (*pid_left == -1)
 	{
 		close(pipe_cmd[0]);
 		close(pipe_cmd[1]);
-		return (perror("Error"), FAIL);
+		return (ft_putstr_fd("pipe Error :(", 2), FAIL);
 	}
 	if (*pid_left == 0)
 		exec_pipe_child(node, shell, pipe_cmd, 1);
@@ -44,7 +45,7 @@ int	exec_pipe(t_ast_node *node, t_shell *shell,
 	{
 		close(pipe_cmd[0]);
 		close(pipe_cmd[1]);
-		return (perror("Error"), FAIL);
+		return (ft_putstr_fd("fork Error :(", 2), FAIL);
 	}
 	if (*pid_right == 0)
 		exec_pipe_child(node, shell, pipe_cmd, 0);
@@ -70,5 +71,5 @@ static void	exec_pipe_child(t_ast_node *node, t_shell *shell,
 		close(pipe_cmd[1]);
 		exec_ast(node->t_node.pipe_node.right, shell);
 	}
-	exit(shell->status);
+	exec_exit(shell, shell->status);
 }
