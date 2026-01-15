@@ -74,6 +74,7 @@ SRC :=	src/basic/ft_isalnum.c \
 	src/printf/ft_print_nbr.c \
 	src/printf/ft_print_hexa.c \
 	src/printf/ft_print_pointer.c \
+	src/fprintf/ft_fprintf.c \
 	src/gnl/get_next_line.c
 
 OBJ := $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
