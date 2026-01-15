@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:31:57 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/15 18:59:34 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 20:22:37 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	get_word(t_token **token, char **input)
 			while ((*input)[i] && (*input)[i] != quote)
 				i++;
 			if (!(*input)[i])
-				return (ft_putstr_fd("syntax error: unclosed quote\n", 2), FAIL);
+				return (ft_fprintf(2, "syntax error: unclosed quote\n"), FAIL);
 		}
 		i++;
 	}
