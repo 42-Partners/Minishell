@@ -3,29 +3,86 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:46:37 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/31 22:14:12 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/14 20:15:26 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "minishell.h"
+#include "error_handling.h"
 
-static int	ft_export(char **args, char **envp[], int *status)
+static int	set_var(t_shell *shell, char **args);
+static int	is_valid_var_name(char *arg);
+static void	cleanup(char *name, char *value);
+
+int	ft_export(t_shell *shell, char **args)
 {
-	char	*expanded_arg;
-	char	*assign;
-
-	while (*(++args))
+	shell->status = 1;
+	args++;
+	if (!*args)
+		return (OK);
+	if ((*args)[0] == '-')
+		return (ft_putstr_fd("export: invalid option\n", 2), FAIL);
+	if (!ft_isalpha((*args)[0]) && (*args)[0] != '_')
+		return (ft_putstr_fd("export: not a valid identifier\n", 2), FAIL);
+	while (*args)
 	{
-		expanded_arg = NULL; //expand arg
-		assign = ft_strchr(expanded_arg, '=');
-		if (!assign)
-			continue ;
-		expanded_arg[assign - expanded_arg] = '\0';
-		ft_setenv(expanded_arg, &(expanded_arg[1 + assign - expanded_arg]));
-		free(expanded_arg);
+		if (!is_valid_var_name(*args))
+			return (ft_putstr_fd("export: invalid name\n", 2), FAIL);
+		if (set_var(shell, args) != OK)
+			return (ERROR);
+		args++;
 	}
-	return (0);
+	shell->status = 0;
+	return (OK);
+}
+
+static int	set_var(t_shell *shell, char **args)
+{
+	char	*assign;
+	char	*name;
+	char	*value;
+
+	assign = ft_strchr(*args, '=');
+	if (!assign)
+	{
+		ft_setenv(*args, NULL, &shell->envv);
+		args++;
+		return (OK);
+	}
+	name = ft_substr(*args, 0, assign - *args);
+	if (!name)
+		return (ERROR);
+	value = ft_strdup(assign + 1);
+	if (!value)
+		return (ERROR);
+	if (ft_setenv(name, value, &shell->envv) != OK)
+	{
+		cleanup(name, value);
+		return (ERROR);
+	}
+	cleanup(name, value);
+	return (OK);
+}
+
+static int	is_valid_var_name(char *arg)
+{
+	while (*arg)
+	{
+		if (*arg == '=')
+			break ;
+		if (!ft_isalnum(*arg) && *arg != '_')
+			return (0);
+		arg++;
+	}
+	return (1);
+}
+
+static void	cleanup(char *name, char *value)
+{
+	free(name);
+	free(value);
 }

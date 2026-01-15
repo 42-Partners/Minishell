@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 06:45:55 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/14 17:34:33 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/14 19:04:42 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@
 int			ft_echo(t_shell *shell, char **args);
 int			ft_cd(t_shell *shell, char **argv);
 int			ft_pwd(t_shell *shell, char **args);
+int			ft_export(t_shell *shell, char **args);
 static int	find_builtin(t_shell *shell, char *cmd, char **args);
 
 int	is_builtin(char *cmd)
 {
 	return (!ft_strcmp(cmd, "cd")
 		|| !ft_strcmp(cmd, "echo")
-		|| !ft_strcmp(cmd, "pwd"));
+		|| !ft_strcmp(cmd, "pwd")
+		|| !ft_strcmp(cmd, "export"));
 }
 
 int	exec_builtin(t_cmd_node *cmd, t_shell *shell)
@@ -55,5 +57,7 @@ static int	find_builtin(t_shell *shell, char *cmd, char **args)
 		return (ft_cd(shell, args));
 	else if (ft_strcmp(cmd, "pwd") == 0)
 		return (ft_pwd(shell, args));
+	else if (ft_strcmp(cmd, "export") == 0)
+		return (ft_export(shell, args));
 	return (FAIL);
 }
