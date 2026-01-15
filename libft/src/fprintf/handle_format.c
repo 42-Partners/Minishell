@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 19:00:19 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/15 19:17:04 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 20:29:54 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdarg.h>
 
 int	ft_printchar_fd(char c, int fd);
+int	ft_printstr_fd(char *s, int fd);
 int	ft_printnbr_fd(long n, int fd);
 int	ft_printunbr_fd(unsigned long n, int fd);
 int	ft_printhex_fd(unsigned long n, int fd, int upper);

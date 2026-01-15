@@ -6,11 +6,9 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 19:02:48 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/15 19:17:30 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 20:24:42 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "libft.h"
 
 #include <unistd.h>
 #include <stdarg.h>
