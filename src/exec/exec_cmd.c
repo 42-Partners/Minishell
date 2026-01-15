@@ -32,8 +32,6 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 
 	ret = OK;
 	exec = NULL;
-	if (expand_cmd(cmd, shell) != OK)
-		return (ERROR);
 	if (cmd->cmd)
 	{
 		if (is_builtin(cmd->cmd))
@@ -47,6 +45,7 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 		return (perror("Error"), FAIL);
 	if (pid == 0)
 		launch_command(cmd, exec, shell);
+	free(exec);
 	shell->status = wait_child(pid);
 	if (shell->status > 0)
 		return (FAIL);
@@ -63,10 +62,7 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 		exit (0);
 	}
 	else
-	{
 		exec_and_redirect(exec, cmd, shell->envv);
-		free(exec);
-	}
 }
 
 static void	exec_and_redirect(char *exec, t_cmd_node *cmd, char *envv[])
