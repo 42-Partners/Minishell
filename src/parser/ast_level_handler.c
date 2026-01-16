@@ -17,74 +17,104 @@
 
 #include <stdlib.h>
 
-static void	*new_high_level_node( t_node_type type,
+static int	new_high_level_node(void **node, t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
+static int	fill_high_level_node(void **node, t_node_type type,
+				t_token *right_tokens, t_token *left_tokens);
+static void	cleanup(t_token *left, t_token *right, void *node);
 
-t_ast_node	*handle_low_level(t_token *tokens)
+int	handle_low_level(t_ast_node **ast, t_token *tokens)
 {
-	t_ast_node	*ret;
 	t_cmd_node	*cmd_node;
+	int			ret;
 
-	if (!tokens)
-		return (NULL);
-	ret = malloc(sizeof(t_ast_node));
-	if (!ret)
-		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
-	ret->type = CMD;
-	cmd_node = consume_tokens(tokens);
-	if (!cmd_node)
-		return (free(ret), NULL);
-	ret->t_node.cmd_node = *cmd_node;
+	cmd_node = NULL;
+	*ast = malloc(sizeof(t_ast_node));
+	if (!*ast)
+		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+	(*ast)->type = CMD;
+	ret = consume_tokens(&cmd_node, tokens);
+	if (ret != OK)
+		return (ret);
+	(*ast)->t_node.cmd_node = *cmd_node;
 	free(cmd_node);
-	return (ret);
+	return (OK);
 }
 
-t_ast_node	*handle_high_level(t_node_type type,
-				t_token *right_tokens, t_token *left_tokens)
+int	handle_high_level(t_ast_node **ast, t_node_type type,
+	t_token *right_tokens, t_token *left_tokens)
 {
-	t_ast_node	*ret;
-	void		*ret_sub_node;
+	void	*sub_node;
+	int		ret;
 
+	if (!right_tokens || !left_tokens)
+		return (ERROR);
 	if (type != LOGICAL && type != PIPE)
-		return (NULL);
-	ret = malloc(sizeof(t_ast_node));
-	if (!ret)
-		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
-	ret->type = type;
-	ret_sub_node = new_high_level_node(type, right_tokens, left_tokens);
+		return (ERROR);
+	*ast = malloc(sizeof(t_ast_node));
+	if (!*ast)
+		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+	(*ast)->type = type;
+	sub_node = NULL;
+	ret = new_high_level_node(&sub_node, type, right_tokens, left_tokens);
+	if (ret != OK)
+		return (ret);
 	if (type == LOGICAL)
-		ret->t_node.logical_node = *((t_logical_node *)ret_sub_node);
+		(*ast)->t_node.logical_node = *((t_logical_node *)sub_node);
 	else if (type == PIPE)
-		ret->t_node.pipe_node = *((t_pipe_node *)ret_sub_node);
-	else
-		return (free(ret), NULL);
-	free(ret_sub_node);
-	return (ret);
+		(*ast)->t_node.pipe_node = *((t_pipe_node *)sub_node);
+	free(sub_node);
+	return (OK);
 }
 
-static void	*new_high_level_node(t_node_type type,
-	t_token *left_tokens, t_token *right_tokens)
+static int	new_high_level_node(void **node, t_node_type type,
+			t_token *right_tokens, t_token *left_tokens)
 {
-	void	*ret;
+	int	ret;
 
-	ret = NULL;
 	if (type == LOGICAL)
-		ret = malloc(sizeof(t_logical_node));
+		*node = malloc(sizeof(t_logical_node));
 	else if (type == PIPE)
-		ret = malloc(sizeof(t_pipe_node));
-	if (!ret)
-		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
+		*node = malloc(sizeof(t_pipe_node));
+	if (!*node)
+		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+	ret = fill_high_level_node(node, type, right_tokens, left_tokens);
+	if (ret != OK)
+		return (cleanup(left_tokens, right_tokens, *node), ret);
+	cleanup(left_tokens, right_tokens, NULL);
+	return (OK);
+}
+
+static int	fill_high_level_node(void **node, t_node_type type,
+		t_token *right_tokens, t_token *left_tokens)
+{
+	int	ret;
+
 	if (type == LOGICAL)
 	{
-		((t_logical_node *)ret)->left = build_ast(left_tokens);
-		((t_logical_node *)ret)->right = build_ast(right_tokens);
+		ret = build_ast(&((t_logical_node *)(*node))->left, left_tokens);
+		if (ret != OK)
+			return (ret);
+		ret = build_ast(&((t_logical_node *)(*node))->right, right_tokens);
+		if (ret != OK)
+			return (ret);
 	}
 	else if (type == PIPE)
 	{
-		((t_pipe_node *)ret)->left = build_ast(left_tokens);
-		((t_pipe_node *)ret)->right = build_ast(right_tokens);
+		ret = build_ast(&((t_pipe_node *)(*node))->left, left_tokens);
+		if (ret != OK)
+			return (ret);
+		ret = build_ast(&((t_pipe_node *)(*node))->right, right_tokens);
+		if (ret != OK)
+			return (ret);
 	}
-	free_token(&left_tokens);
-	free_token(&right_tokens);
-	return (ret);
+	return (OK);
+}
+
+static void	cleanup(t_token *left, t_token *right, void *node)
+{
+	free_token(&left);
+	free_token(&right);
+	if (node)
+		free(node);
 }

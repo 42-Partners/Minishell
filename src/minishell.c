@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/15 23:32:07 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/16 00:20:13 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,13 @@ static int	input_process(char *input, t_shell *shell)
 
 static int	parse_and_execute(t_token *token, t_shell *shell)
 {
-	int			ret;
+	int	ret;
 
-	shell->ast = build_ast(token);
+	shell->ast = NULL;
+	ret = build_ast(&shell->ast, token);
 	free_token(&token);
-	ret = OK;
-	if (!shell->ast)
-		return (ERROR);
+	if (ret != OK)
+		return (free_ast(&shell->ast), ret);
 	ret = validate_ast(&shell->ast);
 	if (ret != OK)
 		return (ret);
@@ -103,6 +103,5 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 		return (free_ast(&shell->ast), ret);
 	exec_ast(shell->ast, shell);
 	free_ast(&shell->ast);
-	shell->ast = NULL;
 	return (OK);
 }
