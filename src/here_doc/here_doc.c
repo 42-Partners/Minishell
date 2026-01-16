@@ -31,7 +31,7 @@ int	read_all_here_docs(t_ast_node *ast, t_shell *shell)
 	ret = OK;
 	if (ast->type == CMD)
 		return (read_here_docs(ast->t_node.cmd_node, shell));
-	else if (ast->type == LOGICAL)
+	else if (ast->type == LOGICAL_AND || ast->type == LOGICAL_OR)
 	{
 		ret = read_all_here_docs(ast->t_node.logical_node.left, shell);
 		if (ret != OK)

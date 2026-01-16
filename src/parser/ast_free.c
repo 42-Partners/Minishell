@@ -25,7 +25,7 @@ void	free_ast(t_ast_node **ast)
 	node = *ast;
 	if (node->type == CMD)
 		free_cmd(&node->t_node.cmd_node);
-	else if (node->type == LOGICAL)
+	else if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
 	{
 		free_ast(&node->t_node.logical_node.left);
 		free_ast(&node->t_node.logical_node.right);

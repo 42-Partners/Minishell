@@ -74,7 +74,7 @@ static int	check_cmd_node(t_ast_node *node, t_shell *shell)
 		if (node->t_node.cmd_node.cmd != NULL)
 			return (validate_cmd(&(node->t_node.cmd_node), shell));
 	}
-	else if (node->type == LOGICAL)
+	else if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
 	{
 		ret = check_cmd_node(node->t_node.logical_node.left, shell);
 		if (ret == OK)
