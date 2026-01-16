@@ -52,7 +52,7 @@ int	is_arg_valid(char *arg)
 		return (0);
 	while (*arg == 32 || (*arg >= 9 && *arg <= 13))
 		arg++;
-	if(*arg == '-' || *arg == '+')
+	if (*arg == '-' || *arg == '+')
 		arg++;
 	while (*arg)
 	{
