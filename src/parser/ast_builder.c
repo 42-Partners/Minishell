@@ -28,6 +28,8 @@ int	build_ast(t_ast_node **ast, t_token *tokens)
 	int			ret;
 	t_node_type	next_node_type;
 
+	if (!tokens)
+		return(*ast = NULL, OK);
 	next_node_type = detect_next_node_type(tokens);
 	if (next_node_type == CMD)
 		ret = handle_low_level(ast, tokens);

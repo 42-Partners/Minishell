@@ -21,7 +21,6 @@ static int	new_high_level_node(void **node, t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
 static int	fill_high_level_node(void **node, t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
-static void	cleanup(t_token *left, t_token *right, void *node);
 
 int	handle_low_level(t_ast_node **ast, t_token *tokens)
 {
@@ -47,8 +46,6 @@ int	handle_high_level(t_ast_node **ast, t_node_type type,
 	void	*sub_node;
 	int		ret;
 
-	if (!right_tokens || !left_tokens)
-		return (ERROR);
 	if (type != LOGICAL_AND && type != LOGICAL_OR && type != PIPE)
 		return (ERROR);
 	*ast = malloc(sizeof(t_ast_node));
@@ -79,10 +76,11 @@ static int	new_high_level_node(void **node, t_node_type type,
 	if (!*node)
 		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
 	ret = fill_high_level_node(node, type, right_tokens, left_tokens);
+	free_token(&left_tokens);
+	free_token(&right_tokens);
 	if (ret != OK)
-		return (cleanup(left_tokens, right_tokens, *node), ret);
-	cleanup(left_tokens, right_tokens, NULL);
-	return (OK);
+		free(*node);
+	return (ret);
 }
 
 static int	fill_high_level_node(void **node, t_node_type type,
@@ -112,12 +110,4 @@ static int	fill_high_level_node(void **node, t_node_type type,
 			return (ret);
 	}
 	return (OK);
-}
-
-static void	cleanup(t_token *left, t_token *right, void *node)
-{
-	free_token(&left);
-	free_token(&right);
-	if (node)
-		free(node);
 }

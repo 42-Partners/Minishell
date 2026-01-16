@@ -42,7 +42,7 @@ static int	validate_ast_node(t_ast_node *node)
 		return (ERROR);
 	if (node->type == CMD)
 		return (validate_cmd(node->t_node.cmd_node));
-	else if (node->type == LOGICAL || node->type == PIPE)
+	else
 		return (validate_high_level(node->type, node));
 	return (OK);
 }
@@ -76,12 +76,12 @@ static int	validate_high_level(t_node_type type, t_ast_node *node)
 	t_ast_node	*left;
 	t_ast_node	*right;
 
-	if (type == LOGICAL)
+	if (type == LOGICAL_AND || type == LOGICAL_OR)
 	{
 		left = node->t_node.logical_node.left;
 		right = node->t_node.logical_node.right;
 		if ((!left || !right))
-			ft_putstr_fd("syntax error near logical token\n", 2);
+			return (ft_putstr_fd("syntax error near logical token\n", 2), FAIL);
 	}
 	else if (type == PIPE)
 	{
