@@ -62,7 +62,7 @@ static int	read_here_docs(t_cmd_node cmd, t_shell *shell)
 			continue ;
 		content = ft_strdup("");
 		if (!content)
-			return (ERROR);
+			return (ft_fprintf(2, ERR_MALLOC), ERROR);
 		ret = read_and_expand(&(cmd.redirects[i]->file_name), &content, shell);
 		if (ret != OK)
 			return (ret);

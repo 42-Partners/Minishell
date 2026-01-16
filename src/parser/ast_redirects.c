@@ -48,12 +48,11 @@ int	get_redirects(t_cmd_node **node, t_token *tokens)
 }
 
 static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
-{     
+{
 	int	i;
 	int	ret;
 
 	i = 0;
-	ret = OK;
 	while (tokens)
 	{
 		if (tokens->type == TOKEN_HEREDOC || tokens->type == TOKEN_REDIRECT_IN
@@ -62,7 +61,10 @@ static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 		{
 			(*redirect)[i] = malloc(sizeof(t_redirect));
 			if (!(*redirect)[i])
-				return (free_array((void **)(*redirect), i), ERROR);
+			{
+				free_array((void **)(*redirect), i);
+				return (ft_fprintf(2, ERR_MALLOC), ERROR);
+			}
 			ret = handle_redirect_token(&((*redirect)[i]), tokens);
 			if (ret != OK)
 				return (free_array((void **)(*redirect), i), ret);
@@ -90,10 +92,14 @@ static int	handle_redirect_token(t_redirect **redirect, t_token *token)
 	else if (token->type == TOKEN_REDIRECT_APPEND)
 		(*redirect)->type = REDIRECT_APPEND;
 	if (!token->next || token->next->type != TOKEN_WORD)
+	{
+		ft_fprintf(2,
+			"syntax error near token '%s'\n", token->value);
 		return (FAIL);
+	}
 	(*redirect)->file_name = ft_strdup(token->next->value);
 	if (!(*redirect)->file_name)
-		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+		return (ft_fprintf(2, ERR_MALLOC), ERROR);
 	return (OK);
 }
 

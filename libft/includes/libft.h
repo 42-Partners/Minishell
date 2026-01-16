@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:50:47 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/14 20:47:09 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 19:15:16 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 
 # include "ft_printf.h"
+# include "ft_fprintf.h"
 # include "gnl.h"
 
 typedef struct s_list

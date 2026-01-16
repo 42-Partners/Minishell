@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/15 19:40:02 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 22:03:16 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 	ret = build_ast(&shell->ast, token);
 	free_token(&token);
 	if (ret != OK)
-		return (ret);
+		return (free_ast(&shell->ast), ret);
 	ret = validate_ast(&shell->ast);
 	if (ret != OK)
 		return (ret);

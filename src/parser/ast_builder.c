@@ -36,14 +36,14 @@ int	build_ast(t_ast_node **ast, t_token *tokens)
 	{
 		ret = handle_low_level(ast, tokens);
 		if (ret != OK)
-			return (free_ast(ast), ret);
+			return (*ast = NULL, ret);
 	}
 	else
 	{
 		ret = handle_high_level(ast, PIPE,
 				divide_right(tokens, aux), divide_left(tokens, aux));
 		if (ret != OK)
-			return (free_ast(ast), ret);
+			return (*ast = NULL, ret);
 	}
 	return (OK);
 }

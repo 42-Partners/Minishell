@@ -72,19 +72,20 @@ static int	get_args(t_cmd_node **node, t_token *tokens)
 	if (!node || !*node)
 		return (ERROR);
 	if (!tokens || n_args == 0)
+	{
 		(*node)->args = NULL;
+		return (OK);
+	}
 	else if (n_args == 1)
 		(*node)->args = malloc(sizeof(char *) * 2);
 	else
-	{
 		(*node)->args = malloc(sizeof(char *) * (n_args + 1));
-		if (!(*node)->args)
-		{
-			ft_putstr_fd(ERR_MALLOC, 2);
-			free(*node);
-			*node = NULL;
-			return (ERROR);
-		}
+	if (!(*node)->args)
+	{
+		ft_fprintf(2, ERR_MALLOC);
+		free(*node);
+		*node = NULL;
+		return (ERROR);
 	}
 	fill_args(node, tokens);
 	return (OK);
