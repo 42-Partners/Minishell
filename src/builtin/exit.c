@@ -22,7 +22,7 @@
 int	is_arg_valid(char *arg);
 int	convert_exit_status(int arg);
 
-int	ft_exit(t_shell *shell, char **args)
+int	ft_exit(t_shell *shell, char **args, int pipe)
 {
 	int	exit_status;
 
@@ -41,7 +41,8 @@ int	ft_exit(t_shell *shell, char **args)
 	if (shell->ast)
 		free_ast(&shell->ast);
 	ft_free_arr(&shell->envv);
-	write(STDERR_FILENO, "exit: Bye Bye\n", 15);
+	if (pipe == 0)
+		write(STDERR_FILENO, "exit: Bye Bye\n", 15);
 	close(STDERR_FILENO);
 	exit(exit_status);
 }

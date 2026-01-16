@@ -39,10 +39,10 @@ int	check_cmds(t_ast_node **ast, t_shell *shell)
 	return (OK);
 }
 
-int	exec_ast(t_ast_node *node, t_shell *shell)
+int	exec_ast(t_ast_node *node, t_shell *shell, int pipe)
 {
 	if (node->type == CMD)
-		return (exec_cmd(&(node->t_node.cmd_node), shell));
+		return (exec_cmd(&(node->t_node.cmd_node), shell, pipe));
 	return (exec_high_level_node(node, shell));
 }
 

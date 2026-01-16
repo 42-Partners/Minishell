@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/09 00:53:54 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/12 20:55:39 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/16 18:41:22 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-int			exec_ast(t_ast_node *node, t_shell *shell);
+int			exec_ast(t_ast_node *node, t_shell *shell, int pipe);
 static void	exec_pipe_child(t_ast_node *node, t_shell *shell,
 				int pipe_cmd[2], int n);
 
@@ -62,14 +62,14 @@ static void	exec_pipe_child(t_ast_node *node, t_shell *shell,
 		dup2(pipe_cmd[n], STDOUT_FILENO);
 		close(pipe_cmd[0]);
 		close(pipe_cmd[1]);
-		exec_ast(node->t_node.pipe_node.left, shell);
+		exec_ast(node->t_node.pipe_node.left, shell, 1);
 	}
 	else if (n == 0)
 	{
 		dup2(pipe_cmd[n], STDIN_FILENO);
 		close(pipe_cmd[0]);
 		close(pipe_cmd[1]);
-		exec_ast(node->t_node.pipe_node.right, shell);
+		exec_ast(node->t_node.pipe_node.right, shell, 1);
 	}
 	exec_exit(shell, shell->status);
 }

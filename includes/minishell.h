@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/15 19:20:18 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/16 18:39:18 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int		ft_setenv(char *name, char *value, char **envv[]);
 
 // builtin
 int		is_builtin(char *cmd);
-int		exec_builtin(t_cmd_node *cmd, t_shell *shell);
-int		ft_exit(t_shell *shell, char **args);
+int		exec_builtin(t_cmd_node *cmd, t_shell *shell, int pipe);
+int		ft_exit(t_shell *shell, char **args, int pipe);
 
 // exit
 void	exec_exit(t_shell *shell, int status);
