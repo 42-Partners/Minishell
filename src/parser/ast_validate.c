@@ -56,7 +56,7 @@ static int	validate_cmd(t_cmd_node cmd)
 	{
 		if (!cmd.redirects[i]->file_name)
 		{
-			write(1, "syntax error near unexpected token '", 25);
+			write(1, "syntax error near token '", 25);
 			if (cmd.redirects[i]->type == REDIRECT_IN)
 				write(1, "<'\n", 3);
 			else if (cmd.redirects[i]->type == REDIRECT_OUT)

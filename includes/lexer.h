@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/15 16:27:37 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 23:42:49 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,
+	TOKEN_AND,
+	TOKEN_OR,
 	TOKEN_PIPE,
+	TOKEN_WORD,
 	TOKEN_REDIRECT_IN,
 	TOKEN_REDIRECT_OUT,
 	TOKEN_REDIRECT_APPEND,

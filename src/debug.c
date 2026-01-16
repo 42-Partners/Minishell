@@ -56,6 +56,10 @@ static char	*get_token_type(t_token token)
 		return ("HERE_DOC");
 	else if (token.type == TOKEN_PIPE)
 		return ("PIPE");
+	else if (token.type == TOKEN_AND)
+		return ("AND");
+	else if (token.type == TOKEN_OR)
+		return ("OR");
 	else if (token.type == TOKEN_REDIRECT_IN)
 		return ("RED_IN");
 	else if (token.type == TOKEN_REDIRECT_OUT)

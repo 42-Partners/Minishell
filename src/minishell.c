@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/15 20:24:00 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 23:32:07 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static int	input_process(char *input, t_shell *shell)
 		ret = tokenize(&token, &line);
 		if (ret != OK)
 			return (free(input), ret);
+		print_tokens(token, "tokens =");
 		ret = parse_and_execute(token, shell);
 		if (ret != OK)
 			return (free(input), ret);
