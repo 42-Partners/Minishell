@@ -51,7 +51,17 @@ static int	exec_high_level_node(t_ast_node *node, t_shell *shell)
 {
 	pid_t	pid_left;
 	pid_t	pid_right;
+	int		ret;
 
+	ret = OK;
+	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
+	{
+		ret = exec_ast(node->t_node.logical_node.left, shell);
+		if ((node->type == LOGICAL_AND && ret == OK)
+				|| (node->type == LOGICAL_OR && ret == FAIL))
+			ret = exec_ast(node->t_node.logical_node.right, shell);
+		return (ret);
+	}
 	if (node->type == PIPE)
 	{
 		if (exec_pipe(node, shell, &pid_left, &pid_right) != OK)
