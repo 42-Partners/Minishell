@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/15 10:05:33 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/16 17:15:46 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,36 @@
 #include <stdlib.h>
 
 static int	get_bin_paths(char **envv, char ***bin_paths);
-static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **aux);
+static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **exec);
 static char	*construct_path(char *bin_path, char *cmd);
 
 int	validate_cmd(t_cmd_node *cmd, t_shell *shell)
 {
 	char	**bin_paths;
 	char	*aux;
+	char	*cmd_expanded;
 	int		ret;
 
-	if (expand_cmd(cmd, shell) != OK)
+	if (!cmd->cmd)
+		return (OK);
+	cmd_expanded = ft_strdup(cmd->cmd);
+	if (!cmd_expanded)
 		return (ERROR);
-	if (is_builtin(cmd->cmd))
-		return (OK);
-	if (access(cmd->cmd, X_OK) == 0)
-		return (OK);
+	ret = expand_string(&cmd_expanded, shell);
+	if (ret != OK)
+		return (free(cmd_expanded), ret);
+	if (is_builtin(cmd_expanded))
+		return (free(cmd_expanded), OK);
+	if (access(cmd_expanded, X_OK) == 0)
+		return (free(cmd_expanded), OK);
 	ret = get_bin_paths(shell->envv, &bin_paths);
 	if (ret != OK)
-		return (ret);
-	ret = verify_cmd_in_bin_paths(cmd->cmd, bin_paths, &aux);
+		return (free(cmd_expanded), ret);
+	ret = verify_cmd_in_bin_paths(cmd_expanded, bin_paths, &aux);
+	if (ret == OK)
+		free(aux);
 	ft_free_arr(&bin_paths);
-	if (ret != OK)
-		return (ret);
-	free(aux);
-	return (OK);
+	return (free(cmd_expanded), ret);
 }
 
 int	get_cmd_path(char **exec, char *cmd, char *envv[])
@@ -50,33 +56,34 @@ int	get_cmd_path(char **exec, char *cmd, char *envv[])
 	char	**bin_paths;
 	int		ret;
 
-	ret = 1;
+	ret = OK;
 	if (access(cmd, X_OK) == 0)
 	{
 		*exec = ft_strdup(cmd);
 		if (!*exec)
 			return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
 	}
-	ret = get_bin_paths(envv, &bin_paths);
-	if (ret != OK)
-		return (ret);
-	ret = verify_cmd_in_bin_paths(cmd, bin_paths, exec);
-	ft_free_arr(&bin_paths);
-	if (ret != OK)
-		return (ret);
-	return (OK);
+	else
+	{
+		ret = get_bin_paths(envv, &bin_paths);
+		if (ret != OK)
+			return (ret);
+		ret = verify_cmd_in_bin_paths(cmd, bin_paths, exec);
+		ft_free_arr(&bin_paths);
+	}
+	return (ret);
 }
 
-static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **aux)
+static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **exec)
 {
 	while (*bin_paths)
 	{
-		*aux = construct_path(*bin_paths, cmd);
-		if (!*aux)
-			return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
-		if (access(*aux, X_OK) == 0)
+		*exec = construct_path(*bin_paths, cmd);
+		if (!*exec)
+			return (ERROR);
+		if (access(*exec, X_OK) == 0)
 			return (OK);
-		free(*aux);
+		free(*exec);
 		bin_paths++;
 	}
 	return (ft_printf("Command not found: %s\n", cmd), FAIL);
