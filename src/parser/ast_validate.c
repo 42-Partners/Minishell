@@ -19,7 +19,7 @@
 #include <stdio.h>
 
 static int	validate_ast_node(t_ast_node *node);
-static int	validate_cmd(t_cmd_node cmd);
+static int	validate_cmd_node(t_cmd_node cmd);
 static int	validate_high_level(t_node_type type, t_ast_node *node);
 static int	validate_ast_children(t_ast_node *left, t_ast_node *right);
 
@@ -41,13 +41,13 @@ static int	validate_ast_node(t_ast_node *node)
 	if (!node)
 		return (ERROR);
 	if (node->type == CMD)
-		return (validate_cmd(node->t_node.cmd_node));
+		return (validate_cmd_node(node->t_node.cmd_node));
 	else
 		return (validate_high_level(node->type, node));
 	return (OK);
 }
 
-static int	validate_cmd(t_cmd_node cmd)
+static int	validate_cmd_node(t_cmd_node cmd)
 {
 	int	i;
 

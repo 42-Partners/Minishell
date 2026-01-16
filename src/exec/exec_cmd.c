@@ -45,6 +45,7 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 	if (pid == -1)
 		return (ft_putstr_fd("pipe Error :(", 2), ERROR);
 	shell->status = wait_child(pid);
+	free(exec);
 	if (shell->status > 0)
 		return (FAIL);
 	return (OK);
