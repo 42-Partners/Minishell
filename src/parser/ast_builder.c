@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 #include "ast.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,6 +38,17 @@ t_ast_node	*build_ast(t_token *tokens)
 		ast = handle_high_level(PIPE,
 				divide_left(tokens, aux), divide_right(tokens, aux));
 	return (ast);
+}
+
+t_node_type	detect_next_node_type(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == TOKEN_PIPE)
+			return (PIPE);
+		tokens = tokens->next;
+	}
+	return (CMD);
 }
 
 static t_token	*divide_left(t_token *token_head, t_token *father)
@@ -83,17 +95,4 @@ static t_token	*divide_right(t_token *token_head, t_token *father)
 		aux = aux->next;
 	}
 	return (ret);
-}
-
-t_node_type	detect_next_node_type(t_token *tokens)
-{
-	while (tokens)
-	{
-		if (tokens->type == TOKEN_PIPE)
-			break ;
-		tokens = tokens->next;
-	}
-	if (tokens && tokens->type == TOKEN_PIPE)
-		return (PIPE);
-	return (CMD);
 }

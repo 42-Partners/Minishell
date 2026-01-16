@@ -3,82 +3,114 @@
 /*                                                        :::      ::::::::   */
 /*   expand_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/25 17:21:54 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/14 20:44:25 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+#include "ast.h"
 #include "libft.h"
 #include "lexer.h"
+#include "error_handling.h"
 
-void	append_fragment(char **result, char *s, int start, int i);
-void	handle_dollar(char **result, char *s, int *index, int *status);
-void	expand_env(char **result, char *s, int *index);
-char	*strjoin_free(char *s1, char *s2);
+int			append_fragment(char **result, char *s, int start, int i);
+int			expand_env(char **result, char *cmd, int *index, char *envp[]);
+static int	handle_invalid_var_name(char **result, char *cmd, int *index);
 
-void	handle_single_quote(char **result, char *s, int *index)
-{
-	int	i;
-
-	i = *index + 1;
-	while (s[i] && s[i] != '\'')
-		i++;
-	append_fragment(result, s, *index + 1, i);
-	*index = i + 1;
-}
-
-void	handle_double_quote(char **result, char *s, int *index, int *status)
-{
-	int	start;
-	int	i;
-
-	i = *index + 1;
-	start = i;
-	while (s[i] && s[i] != '"')
-	{
-		if (s[i] == '$')
-		{
-			append_fragment(result, s, start, i);
-			handle_dollar(result, s, &i, status);
-			start = i;
-		}
-		else
-			i++;
-	}
-	append_fragment(result, s, start, i);
-	i++;
-	*index = i;
-}
-
-void	handle_dollar(char **result, char *s, int *index, int *status)
+int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
 {
 	int		i;
 	char	*aux;
 
 	i = *index + 1;
-	if (ft_isalpha(s[i]) || s[i] == '_')
-		expand_env(result, s, &i);
-	if (s[i] == '?')
+	if (ft_isalpha(cmd[i]) || cmd[i] == '_')
 	{
-		aux = ft_itoa(*status);
-		*result = strjoin_free(*result, aux);
+		if (expand_env(result, cmd, &i, shell->envv) != OK)
+			return (ERROR);
+	}
+	else if (cmd[i] == '?')
+	{
+		aux = ft_itoa(shell->status);
+		if (!aux)
+			return (ERROR);
+		*result = ft_strjoin_free(*result, aux);
 		free(aux);
 		i++;
 	}
 	else
-		*result = strjoin_free(*result, "$");
+	{
+		if (handle_invalid_var_name(result, cmd, &i) != OK)
+			return (ERROR);
+	}
 	*index = i;
+	return (OK);
 }
 
-void	handle_literal(char **result, char *s, int *index)
+int	handle_single_quote(char **result, char *cmd, int *index)
+{
+	int	i;
+
+	i = *index + 1;
+	while (cmd[i] && cmd[i] != '\'')
+		i++;
+	if (append_fragment(result, cmd, *index + 1, i) == ERROR)
+		return (ERROR);
+	*index = i + 1;
+	return (OK);
+}
+
+int	handle_double_quote(char **result, char *cmd, int *index, t_shell *shell)
+{
+	int	i;
+	int	start;
+
+	i = *index + 1;
+	start = i;
+	while (cmd[i] && cmd[i] != '"')
+	{
+		if (cmd[i] == '$')
+		{
+			if (append_fragment(result, cmd, start, i) != OK)
+				return (ERROR);
+			if (handle_dollar(result, cmd, &i, shell) != OK)
+				return (ERROR);
+			start = i;
+		}
+		else
+			i++;
+	}
+	if (append_fragment(result, cmd, start, i) != OK)
+		return (ERROR);
+	i++;
+	*index = i;
+	return (OK);
+}
+
+int	handle_literal(char **result, char *cmd, int *index)
 {
 	int	i;
 
 	i = *index;
-	while (s[i] && !is_quote(s[i]) && s[i] != '$')
+	while (cmd[i] && !ft_isquote(cmd[i]) && cmd[i] != '$')
 		i++;
-	append_fragment(result, s, *index, i);
+	if (append_fragment(result, cmd, *index, i) != OK)
+		return (ERROR);
 	*index = i;
+	return (OK);
+}
+
+static int	handle_invalid_var_name(char **result, char *cmd, int *index)
+{
+	if (cmd[*index] == '\0')
+	{
+		*result = ft_strjoin_free(*result, "$");
+		if (!*result)
+			return (ERROR);
+	}
+	else
+		(*index)++;
+	return (OK);
 }

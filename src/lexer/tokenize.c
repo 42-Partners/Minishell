@@ -6,48 +6,47 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 18:50:05 by devrafaelly       #+#    #+#             */
-/*   Updated: 2025/12/27 15:59:35 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 16:21:59 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
 #include "libft.h"
+#include "lexer.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
-static t_token	*set_token(t_token **token, char *input);
-static char		*find_end_of_command(char *input);
 int				get_operator(t_token **token, char **input);
 int				get_word(t_token **token, char **input);
 int				is_invalid_token(int c);
 int				is_operator(int c);
-int				is_quote(int c);
+static int		set_token(t_token **token, char *input);
+static char		*find_end_of_command(char *input);
 
-t_token	*tokenize(char **input)
+int	tokenize(t_token **token, char **input)
 {
-	t_token	*token;
 	char	*line;
 	char	*end_cmd;
+	int		ret;
 
-	token = NULL;
 	end_cmd = find_end_of_command(*input);
 	if (end_cmd)
 	{
 		line = ft_substr(*input, 0, end_cmd - *input);
 		*input = end_cmd + 1;
-		token = set_token(&token, line);
+		ret = set_token(token, line);
 		free(line);
 	}
 	else
 	{
 		line = *input;
-		token = set_token(&token, line);
+		ret = set_token(token, line);
 		*input = ft_strchr(*input, '\0');
 	}
-	return (token);
+	return (ret);
 }
 
-static t_token	*set_token(t_token **token, char *input)
+static int	set_token(t_token **token, char *input)
 {
 	int	ret;
 
@@ -59,17 +58,17 @@ static t_token	*set_token(t_token **token, char *input)
 			break ;
 		if (is_invalid_token(*input))
 		{
-			ft_putstr_fd("syntax error: invalid token\n", 2);
-			return (free_token(token), NULL);
+			ft_putstr_fd(ERR_INVALID_CHAR, 2);
+			return (free_token(token), FAIL);
 		}
 		else if (is_operator(*input))
 			ret = get_operator(token, &input);
 		else
 			ret = get_word(token, &input);
-		if (!ret)
-			return (free_token(token), NULL);
+		if (ret != OK)
+			return (free_token(token), ret);
 	}
-	return (*token);
+	return (ret);
 }
 
 static char	*find_end_of_command(char *input)
@@ -80,7 +79,7 @@ static char	*find_end_of_command(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (is_quote(input[i]))
+		if (ft_isquote(input[i]))
 		{
 			quote = input[i++];
 			while (input[i] && input[i] != quote)

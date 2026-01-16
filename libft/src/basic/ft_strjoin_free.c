@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_strjoin_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/30 08:16:20 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/13 19:19:14 by devrafaelly      ###   ########.fr       */
+/*   Created: 2026/01/14 20:41:53 by devrafaelly       #+#    #+#             */
+/*   Updated: 2026/01/14 20:45:09 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "minishell.h"
 
-int	ft_echo(t_shell *shell, char **args)
+char	*ft_strjoin_free(char *s1, char *s2)
 {
-	int	i;
-	int	newline;
+	char	*str;
+	size_t	s1_len;
+	size_t	s2_len;
+	size_t	str_len;
 
-	i = 0;
-	newline = 1;
-	while (args[++i] && ft_strcmp(args[i], "-n") == 0)
-		newline = 0;
-	while (args[i])
+	if (!s1)
+		return (NULL);
+	s1_len = ft_strlen(s1);
+	s2_len = 0;
+	if (s2)
+		s2_len = ft_strlen(s2);
+	str_len = s1_len + s2_len;
+	str = malloc(str_len + 1);
+	if (!str)
 	{
-		ft_putstr_fd(args[i++], STDOUT_FILENO);
-		if (args [i])
-			ft_putchar_fd(' ', STDOUT_FILENO);
+		free(s1);
+		return (NULL);
 	}
-	if (newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	shell->status = 0;
-	return (0);
+	ft_memcpy(str, s1, s1_len);
+	ft_memcpy(str + s1_len, s2, s2_len);
+	str[str_len] = '\0';
+	free(s1);
+	s1 = str;
+	return (s1);
 }

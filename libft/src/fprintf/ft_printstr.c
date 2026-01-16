@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_printstr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/30 08:16:20 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/13 19:19:14 by devrafaelly      ###   ########.fr       */
+/*   Created: 2026/01/15 19:04:22 by devrafaelly       #+#    #+#             */
+/*   Updated: 2026/01/15 20:33:13 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "minishell.h"
+#include <unistd.h>
 
-int	ft_echo(t_shell *shell, char **args)
+int	ft_printstr_fd(char *s, int fd)
 {
 	int	i;
-	int	newline;
 
+	if (!s)
+		return (write(fd, "(null)", 6));
 	i = 0;
-	newline = 1;
-	while (args[++i] && ft_strcmp(args[i], "-n") == 0)
-		newline = 0;
-	while (args[i])
-	{
-		ft_putstr_fd(args[i++], STDOUT_FILENO);
-		if (args [i])
-			ft_putchar_fd(' ', STDOUT_FILENO);
-	}
-	if (newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	shell->status = 0;
-	return (0);
+	while (s[i])
+		i++;
+	return (write(fd, s, i));
 }

@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_checkers.c                                   :+:      :+:    :+:   */
+/*   exec_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/13 18:30:17 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/04 20:27:04 by devrafaelly      ###   ########.fr       */
+/*   Created: 2026/01/14 20:56:21 by gustaoli          #+#    #+#             */
+/*   Updated: 2026/01/14 21:02:08 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "minishell.h"
 #include "libft.h"
 
-int	is_invalid_token(int c)
-{
-	return (c == ';' || c == '(' || c == ')');
-}
+#include <stdlib.h>
 
-int	is_operator(int c)
+void	exec_exit(t_shell *shell, int status)
 {
-	return (c == '>' || c == '<' || c == '|');
-}
-
-int	is_word(int c)
-{
-	return (!is_invalid_token(c) && !ft_isspace(c) && !is_operator(c));
+	if (shell->ast)
+		free_ast(&shell->ast);
+	ft_free_arr(&shell->envv);
+	exit(status);
 }

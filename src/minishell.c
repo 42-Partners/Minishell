@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/28 15:00:53 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/15 20:24:00 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,80 +14,94 @@
 #include "libft.h"
 #include "lexer.h"
 #include "ast.h"
+#include "exec.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static int	input_process(char *input, char *envv[], int *status);
-static int	parse_and_execute(t_token *tokens, char *envv[], int *status);
+static int	input_process(char *input, t_shell *shell);
+static int	parse_and_execute(t_token *token, t_shell *shell);
 
 int	main(int argc, char *argv[], char *envv[])
 {
+	t_shell	shell;
 	char	*input;
-	int		status;
 
 	(void)argc;
 	(void)argv;
-	status = 0;
+	shell.envv = ft_str_arr_dup(envv);
+	shell.ast = NULL;
+	if (!shell.envv)
+		return (ERROR);
+	shell.status = 0;
 	register_sig_handlers();
 	while (1)
 	{
 		input = readline(PROMPT);
 		g_signal = 0;
-		if (input_process(input, envv, &status) < 0)
+		if (input_process(input, &shell) == ERROR)
 			break ;
 	}
-	return (0);
+	ft_free_arr(&(shell.envv));
+	close(STDERR_FILENO);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	return (OK);
 }
 
-static int	input_process(char *input, char *envv[], int *status)
+static int	input_process(char *input, t_shell *shell)
 {
 	t_token	*token;
 	char	*line;
 	int		ret;
 
+	token = NULL;
 	line = input;
 	ret = 1;
 	if (!line)
-		return (-1);
+		return (ERROR);
 	while (ft_isspace(*line))
 		line++;
 	if (!*line)
-		return (free(input), 1);
+		return (free(input), OK);
 	add_history(input);
 	while (*line)
 	{
-		token = tokenize(&line);
-		if (!token)
-			return (free(input), -1);
-		ret = parse_and_execute(token, envv, status);
-		if (ret != 1)
+		ret = tokenize(&token, &line);
+		if (ret != OK)
+			return (free(input), ret);
+		ret = parse_and_execute(token, shell);
+		if (ret != OK)
 			return (free(input), ret);
 	}
-	return (free(input), 1);
+	return (free(input), OK);
 }
 
-static int	parse_and_execute(t_token *token, char *envv[], int *status)
+static int	parse_and_execute(t_token *token, t_shell *shell)
 {
-	t_ast_node	*ast;
+	int			ret;
 
-	ast = build_ast(token);
+	shell->ast = build_ast(token);
 	free_token(&token);
-	if (!ast)
-		return (-1);
-	validate_ast(&ast);
-	if (!ast)
-		return (0);
-	check_cmds(&ast, envv);
-	if (!ast)
-		return (*status = 127, 0);
-	if (read_all_here_docs(ast) == -1)
+	ret = OK;
+	if (!shell->ast)
+		return (ERROR);
+	ret = validate_ast(&shell->ast);
+	if (ret != OK)
+		return (ret);
+	ret = check_cmds(&shell->ast, shell);
+	if (ret != OK)
 	{
-		free_ast(&ast);
-		return (0);
+		if (ret == FAIL)
+			shell->status = 127;
+		return (ret);
 	}
-	exec_ast(ast, envv, status);
-	free_ast(&ast);
-	return (1);
+	if (read_all_here_docs(shell->ast, shell) != OK)
+		return (free_ast(&shell->ast), ret);
+	exec_ast(shell->ast, shell);
+	free_ast(&shell->ast);
+	shell->ast = NULL;
+	return (OK);
 }

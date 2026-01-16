@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 11:50:47 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/12/24 10:19:56 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/15 19:15:16 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 
 # include "ft_printf.h"
+# include "ft_fprintf.h"
 # include "gnl.h"
 
 typedef struct s_list
@@ -32,6 +33,7 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
+int		ft_isquote(int c);
 int		ft_isspace(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
@@ -55,7 +57,7 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
-void	ft_free_arr(char **arr);
+void	ft_free_arr(char ***arr);
 
 char	*ft_strnstr(const char *big, const char *little, size_t len);
 char	*ft_strchr(const char *s, int c);
@@ -63,6 +65,7 @@ char	*ft_strrchr(const char *s, int c);
 char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin_free(char *s1, char *s2);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	*ft_itoa(int n);
 char	*ft_strtrim(char const *s1, char const *set);
@@ -75,6 +78,7 @@ void	*ft_calloc(size_t nmemb, size_t size);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 
 char	**ft_split(char const *s, char c);
+char	**ft_str_arr_dup(char **str_array);
 
 int		ft_lstsize(t_list *lst);
 
