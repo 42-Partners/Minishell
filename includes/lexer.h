@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/04 20:28:30 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 16:27:37 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-t_token	*tokenize(char **input);
-t_token	*new_token(char *value, t_token_type type);
+int		tokenize(t_token **token, char **input);
 int		token_add_back(t_token **token, char *value, t_token_type type);
+t_token	*new_token(char *value, t_token_type type);
 void	free_token(t_token **token);
 
 /* Debug (remove on project delivery) */
