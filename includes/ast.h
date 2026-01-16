@@ -20,7 +20,8 @@ typedef struct s_ast_node	t_ast_node;
 typedef enum e_node_type
 {
 	CMD,
-	LOGICAL,
+	LOGICAL_AND,
+	LOGICAL_OR,
 	PIPE
 }	t_node_type;
 
@@ -84,7 +85,6 @@ int			handle_low_level(t_ast_node **ast, t_token *tokens);
 int			handle_high_level(t_ast_node **ast, t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
 int			validate_ast(t_ast_node **ast);
-t_node_type	detect_next_node_type(t_token *tokens);
 void		free_ast(t_ast_node **ast);
 
 /*DEBUG*/

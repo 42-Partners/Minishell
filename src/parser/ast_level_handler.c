@@ -49,7 +49,7 @@ int	handle_high_level(t_ast_node **ast, t_node_type type,
 
 	if (!right_tokens || !left_tokens)
 		return (ERROR);
-	if (type != LOGICAL && type != PIPE)
+	if (type != LOGICAL_AND && type != LOGICAL_OR && type != PIPE)
 		return (ERROR);
 	*ast = malloc(sizeof(t_ast_node));
 	if (!*ast)
@@ -59,7 +59,7 @@ int	handle_high_level(t_ast_node **ast, t_node_type type,
 	ret = new_high_level_node(&sub_node, type, right_tokens, left_tokens);
 	if (ret != OK)
 		return (ret);
-	if (type == LOGICAL)
+	if (type == LOGICAL_AND || type == LOGICAL_OR)
 		(*ast)->t_node.logical_node = *((t_logical_node *)sub_node);
 	else if (type == PIPE)
 		(*ast)->t_node.pipe_node = *((t_pipe_node *)sub_node);
@@ -72,7 +72,7 @@ static int	new_high_level_node(void **node, t_node_type type,
 {
 	int	ret;
 
-	if (type == LOGICAL)
+	if (type == LOGICAL_AND || type == LOGICAL_OR)
 		*node = malloc(sizeof(t_logical_node));
 	else if (type == PIPE)
 		*node = malloc(sizeof(t_pipe_node));
@@ -90,8 +90,11 @@ static int	fill_high_level_node(void **node, t_node_type type,
 {
 	int	ret;
 
-	if (type == LOGICAL)
+	if (type == LOGICAL_AND || type == LOGICAL_OR)
 	{
+		((t_logical_node *)(*node))->type = AND;
+		if (type == LOGICAL_OR)
+			((t_logical_node *)(*node))->type = OR;
 		ret = build_ast(&((t_logical_node *)(*node))->left, left_tokens);
 		if (ret != OK)
 			return (ret);

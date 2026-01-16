@@ -17,46 +17,65 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+static t_token		*getfather_token(t_token *tokens, t_node_type father_type);
 static t_token		*divide_left(t_token *token_head, t_token *father);
 static t_token		*divide_right(t_token *token_head, t_token *father);
+static t_node_type	detect_next_node_type(t_token *tokens);
 
 int	build_ast(t_ast_node **ast, t_token *tokens)
 {
-	t_token		*aux;
+	t_token		*tk_node;
 	int			ret;
+	t_node_type	next_node_type;
 
-	aux = tokens;
-	while (aux)
-	{
-		if (aux->type == TOKEN_PIPE)
-			break ;
-		aux = aux->next;
-	}
-	if (detect_next_node_type(tokens) == CMD)
-	{
+	next_node_type = detect_next_node_type(tokens);
+	if (next_node_type == CMD)
 		ret = handle_low_level(ast, tokens);
-		if (ret != OK)
-			return (*ast = NULL, ret);
-	}
 	else
 	{
-		ret = handle_high_level(ast, PIPE,
-				divide_right(tokens, aux), divide_left(tokens, aux));
-		if (ret != OK)
-			return (*ast = NULL, ret);
+		tk_node = getfather_token(tokens, next_node_type);
+		ret = handle_high_level(ast, next_node_type,
+				divide_right(tokens, tk_node), divide_left(tokens, tk_node));
 	}
+	if (ret != OK)
+		return (*ast = NULL, ret);
 	return (OK);
 }
 
-t_node_type	detect_next_node_type(t_token *tokens)
+static t_token	*getfather_token(t_token *tokens, t_node_type father_type)
 {
+	t_token_type	father_token_type;
+
+	father_token_type = TOKEN_PIPE;
+	if (father_type == LOGICAL_AND)
+		father_token_type = TOKEN_AND;
+	if (father_type == LOGICAL_OR)
+		father_token_type = TOKEN_OR;
 	while (tokens)
 	{
-		if (tokens->type == TOKEN_PIPE)
-			return (PIPE);
+		if (tokens->type == father_token_type)
+			break ;
 		tokens = tokens->next;
 	}
-	return (CMD);
+	return (tokens);
+}
+
+static t_node_type	detect_next_node_type(t_token *tokens)
+{
+	t_node_type	highest_level;
+
+	highest_level = CMD;
+	while (tokens)
+	{
+		if (tokens->type == TOKEN_AND)
+			return (LOGICAL_AND);
+		else if (tokens->type == TOKEN_OR)
+			return (LOGICAL_OR);
+		else if (tokens->type == TOKEN_PIPE && highest_level == CMD)
+			highest_level = PIPE;
+		tokens = tokens->next;
+	}
+	return (highest_level);
 }
 
 static t_token	*divide_left(t_token *token_head, t_token *father)
