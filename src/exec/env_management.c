@@ -25,7 +25,10 @@ int	ft_getenv(char *env, char *envv[], char **result)
 	if (ft_getenv_index(env, envv, &index))
 		return (ERROR);
 	if (index < 0)
+	{
+		*result = NULL;
 		return (OK);
+	}
 	*result = ft_strdup(envv[index] + ft_strlen(env) + 1);
 	if (!*result)
 		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);

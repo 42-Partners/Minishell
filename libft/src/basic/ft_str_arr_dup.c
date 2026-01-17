@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_str_arr_dup.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 07:34:29 by gustaoli          #+#    #+#             */
-/*   Updated: 2025/12/28 16:57:35 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:32:20 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
