@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:22:09 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/14 17:35:20 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/17 18:54:03 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,24 @@ int	ft_pwd(t_shell *shell, char **args)
 {
 	char	*pwd;
 
-	shell->status = 1;
-	if (*(args + 1))
+	(void)args;
+	pwd = NULL;
+	ft_getenv("PWD", shell->envv, &pwd);
+	if (pwd)
 	{
-		ft_putstr_fd("pwd: too many arguments\n", 2);
-		return (FAIL);
+		ft_printf("%s\n", pwd);
+		free(pwd);
 	}
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (perror("pwd"), FAIL);
-	ft_putendl_fd(pwd, 1);
-	free(pwd);
-	shell->status = 0;
-	return (OK);
+	else
+	{
+		pwd = getcwd(NULL, 0);
+		if (!pwd)
+		{
+			perror("pwd");
+			return (1);
+		}
+		ft_printf("%s\n", pwd);
+		free(pwd);
+	}
+	return (0);
 }
