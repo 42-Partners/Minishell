@@ -24,7 +24,7 @@ static void	exec_and_redirect(char *exec, t_cmd_node *cmd, t_shell *shell);
 static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell);
 static int	wait_child(int pid);
 
-int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
+int	exec_cmd(t_cmd_node *cmd, t_shell *shell, int pipe)
 {
 	pid_t	pid;
 	char	*exec;
@@ -34,7 +34,7 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell)
 	if (cmd->cmd)
 	{
 		if (is_builtin(cmd->cmd))
-			return (exec_builtin(cmd, shell));
+			return (exec_builtin(cmd, shell, pipe));
 		ret = get_cmd_path(&exec, cmd->cmd, shell->envv);
 		if (ret != OK)
 			return (ret);
