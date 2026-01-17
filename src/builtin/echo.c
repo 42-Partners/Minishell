@@ -6,30 +6,51 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 08:16:20 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/13 19:19:14 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/17 19:41:26 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-int	ft_echo(t_shell *shell, char **args)
+static int	is_n_flag(char *arg);
+
+int	ft_echo(char **args)
 {
 	int	i;
 	int	newline;
 
-	i = 0;
+	i = 1;
 	newline = 1;
-	while (args[++i] && ft_strcmp(args[i], "-n") == 0)
+	while (args[i] && is_n_flag(args[i]))
+	{
 		newline = 0;
+		i++;
+	}
 	while (args[i])
 	{
-		ft_putstr_fd(args[i++], STDOUT_FILENO);
-		if (args [i])
-			ft_putchar_fd(' ', STDOUT_FILENO);
+		ft_fprintf(1, "%s", args[i]);
+		if (args[i + 1])
+			ft_putchar_fd(' ', 1);
+		i++;
 	}
 	if (newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	shell->status = 0;
+		ft_putchar_fd('\n', 1);
 	return (0);
+}
+
+static int	is_n_flag(char *arg)
+{
+	int	i;
+
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (0);
+	i = 2;
+	while (arg[i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
 }
