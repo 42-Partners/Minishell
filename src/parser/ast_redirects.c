@@ -20,7 +20,6 @@
 static int		parse_redirect_tokens(t_redirect ***redirect, t_token *tokens);
 static int		handle_redirect_token(t_redirect **redirect, t_token *token);
 static int		count_redirects(t_token *tokens);
-void			free_array(void **array, int count);
 
 int	get_redirects(t_cmd_node **node, t_token *tokens)
 {
@@ -59,9 +58,9 @@ static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 		{
 			(*redirect)[i] = malloc(sizeof(t_redirect));
 			if (!(*redirect)[i])
-				return (free_array((void **)(*redirect), i), ERROR);
+				return (free_redirect_array(redirect), ERROR);
 			if (handle_redirect_token(&((*redirect)[i]), tokens) != OK)
-				return (free_array((void **)(*redirect), i), ERROR);
+				return (free_redirect_array(redirect), ERROR);
 			i++;
 		}
 		tokens = tokens->next;

@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/15 15:58:18 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/17 13:47:19 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	free_token(t_token **token)
 	while (*token)
 	{
 		temp = (*token)->next;
-		free((*token)->value);
+		if ((*token)->value)
+			free((*token)->value);
 		free(*token);
 		*token = temp;
 	}

@@ -21,7 +21,6 @@ static int			count_args(t_token *tokens);
 static int			get_args(t_cmd_node **node, t_token *tokens);
 static	t_cmd_node	*new_cmd_node(void);
 static int			fill_args(t_cmd_node **node, t_token *tokens);
-void				free_array(void **array, int count);
 
 t_cmd_node	*consume_tokens(t_token *tokens)
 {
@@ -37,29 +36,6 @@ t_cmd_node	*consume_tokens(t_token *tokens)
 	if (ret->args)
 		ret->cmd = ret->args[0];
 	return (ret);
-}
-
-static int	count_args(t_token *tokens)
-{
-	int				arg_size;
-	t_token_type	last;
-
-	last = TOKEN_WORD;
-	arg_size = 0;
-	while (tokens && tokens->type != TOKEN_PIPE)
-	{
-		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
-		{
-			arg_size++;
-			tokens = tokens->next;
-		}
-		else
-		{
-			last = tokens->type;
-			tokens = tokens->next;
-		}
-	}
-	return (arg_size);
 }
 
 static int	get_args(t_cmd_node **node, t_token *tokens)
@@ -88,6 +64,29 @@ static int	get_args(t_cmd_node **node, t_token *tokens)
 	return (OK);
 }
 
+static int	count_args(t_token *tokens)
+{
+	int				arg_size;
+	t_token_type	last;
+
+	last = TOKEN_WORD;
+	arg_size = 0;
+	while (tokens && tokens->type != TOKEN_PIPE)
+	{
+		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
+		{
+			arg_size++;
+			tokens = tokens->next;
+		}
+		else
+		{
+			last = tokens->type;
+			tokens = tokens->next;
+		}
+	}
+	return (arg_size);
+}
+
 static int	fill_args(t_cmd_node **node, t_token *tokens)
 {
 	int				i;
@@ -102,11 +101,12 @@ static int	fill_args(t_cmd_node **node, t_token *tokens)
 		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
 		{
 			(*node)->args[i] = ft_strdup(tokens->value);
-			if (!(*node)->args[i++])
+			if (!(*node)->args[i])
 			{
 				ft_putstr_fd(ERR_MALLOC, 2);
-				return (free_array((void **)(*node)->args, i), ERROR);
+				return (free_array((void ***)&(*node)->args), ERROR);
 			}
+			i++;
 		}
 		else
 			last = tokens->type;
