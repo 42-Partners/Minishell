@@ -19,7 +19,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	is_arg_valid(char *arg);
+static int	is_arg_valid(char *arg);
 static void	exit_cleanup(t_shell *shell, int pipe);
 
 int	ft_exit(t_shell *shell, char **args, int pipe)
@@ -46,7 +46,7 @@ int	ft_exit(t_shell *shell, char **args, int pipe)
 	exit(exit_status);
 }
 
-int	is_arg_valid(char *arg)
+static int	is_arg_valid(char *arg)
 {
 	if (ft_atol(arg) != (long)ft_atoi(arg))
 		return (0);
@@ -61,7 +61,7 @@ int	is_arg_valid(char *arg)
 		if (!ft_isdigit(*arg))
 			return (0);
 		arg++;
-	} 
+	}
 	return (1);
 }
 
