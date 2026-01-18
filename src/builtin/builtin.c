@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 06:45:55 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/17 18:50:06 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 15:21:41 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "echo")
 		|| !ft_strcmp(cmd, "pwd")
 		|| !ft_strcmp(cmd, "export")
-		|| !ft_strcmp(cmd, "unset"));
+		|| !ft_strcmp(cmd, "unset")
 		|| !ft_strcmp(cmd, "exit"));
 }
 
