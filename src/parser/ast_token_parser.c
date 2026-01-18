@@ -13,13 +13,14 @@
 #include "lexer.h"
 #include "ast.h"
 #include "libft.h"
+#include "error_handling.h"
 
 #include <stdlib.h>
 
 static int			count_args(t_token *tokens);
-static void			get_args(t_cmd_node **node, t_token *tokens);
+static int			get_args(t_cmd_node **node, t_token *tokens);
 static	t_cmd_node	*new_cmd_node(void);
-static void			fill_args(t_cmd_node **node, t_token *tokens);
+static int			fill_args(t_cmd_node **node, t_token *tokens);
 
 t_cmd_node	*consume_tokens(t_token *tokens)
 {
@@ -28,25 +29,39 @@ t_cmd_node	*consume_tokens(t_token *tokens)
 	ret = new_cmd_node();
 	if (!ret)
 		return (NULL);
-	get_args(&ret, tokens);
-	get_redirects(&ret, tokens);
-	while (tokens && tokens->type != TOKEN_PIPE)
-	{
-		if (tokens->type == TOKEN_WORD)
-		{
-			ret->cmd = ft_strdup(tokens->value);
-			break ;
-		}
-		if (tokens->type != TOKEN_WORD)
-		{
-			tokens = tokens->next;
-			if (tokens)
-				tokens = tokens->next;
-		}
-		else
-			tokens = tokens->next;
-	}
+	if (get_args(&ret, tokens) != OK)
+		return (free(ret), NULL);
+	if (get_redirects(&ret, tokens) != OK)
+		return (free(ret), NULL);
+	if (ret->args)
+		ret->cmd = ret->args[0];
 	return (ret);
+}
+
+static int	get_args(t_cmd_node **node, t_token *tokens)
+{
+	int	n_args;
+
+	n_args = count_args(tokens);
+	if (!node || !*node)
+		return (ERROR);
+	if (!tokens || n_args == 0)
+		(*node)->args = NULL;
+	else if (n_args == 1)
+		(*node)->args = malloc(sizeof(char *) * 2);
+	else
+	{
+		(*node)->args = malloc(sizeof(char *) * (n_args + 1));
+		if (!(*node)->args)
+		{
+			ft_putstr_fd(ERR_MALLOC, 2);
+			free(*node);
+			*node = NULL;
+			return (ERROR);
+		}
+	}
+	fill_args(node, tokens);
+	return (OK);
 }
 
 static int	count_args(t_token *tokens)
@@ -55,7 +70,7 @@ static int	count_args(t_token *tokens)
 	t_token_type	last;
 
 	last = TOKEN_WORD;
-	arg_size = -1;
+	arg_size = 0;
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
@@ -65,61 +80,40 @@ static int	count_args(t_token *tokens)
 		}
 		else
 		{
+			last = tokens->type;
 			tokens = tokens->next;
-			if (tokens && tokens->type == TOKEN_WORD)
-			{
-				last = tokens->type;
-				tokens = tokens->next;
-			}
 		}
 	}
 	return (arg_size);
 }
 
-static void	get_args(t_cmd_node **node, t_token *tokens)
-{
-	if (!node || !*node)
-		return ;
-	if (!tokens || count_args(tokens) <= 0)
-	{
-		(*node)->args = malloc(sizeof(char *) * 2);
-	}
-	else
-		(*node)->args = malloc(sizeof(char *) * (count_args(tokens) + 2));
-	if (!(*node)->args)
-	{
-		free(*node);
-		*node = NULL;
-		return ;
-	}
-	fill_args(node, tokens);
-}
-
-static void	fill_args(t_cmd_node **node, t_token *tokens)
+static int	fill_args(t_cmd_node **node, t_token *tokens)
 {
 	int				i;
 	t_token_type	last;
 
 	i = 0;
 	last = TOKEN_WORD;
+	if (!(*node)->args)
+		return (ERROR);
 	while (tokens && tokens->type != TOKEN_PIPE)
 	{
 		if (tokens->type == TOKEN_WORD && last == TOKEN_WORD)
 		{
-			(*node)->args[i++] = ft_strdup(tokens->value);
-			tokens = tokens->next;
+			(*node)->args[i] = ft_strdup(tokens->value);
+			if (!(*node)->args[i])
+			{
+				ft_putstr_fd(ERR_MALLOC, 2);
+				return (free_array((void ***)&(*node)->args), ERROR);
+			}
+			i++;
 		}
 		else
-		{
-			tokens = tokens->next;
-			if (tokens && tokens->type == TOKEN_WORD)
-			{
-				last = tokens->type;
-				tokens = tokens->next;
-			}
-		}
+			last = tokens->type;
+		tokens = tokens->next;
 	}
 	(*node)->args[i] = NULL;
+	return (OK);
 }
 
 static t_cmd_node	*new_cmd_node(void)
@@ -128,7 +122,7 @@ static t_cmd_node	*new_cmd_node(void)
 
 	ret = malloc(sizeof(t_cmd_node));
 	if (!ret)
-		return (NULL);
+		return (ft_putstr_fd(ERR_MALLOC, 2), NULL);
 	ret->cmd = NULL;
 	ret->args = NULL;
 	ret->redirect_count = 0;
