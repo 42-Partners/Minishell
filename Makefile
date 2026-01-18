@@ -57,6 +57,7 @@ SRC		:= \
 			src/here_doc/here_doc_utils.c \
 			src/builtin/builtin.c \
 			src/builtin/echo.c \
+			src/builtin/exit.c \
 			src/builtin/cd.c \
 			src/builtin/pwd.c \
 			src/builtin/export.c \

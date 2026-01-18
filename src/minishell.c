@@ -100,7 +100,7 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 	}
 	if (read_all_here_docs(shell->ast, shell) != OK)
 		return (free_ast(&shell->ast), ret);
-	exec_ast(shell->ast, shell);
+	exec_ast(shell->ast, shell, 0);
 	free_ast(&shell->ast);
 	shell->ast = NULL;
 	return (OK);

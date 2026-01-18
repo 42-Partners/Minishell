@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 16:12:29 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/05 18:38:32 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/15 19:25:15 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 
 typedef enum e_error_type
 {
-	ERROR = -1, // erro grave, encerra minishell
-	OK = 0, // erro leve, retorna novo prompt
-	FAIL = 1 // tudo certo
+	ERROR = -1,
+	OK = 0,
+	FAIL = 1
 }	t_error_type;
 
 #endif
