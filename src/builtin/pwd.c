@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:22:09 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/17 18:54:03 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 17:43:01 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	ft_pwd(t_shell *shell, char **args)
 
 	(void)args;
 	pwd = NULL;
+	shell->status = 1;
 	ft_getenv("PWD", shell->envv, &pwd);
 	if (pwd)
 	{
@@ -34,10 +35,11 @@ int	ft_pwd(t_shell *shell, char **args)
 		if (!pwd)
 		{
 			perror("pwd");
-			return (1);
+			return (FAIL);
 		}
 		ft_printf("%s\n", pwd);
 		free(pwd);
 	}
-	return (0);
+	shell->status = 0;
+	return (OK);
 }

@@ -6,22 +6,24 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 08:16:20 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/17 19:41:26 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 17:42:08 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+#include "error_handling.h"
 
 static int	is_n_flag(char *arg);
 
-int	ft_echo(char **args)
+int	ft_echo(t_shell *shell, char **args)
 {
-	int	i;
 	int	newline;
+	int	i;
 
-	i = 1;
+	shell->status = 1;
 	newline = 1;
+	i = 1;
 	while (args[i] && is_n_flag(args[i]))
 	{
 		newline = 0;
@@ -36,7 +38,8 @@ int	ft_echo(char **args)
 	}
 	if (newline)
 		ft_putchar_fd('\n', 1);
-	return (0);
+	shell->status = 0;
+	return (OK);
 }
 
 static int	is_n_flag(char *arg)

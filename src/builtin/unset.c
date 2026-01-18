@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:31:12 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/17 14:49:14 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 17:42:45 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,26 @@ static char	**get_new_env(char **env, char **updated_env, char *arg);
 int	ft_unset(t_shell *shell, char **args)
 {
 	char	**new_envv;
-	int		status;
 	int		i;
 
-	status = 0;
+	shell->status = 0;
 	i = 0;
 	while (args[++i])
 	{
 		if (validate_arg_name(args[i]) == 1)
-			status = 1;
+			shell->status = 1;
 		else
 		{
 			new_envv = remove_env_var(shell, args[i]);
 			if (!new_envv)
-				return (-1);
+			{
+				shell->status = 1;
+				return (ERROR);
+			}
 			shell->envv = new_envv;
 		}
 	}
-	return (status);
+	return (OK);
 }
 
 static int	validate_arg_name(char *arg)

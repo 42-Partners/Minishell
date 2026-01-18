@@ -20,6 +20,7 @@
 #include <stdio.h>
 
 int	is_arg_valid(char *arg);
+static void	exit_cleanup(t_shell *shell, int pipe);
 
 int	ft_exit(t_shell *shell, char **args, int pipe)
 {
@@ -29,7 +30,10 @@ int	ft_exit(t_shell *shell, char **args, int pipe)
 	if (args[1])
 	{
 		if (args[2])
-			return (ft_fprintf(2, "exit: too many arguments\n"), 1);
+		{
+			shell->status = 1;
+			return (ft_fprintf(2, "exit: too many arguments\n"), FAIL);
+		}
 		else if (!is_arg_valid(args[1]))
 		{
 			ft_fprintf(2, "exit: %s: numeric argument required\n", args[1]);
@@ -38,14 +42,7 @@ int	ft_exit(t_shell *shell, char **args, int pipe)
 		else
 			exit_status = (unsigned char)ft_atoi(args[1]);
 	}
-	if (!pipe)
-		ft_fprintf(1, "exit\n");
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	if (shell->ast)
-		free_ast(&shell->ast);
-	ft_free_arr(&shell->envv);
-	close(STDERR_FILENO);
+	exit_cleanup(shell, pipe);
 	exit(exit_status);
 }
 
@@ -66,4 +63,16 @@ int	is_arg_valid(char *arg)
 		arg++;
 	} 
 	return (1);
+}
+
+static void	exit_cleanup(t_shell *shell, int pipe)
+{
+	if (!pipe)
+		ft_fprintf(1, "exit\n");
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	if (shell->ast)
+		free_ast(&shell->ast);
+	ft_free_arr(&shell->envv);
+	close(STDERR_FILENO);
 }

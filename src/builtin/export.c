@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:46:37 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/17 14:22:37 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 16:57:54 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,30 @@ static void	cleanup(char *name, char *value);
 
 int	ft_export(t_shell *shell, char **args)
 {
-	int	status;
+	int	i;
 
-	status = 0;
-	args++;
-	if (!*args)
-		return (status);
-	if ((*args)[0] == '-')
+	shell->status = 0;
+	if (!args[1])
+		return (OK); //! chamar env
+	if (args[1][0] == '-')
 	{
-		status = 1;
-		ft_fprintf(2, "export: %s: invalid option\n", *args);
-		return (status);
+		shell->status = 1;
+		ft_fprintf(2, "export: %s: invalid option\n", args[1]);
+		return (FAIL);
 	}
-	while (*args)
+	i = 1;
+	while (args[i])
 	{
-		if (!is_valid_var_name(*args))
-			status = 1;
-		else if (set_var(shell, *args) != OK)
-			return (-1);
-		args++;
+		if (!is_valid_var_name(args[i]))
+			shell->status = 1;
+		else if (set_var(shell, args[i]) != OK)
+		{
+			shell->status = 1;
+			return (ERROR);
+		}
+		i++;
 	}
-	return (status);
+	return (OK);
 }
 
 static int	set_var(t_shell *shell, char *args)
@@ -73,25 +76,29 @@ static int	set_var(t_shell *shell, char *args)
 
 static int	is_valid_var_name(char *arg)
 {
+	int	i;
+
 	if (!arg || !*arg)
 	{
 		ft_fprintf(2, "export: not a valid identifier\n");
 		return (0);
 	}
-	if (!ft_isalpha (*arg) && *arg != '_')
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 	{
 		ft_fprintf(2, "export: %s: not a valid identifier\n", arg);
 		return (0);
 	}
-	while (*(++arg))
+	i = 1;
+	while (arg[i])
 	{
-		if (*arg == '=')
+		if (arg[i] == '=')
 			break ;
-		if (!ft_isalnum(*arg) && *arg != '_')
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 		{
 			ft_fprintf(2, "export: %s: not a valid identifier\n", arg);
 			return (0);
 		}
+		i++;
 	}
 	return (1);
 }
