@@ -60,6 +60,7 @@ SRC		:= \
 			src/builtin/exit.c \
 			src/builtin/cd.c \
 			src/builtin/pwd.c \
+			src/builtin/env.c \
 			src/builtin/export.c \
 			src/builtin/unset.c \
 			src/debug_ast.c \
