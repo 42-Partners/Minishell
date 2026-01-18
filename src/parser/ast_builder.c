@@ -18,8 +18,6 @@
 #include <stdio.h>
 
 static t_token		*getfather_token(t_token *tokens, t_node_type father_type);
-static t_token		*divide_left(t_token *token_head, t_token *father);
-static t_token		*divide_right(t_token *token_head, t_token *father);
 static t_node_type	detect_next_node_type(t_token *tokens);
 
 int	build_ast(t_ast_node **ast, t_token *tokens)
@@ -30,6 +28,8 @@ int	build_ast(t_ast_node **ast, t_token *tokens)
 
 	if (!tokens)
 		return (*ast = NULL, OK);
+	if (tokens->type == TOKEN_OPEN_PARENTESIS || tokens->type == TOKEN_CLOSE_PARENTESIS)
+		return (parentesis_handler(ast, tokens));
 	next_node_type = detect_next_node_type(tokens);
 	if (next_node_type == CMD)
 		ret = handle_low_level(ast, tokens);
@@ -78,56 +78,4 @@ static t_node_type	detect_next_node_type(t_token *tokens)
 		tokens = tokens->next;
 	}
 	return (highest_level);
-}
-
-static t_token	*divide_left(t_token *token_head, t_token *father)
-{
-	t_token	*token;
-	t_token	*aux;
-	int		ret;
-
-	if (!token_head || !father || token_head == father)
-		return (NULL);
-	token = new_token(token_head->value, token_head->type);
-	if (!token)
-		return (NULL);
-	aux = token_head->next;
-	while (aux)
-	{
-		if (aux == father)
-			break ;
-		ret = token_add_back(&token, aux->value, aux->type);
-		if (ret != OK)
-			return (free_token(&token), NULL);
-		aux = aux->next;
-	}
-	return (token);
-}
-
-static t_token	*divide_right(t_token *token_head, t_token *father)
-{
-	t_token	*token;
-	t_token	*aux;
-	int		ret;
-
-	if (!token_head || !father)
-		return (NULL);
-	while (token_head && token_head != father)
-		token_head = token_head->next;
-	if (!token_head || !token_head->next)
-		return (NULL);
-	else
-		token_head = token_head->next;
-	token = new_token(token_head->value, token_head->type);
-	if (!token)
-		return (NULL);
-	aux = token_head->next;
-	while (aux)
-	{
-		ret = token_add_back(&token, aux->value, aux->type);
-		if (ret != OK)
-			return (free_token(&token), NULL);
-		aux = aux->next;
-	}
-	return (token);
 }

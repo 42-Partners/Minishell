@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_stack.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/15 15:58:18 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/17 22:47:37 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,56 @@ void	free_token(t_token **token)
 		free(*token);
 		*token = temp;
 	}
+}
+
+t_token	*divide_left(t_token *token_head, t_token *father)
+{
+	t_token	*token;
+	t_token	*aux;
+	int		ret;
+
+	if (!token_head || !father || token_head == father)
+		return (NULL);
+	token = new_token(token_head->value, token_head->type);
+	if (!token)
+		return (NULL);
+	aux = token_head->next;
+	while (aux)
+	{
+		if (aux == father)
+			break ;
+		ret = token_add_back(&token, aux->value, aux->type);
+		if (ret != OK)
+			return (free_token(&token), NULL);
+		aux = aux->next;
+	}
+	return (token);
+}
+
+t_token	*divide_right(t_token *token_head, t_token *father)
+{
+	t_token	*token;
+	t_token	*aux;
+	int		ret;
+
+	if (!token_head || !father)
+		return (NULL);
+	while (token_head && token_head != father)
+		token_head = token_head->next;
+	if (!token_head || !token_head->next)
+		return (NULL);
+	else
+		token_head = token_head->next;
+	token = new_token(token_head->value, token_head->type);
+	if (!token)
+		return (NULL);
+	aux = token_head->next;
+	while (aux)
+	{
+		ret = token_add_back(&token, aux->value, aux->type);
+		if (ret != OK)
+			return (free_token(&token), NULL);
+		aux = aux->next;
+	}
+	return (token);
 }

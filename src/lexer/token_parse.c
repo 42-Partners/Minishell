@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:31:57 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/16 00:05:04 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/17 19:25:55 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ int	get_operator(t_token **token, char **input)
 		ret = token_add_back(token, ">", TOKEN_REDIRECT_OUT);
 	else if ((*input)[0] == '<')
 		ret = token_add_back(token, "<", TOKEN_REDIRECT_IN);
+	else if ((*input)[0] == '(')
+		ret = token_add_back(token, "(", TOKEN_OPEN_PARENTESIS);
+	else if ((*input)[0] == ')')
+		ret = token_add_back(token, ")", TOKEN_CLOSE_PARENTESIS);
 	(*input)++;
 	return (ret);
 }

@@ -12,7 +12,6 @@
 
 #include "lexer.h"
 #include "ast.h"
-
 #include <stdio.h>
 
 void		debug_flag(char *print_mgs);
@@ -63,6 +62,10 @@ static char	*get_token_type(t_token token)
 		return ("RED_OUT");
 	else if (token.type == TOKEN_REDIRECT_APPEND)
 		return ("RED_APPEND");
+	else if (token.type == TOKEN_OPEN_PARENTESIS)
+		return ("TOKEN_OPEN_PARENTESIS");
+	else if (token.type == TOKEN_CLOSE_PARENTESIS)
+		return ("TOKEN_CLOSE_PARENTESIS");
 	else
 		return ("ERROR");
 }
