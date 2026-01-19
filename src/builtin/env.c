@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 01:08:23 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/18 18:42:14 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/19 18:34:04 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	ft_env(t_shell *shell, char **args)
 		return (FAIL);
 	}
 	i = 0;
-	while (shell->envv[i])
+	while (shell->envp[i])
 	{
-		ft_fprintf(1, "%s\n", shell->envv[i]);
+		ft_fprintf(1, "%s\n", (shell->envp)[i]);
 		i++;
 	}
 	shell->status = 0;

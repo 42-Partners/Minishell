@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/17 18:33:14 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/19 18:34:12 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
-	shell.envv = ft_str_arr_dup(envp);
-	if (!shell.envv)
+	shell.envp = ft_str_arr_dup(envp);
+	if (!shell.envp)
 		return (ERROR);
 	shell.ast = NULL;
 	shell.status = 0;
@@ -44,10 +44,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (input_process(input, &shell) == ERROR)
 			break ;
 	}
-	ft_free_arr(&(shell.envv));
-	close(STDERR_FILENO);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
+	ft_exit(&shell, NULL, 0);
 	return (OK);
 }
 
@@ -81,13 +78,13 @@ static int	input_process(char *input, t_shell *shell)
 
 static int	parse_and_execute(t_token *token, t_shell *shell)
 {
-	int			ret;
+	int	ret;
 
-	shell->ast = build_ast(token);
+	shell->ast = NULL;
+	ret = build_ast(&shell->ast, token);
 	free_token(&token);
-	ret = OK;
-	if (!shell->ast)
-		return (ERROR);
+	if (ret != OK)
+		return (free_ast(&shell->ast), ret);
 	ret = validate_ast(&shell->ast);
 	if (ret != OK)
 		return (ret);
@@ -102,6 +99,5 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 		return (free_ast(&shell->ast), ret);
 	exec_ast(shell->ast, shell, 0);
 	free_ast(&shell->ast);
-	shell->ast = NULL;
 	return (OK);
 }

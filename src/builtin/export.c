@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:46:37 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/18 18:35:08 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/19 18:29:17 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	set_var(t_shell *shell, char *args)
 	assign = ft_strchr(args, '=');
 	if (!assign)
 	{
-		if (ft_setenv(args, "", &shell->envv) != OK)
+		if (ft_setenv(args, "", &shell->envp) != OK)
 			return (ERROR);
 		return (OK);
 	}
@@ -66,7 +66,7 @@ static int	set_var(t_shell *shell, char *args)
 	value = ft_strdup(assign + 1);
 	if (!value)
 		return (free(name), ERROR);
-	if (ft_setenv(name, value, &shell->envv) != OK)
+	if (ft_setenv(name, value, &shell->envp) != OK)
 	{
 		cleanup(name, value);
 		return (ERROR);

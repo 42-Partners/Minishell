@@ -25,7 +25,7 @@ int			exec_pipe(t_ast_node *node, t_shell *shell,
 void		exec_pipe_child(t_ast_node *node, t_shell *shell,
 				int pipe_cmd[2], int n);
 static int	check_cmd_node(t_ast_node *node, t_shell *shell);
-static int	exec_high_level_node(t_ast_node *node, t_shell *shell);
+static int	exec_high_level_node(t_ast_node *node, t_shell *shell, int pipe);
 
 int	check_cmds(t_ast_node **ast, t_shell *shell)
 {
@@ -43,14 +43,24 @@ int	exec_ast(t_ast_node *node, t_shell *shell, int pipe)
 {
 	if (node->type == CMD)
 		return (exec_cmd(&(node->t_node.cmd_node), shell, pipe));
-	return (exec_high_level_node(node, shell));
+	return (exec_high_level_node(node, shell, pipe));
 }
 
-static int	exec_high_level_node(t_ast_node *node, t_shell *shell)
+static int	exec_high_level_node(t_ast_node *node, t_shell *shell, int pipe)
 {
 	pid_t	pid_left;
 	pid_t	pid_right;
+	int		ret;
 
+	ret = OK;
+	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
+	{
+		ret = exec_ast(node->t_node.logical_node.left, shell, pipe);
+		if ((node->type == LOGICAL_AND && shell->status == 0)
+			|| (node->type == LOGICAL_OR && shell->status != 0))
+			ret = exec_ast(node->t_node.logical_node.right, shell, pipe);
+		return (ret);
+	}
 	if (node->type == PIPE)
 	{
 		if (exec_pipe(node, shell, &pid_left, &pid_right) != OK)
@@ -73,7 +83,7 @@ static int	check_cmd_node(t_ast_node *node, t_shell *shell)
 		if (node->t_node.cmd_node.cmd != NULL)
 			return (validate_cmd(&(node->t_node.cmd_node), shell));
 	}
-	else if (node->type == LOGICAL)
+	else if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
 	{
 		ret = check_cmd_node(node->t_node.logical_node.left, shell);
 		if (ret == OK)

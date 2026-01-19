@@ -27,7 +27,7 @@ int	ft_exit(t_shell *shell, char **args, int pipe)
 	int	exit_status;
 
 	exit_status = shell->status;
-	if (args[1])
+	if (args && args[1])
 	{
 		if (args[2])
 		{
@@ -73,6 +73,6 @@ static void	exit_cleanup(t_shell *shell, int pipe)
 	close(STDOUT_FILENO);
 	if (shell->ast)
 		free_ast(&shell->ast);
-	ft_free_arr(&shell->envv);
+	ft_free_arr(&shell->envp);
 	close(STDERR_FILENO);
 }
