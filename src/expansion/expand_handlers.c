@@ -6,7 +6,7 @@
 /*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/19 17:10:41 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:14:32 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
 	int		ret;
 	int		i;
 
-	ft_printf("entrou aqui\n");
 	ret = OK;
 	i = *index + 1;
 	if (!cmd[i] || cmd[i] == '"')
