@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 22:31:12 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/18 17:42:45 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	**get_new_env(char **env, char **updated_env, char *arg);
 
 int	ft_unset(t_shell *shell, char **args)
 {
-	char	**new_envv;
+	char	**new_envp;
 	int		i;
 
 	shell->status = 0;
@@ -32,13 +32,13 @@ int	ft_unset(t_shell *shell, char **args)
 			shell->status = 1;
 		else
 		{
-			new_envv = remove_env_var(shell, args[i]);
-			if (!new_envv)
+			new_envp = remove_env_var(shell, args[i]);
+			if (!new_envp)
 			{
 				shell->status = 1;
 				return (ERROR);
 			}
-			shell->envv = new_envv;
+			shell->envp = new_envp;
 		}
 	}
 	return (OK);
@@ -74,7 +74,7 @@ static char	**remove_env_var(t_shell *shell, char *arg)
 	char	**updated_env;
 	int		i;
 
-	env = shell->envv;
+	env = shell->envp;
 	i = 0;
 	while (env[i])
 		i++;
@@ -84,7 +84,7 @@ static char	**remove_env_var(t_shell *shell, char *arg)
 	updated_env = get_new_env(env, updated_env, arg);
 	if (!updated_env)
 		return (NULL);
-	free_array((void ***)&shell->envv);
+	free_array((void ***)&shell->envp);
 	return (updated_env);
 }
 

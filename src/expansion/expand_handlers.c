@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/14 20:44:25 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
 	i = *index + 1;
 	if (ft_isalpha(cmd[i]) || cmd[i] == '_')
 	{
-		if (expand_env(result, cmd, &i, shell->envv) != OK)
+		if (expand_env(result, cmd, &i, shell->envp) != OK)
 			return (ERROR);
 	}
 	else if (cmd[i] == '?')

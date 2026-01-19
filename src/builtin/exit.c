@@ -73,6 +73,6 @@ static void	exit_cleanup(t_shell *shell, int pipe)
 	close(STDOUT_FILENO);
 	if (shell->ast)
 		free_ast(&shell->ast);
-	ft_free_arr(&shell->envv);
+	ft_free_arr(&shell->envp);
 	close(STDERR_FILENO);
 }

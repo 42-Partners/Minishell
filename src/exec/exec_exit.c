@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 20:56:21 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/14 21:02:08 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ void	exec_exit(t_shell *shell, int status)
 {
 	if (shell->ast)
 		free_ast(&shell->ast);
-	ft_free_arr(&shell->envv);
+	ft_free_arr(&shell->envp);
 	exit(status);
 }

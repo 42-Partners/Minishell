@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_checkers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/13 18:30:17 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/04 20:27:04 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 23:33:53 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 int	is_invalid_token(int c)
 {
-	return (c == ';' || c == '(' || c == ')');
+	return (c == ';');
 }
 
 int	is_operator(int c)
 {
-	return (c == '>' || c == '<' || c == '|');
+	return (c == '>' || c == '<' || c == '|'
+		|| c == '&' || c == '(' || c == ')');
 }
 
 int	is_word(int c)
