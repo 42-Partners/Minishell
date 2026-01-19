@@ -57,10 +57,12 @@ SRC		:= \
 			src/here_doc/here_doc.c \
 			src/here_doc/here_doc_utils.c \
 			src/builtin/builtin.c \
-			src/builtin/echo.c \
 			src/builtin/cd.c \
-			src/builtin/pwd.c \
+			src/builtin/echo.c \
+			src/builtin/exit.c \
 			src/builtin/export.c \
+			src/builtin/pwd.c \
+			src/builtin/unset.c \
 			src/debug/debug_ast.c \
 			src/debug/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))

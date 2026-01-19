@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/18 23:24:39 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 01:14:59 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@
 static int	input_process(char *input, t_shell *shell);
 static int	parse_and_execute(t_token *token, t_shell *shell);
 
-int	main(int argc, char *argv[], char *envv[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	shell;
 	char	*input;
 
 	(void)argc;
 	(void)argv;
-	shell.envv = ft_str_arr_dup(envv);
-	shell.ast = NULL;
+	shell.envv = ft_str_arr_dup(envp);
 	if (!shell.envv)
 		return (ERROR);
+	shell.ast = NULL;
 	shell.status = 0;
 	register_sig_handlers();
 	while (1)
@@ -83,13 +83,11 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 {
 	int	ret;
 
-	print_tokens(token, "token=");
 	shell->ast = NULL;
 	ret = build_ast(&shell->ast, token);
 	free_token(&token);
 	if (ret != OK)
 		return (free_ast(&shell->ast), ret);
-	print_ast(shell->ast);
 	ret = validate_ast(&shell->ast);
 	if (ret != OK)
 		return (ret);
@@ -102,7 +100,7 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 	}
 	if (read_all_here_docs(shell->ast, shell) != OK)
 		return (free_ast(&shell->ast), ret);
-	exec_ast(shell->ast, shell);
+	exec_ast(shell->ast, shell, 0);
 	free_ast(&shell->ast);
 	return (OK);
 }

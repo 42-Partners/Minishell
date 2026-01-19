@@ -87,6 +87,8 @@ int			handle_high_level(t_ast_node **ast, t_node_type type,
 int			parentesis_handler(t_ast_node **ast, t_token *tokens);
 int			validate_ast(t_ast_node **ast);
 void		free_ast(t_ast_node **ast);
+void		free_array(void ***array);
+void		free_redirect_array(t_redirect ***redirects);
 
 /*DEBUG*/
 void		print_ast(t_ast_node *ast);

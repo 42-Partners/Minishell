@@ -14,7 +14,6 @@
 #include "ast.h"
 #include "exec.h"
 #include "error_handling.h"
-#include "libft.h" //! excluir
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -26,7 +25,7 @@ int			exec_pipe(t_ast_node *node, t_shell *shell,
 void		exec_pipe_child(t_ast_node *node, t_shell *shell,
 				int pipe_cmd[2], int n);
 static int	check_cmd_node(t_ast_node *node, t_shell *shell);
-static int	exec_high_level_node(t_ast_node *node, t_shell *shell);
+static int	exec_high_level_node(t_ast_node *node, t_shell *shell, int pipe);
 
 int	check_cmds(t_ast_node **ast, t_shell *shell)
 {
@@ -40,14 +39,14 @@ int	check_cmds(t_ast_node **ast, t_shell *shell)
 	return (OK);
 }
 
-int	exec_ast(t_ast_node *node, t_shell *shell)
+int	exec_ast(t_ast_node *node, t_shell *shell, int pipe)
 {
 	if (node->type == CMD)
-		return (exec_cmd(&(node->t_node.cmd_node), shell));
-	return (exec_high_level_node(node, shell));
+		return (exec_cmd(&(node->t_node.cmd_node), shell, pipe));
+	return (exec_high_level_node(node, shell, pipe));
 }
 
-static int	exec_high_level_node(t_ast_node *node, t_shell *shell)
+static int	exec_high_level_node(t_ast_node *node, t_shell *shell, int pipe)
 {
 	pid_t	pid_left;
 	pid_t	pid_right;
@@ -56,10 +55,10 @@ static int	exec_high_level_node(t_ast_node *node, t_shell *shell)
 	ret = OK;
 	if (node->type == LOGICAL_AND || node->type == LOGICAL_OR)
 	{
-		ret = exec_ast(node->t_node.logical_node.left, shell);
+		ret = exec_ast(node->t_node.logical_node.left, shell, pipe);
 		if ((node->type == LOGICAL_AND && ret == OK)
 			|| (node->type == LOGICAL_OR && ret == FAIL))
-			ret = exec_ast(node->t_node.logical_node.right, shell);
+			ret = exec_ast(node->t_node.logical_node.right, shell, pipe);
 		return (ret);
 	}
 	if (node->type == PIPE)

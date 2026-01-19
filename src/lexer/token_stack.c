@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 19:22:23 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/17 22:47:37 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 00:56:55 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ void	free_token(t_token **token)
 	while (*token)
 	{
 		temp = (*token)->next;
-		free((*token)->value);
+		if ((*token)->value)
+			free((*token)->value);
 		free(*token);
 		*token = temp;
 	}

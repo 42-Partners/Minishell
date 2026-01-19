@@ -59,18 +59,36 @@ static void	free_cmd(t_cmd_node *node)
 	free(node->redirects);
 }
 
-void	free_array(void **array, int count)
+void	free_array(void ***array)
 {
 	int	i;
 
-	if (!array)
+	if (!array || !*array)
 		return ;
 	i = 0;
-	while (i < count)
+	while ((*array)[i])
 	{
-		free(array[i]);
+		free((*array)[i]);
 		i++;
 	}
-	free(array);
-	array = NULL;
+	free(*array);
+	*array = NULL;
+}
+
+void	free_redirect_array(t_redirect ***redirects)
+{
+	int	i;
+
+	if (!redirects || !*redirects)
+		return ;
+	i = 0;
+	while ((*redirects)[i])
+	{
+		if ((*redirects)[i]->file_name)
+			free((*redirects)[i]->file_name);
+		free((*redirects)[i]);
+		i++;
+	}
+	free(*redirects);
+	*redirects = NULL;
 }
