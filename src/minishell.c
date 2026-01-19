@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 16:13:15 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (input_process(input, &shell) == ERROR)
 			break ;
 	}
-	ft_free_arr(&(shell.envp));
-	close(STDERR_FILENO);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
+	ft_exit(&shell, NULL, 0);
 	return (OK);
 }
 

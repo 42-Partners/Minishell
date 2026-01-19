@@ -27,7 +27,7 @@ int	ft_exit(t_shell *shell, char **args, int pipe)
 	int	exit_status;
 
 	exit_status = shell->status;
-	if (args[1])
+	if (args && args[1])
 	{
 		if (args[2])
 		{
