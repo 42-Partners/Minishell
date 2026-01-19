@@ -30,6 +30,7 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell, int pipe)
 	char	*exec;
 	int		ret;
 
+	handle_wildcard(&cmd, shell);
 	expand_cmd(cmd, shell);
 	exec = NULL;
 	if (cmd->cmd)

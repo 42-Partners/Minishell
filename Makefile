@@ -63,6 +63,7 @@ SRC		:= \
 			src/builtin/export.c \
 			src/builtin/pwd.c \
 			src/builtin/unset.c \
+			src/wildcard/wildcard.c \
 			src/debug/debug_ast.c \
 			src/debug/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
