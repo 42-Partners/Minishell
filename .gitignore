@@ -1,3 +1,9 @@
+# exec file
+minishell
+
+#vscode
+.vscode
+
 # Prerequisites
 *.d
 

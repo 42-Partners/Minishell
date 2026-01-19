@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 16:12:50 by rafaoliv          #+#    #+#             */
-/*   Updated: 2025/07/28 15:46:57 by codespace        ###   ########.fr       */
+/*   Updated: 2025/12/13 15:47:02 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 int	ft_tolower(int c)
 {
-	int	res;
-
 	if (c >= 'A' && c <= 'Z')
-	{
-		res = c + 32;
-		return (res);
-	}
-	else
-		return (c);
+		c += 32;
+	return (c);
 }

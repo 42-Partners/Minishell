@@ -1,0 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_redirects.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/22 15:01:26 by gustaoli          #+#    #+#             */
+/*   Updated: 2025/12/22 15:01:26 by gustaoli         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ast.h"
+#include "libft.h"
+#include "error_handling.h"
+
+#include <stdio.h>
+#include <fcntl.h>
+
+static int	redirect(t_redirect *red);
+
+int	exec_redirects(t_cmd_node *node)
+{
+	int	i;
+	int	ret;
+
+	ret = OK;
+	i = 0;
+	if (!node)
+		return (ERROR);
+	while (i < node->redirect_count)
+	{
+		ret = redirect(node->redirects[i++]);
+		if (ret != OK)
+			return (ret);
+	}
+	return (OK);
+}
+
+static int	redirect(t_redirect *red)
+{
+	int	ret;
+
+	if (red->type == REDIRECT_OUT)
+		red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (red->type == REDIRECT_IN)
+		red->fd = open(red->file_name, O_RDONLY);
+	else if (red->type == REDIRECT_APPEND)
+		red->fd = open(red->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (red->fd < 0)
+	{
+		perror(red->file_name);
+		return (FAIL);
+	}
+	if (red->type == REDIRECT_IN || red->type == HERE_DOC)
+		ret = dup2(red->fd, STDIN_FILENO);
+	else
+		ret = dup2(red->fd, STDOUT_FILENO);
+	close(red->fd);
+	if (ret < 0)
+		return (ERROR);
+	return (OK);
+}
