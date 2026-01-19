@@ -57,7 +57,7 @@ static int	exec_high_level_node(t_ast_node *node, t_shell *shell, int pipe)
 	{
 		ret = exec_ast(node->t_node.logical_node.left, shell, pipe);
 		if ((node->type == LOGICAL_AND && shell->status == 0)
-			|| (node->type == LOGICAL_OR && ret == FAIL))
+			|| (node->type == LOGICAL_OR && shell->status != 0))
 			ret = exec_ast(node->t_node.logical_node.right, shell, pipe);
 		return (ret);
 	}
