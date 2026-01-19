@@ -86,6 +86,8 @@ t_ast_node	*handle_high_level(t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
 int			validate_ast(t_ast_node **ast);
 void		free_ast(t_ast_node **ast);
+void		free_array(void ***array);
+void		free_redirect_array(t_redirect ***redirects);
 
 /*DEBUG*/
 void		print_ast(t_ast_node *ast);

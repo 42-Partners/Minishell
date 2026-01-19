@@ -19,35 +19,34 @@
 #include <unistd.h>
 #include <stdio.h>
 
-int	is_arg_valid(char *arg);
-int	convert_exit_status(int arg);
+static int	is_arg_valid(char *arg);
+static void	exit_cleanup(t_shell *shell, int pipe);
 
 int	ft_exit(t_shell *shell, char **args, int pipe)
 {
 	int	exit_status;
 
-	exit_status = 2;
+	exit_status = shell->status;
 	if (args[1])
 	{
 		if (args[2])
-			return (ft_putstr_fd("exit: too many args\n", 2), FAIL);
-		else if (is_arg_valid(args[1]))
-			exit_status = convert_exit_status(ft_atoi(args[1]));
+		{
+			shell->status = 1;
+			return (ft_fprintf(2, "exit: too many arguments\n"), FAIL);
+		}
+		else if (!is_arg_valid(args[1]))
+		{
+			ft_fprintf(2, "exit: %s: numeric argument required\n", args[1]);
+			exit_status = 2;
+		}
 		else
-			ft_putstr_fd("exit: numeric arg required :(\n", 2);
+			exit_status = (unsigned char)ft_atoi(args[1]);
 	}
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	if (shell->ast)
-		free_ast(&shell->ast);
-	ft_free_arr(&shell->envv);
-	if (pipe == 0)
-		write(STDERR_FILENO, "exit: Bye Bye\n", 15);
-	close(STDERR_FILENO);
+	exit_cleanup(shell, pipe);
 	exit(exit_status);
 }
 
-int	is_arg_valid(char *arg)
+static int	is_arg_valid(char *arg)
 {
 	if (ft_atol(arg) != (long)ft_atoi(arg))
 		return (0);
@@ -55,6 +54,8 @@ int	is_arg_valid(char *arg)
 		arg++;
 	if (*arg == '-' || *arg == '+')
 		arg++;
+	if (!*arg)
+		return (0);
 	while (*arg)
 	{
 		if (!ft_isdigit(*arg))
@@ -64,17 +65,14 @@ int	is_arg_valid(char *arg)
 	return (1);
 }
 
-int	convert_exit_status(int arg)
+static void	exit_cleanup(t_shell *shell, int pipe)
 {
-	if (arg > 255)
-	{
-		while (arg > 255)
-			arg -= 256;
-	}
-	if (arg < 0)
-	{
-		while (arg < 0)
-			arg += 256;
-	}
-	return (arg);
+	if (!pipe)
+		ft_fprintf(1, "exit\n");
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	if (shell->ast)
+		free_ast(&shell->ast);
+	ft_free_arr(&shell->envv);
+	close(STDERR_FILENO);
 }

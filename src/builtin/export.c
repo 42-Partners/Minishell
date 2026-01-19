@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:46:37 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/14 20:15:26 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 18:23:43 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,51 +14,57 @@
 #include "minishell.h"
 #include "error_handling.h"
 
-static int	set_var(t_shell *shell, char **args);
+static int	set_var(t_shell *shell, char *args);
 static int	is_valid_var_name(char *arg);
 static void	cleanup(char *name, char *value);
 
 int	ft_export(t_shell *shell, char **args)
 {
-	shell->status = 1;
-	args++;
-	if (!*args)
-		return (OK);
-	if ((*args)[0] == '-')
-		return (ft_putstr_fd("export: invalid option\n", 2), FAIL);
-	if (!ft_isalpha((*args)[0]) && (*args)[0] != '_')
-		return (ft_putstr_fd("export: not a valid identifier\n", 2), FAIL);
-	while (*args)
-	{
-		if (!is_valid_var_name(*args))
-			return (ft_putstr_fd("export: invalid name\n", 2), FAIL);
-		if (set_var(shell, args) != OK)
-			return (ERROR);
-		args++;
-	}
+	int	i;
+
 	shell->status = 0;
+	if (!args[1])
+		return (OK);
+	if (args[1][0] == '-')
+	{
+		shell->status = 1;
+		ft_fprintf(2, "export: %s: invalid option\n", args[1]);
+		return (FAIL);
+	}
+	i = 1;
+	while (args[i])
+	{
+		if (!is_valid_var_name(args[i]))
+			shell->status = 1;
+		else if (set_var(shell, args[i]) != OK)
+		{
+			shell->status = 1;
+			return (ERROR);
+		}
+		i++;
+	}
 	return (OK);
 }
 
-static int	set_var(t_shell *shell, char **args)
+static int	set_var(t_shell *shell, char *args)
 {
 	char	*assign;
 	char	*name;
 	char	*value;
 
-	assign = ft_strchr(*args, '=');
+	assign = ft_strchr(args, '=');
 	if (!assign)
 	{
-		ft_setenv(*args, NULL, &shell->envv);
-		args++;
+		if (ft_setenv(args, "", &shell->envv) != OK)
+			return (ERROR);
 		return (OK);
 	}
-	name = ft_substr(*args, 0, assign - *args);
+	name = ft_substr(args, 0, assign - args);
 	if (!name)
 		return (ERROR);
 	value = ft_strdup(assign + 1);
 	if (!value)
-		return (ERROR);
+		return (free(name), ERROR);
 	if (ft_setenv(name, value, &shell->envv) != OK)
 	{
 		cleanup(name, value);
@@ -70,13 +76,29 @@ static int	set_var(t_shell *shell, char **args)
 
 static int	is_valid_var_name(char *arg)
 {
-	while (*arg)
+	int	i;
+
+	if (!arg || !*arg)
 	{
-		if (*arg == '=')
+		ft_fprintf(2, "export: not a valid identifier\n");
+		return (0);
+	}
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+	{
+		ft_fprintf(2, "export: %s: not a valid identifier\n", arg);
+		return (0);
+	}
+	i = 1;
+	while (arg[i])
+	{
+		if (arg[i] == '=')
 			break ;
-		if (!ft_isalnum(*arg) && *arg != '_')
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+		{
+			ft_fprintf(2, "export: %s: not a valid identifier\n", arg);
 			return (0);
-		arg++;
+		}
+		i++;
 	}
 	return (1);
 }

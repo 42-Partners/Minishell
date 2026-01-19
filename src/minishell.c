@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/16 18:41:02 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:33:14 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@
 static int	input_process(char *input, t_shell *shell);
 static int	parse_and_execute(t_token *token, t_shell *shell);
 
-int	main(int argc, char *argv[], char *envv[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	shell;
 	char	*input;
 
 	(void)argc;
 	(void)argv;
-	shell.envv = ft_str_arr_dup(envv);
-	shell.ast = NULL;
+	shell.envv = ft_str_arr_dup(envp);
 	if (!shell.envv)
 		return (ERROR);
+	shell.ast = NULL;
 	shell.status = 0;
 	register_sig_handlers();
 	while (1)

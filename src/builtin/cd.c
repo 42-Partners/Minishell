@@ -6,7 +6,7 @@
 /*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 17:55:26 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/14 17:29:02 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/18 17:40:17 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,83 +16,92 @@
 
 #include <stdio.h>
 
-static int	get_cd(t_shell *shell, char **argv, char **cd);
-static int	change_directory(char **argv, char *cd);
+static int	get_cd(t_shell *shell, char **argv, char **pwd);
+static int	get_oldpwd(t_shell *shell, char **oldpwd);
+static int	update_envv(t_shell *shell, char *target, char *oldpwd);
 static void	cleanup(char *pwd, char *oldpwd);
 
 int	ft_cd(t_shell *shell, char **argv)
 {
-	char	*cd;
-	char	*pwd;
+	char	*target;
 	char	*oldpwd;
+	int		ret;
 
 	shell->status = 1;
-	if (*(++argv) && *(argv + 1))
-		return (ft_putstr_fd("cd: too many arguments\n", 2), FAIL);
-	oldpwd = getcwd(NULL, 0);
-	if (!oldpwd)
-		return (perror("cd"), ERROR);
-	cd = NULL;
-	if (get_cd(shell, argv, &cd) != OK)
-		return (ERROR);
-	if (change_directory(argv, cd) != OK)
-		return (FAIL);
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (perror("cd"), FAIL);
-	if (ft_setenv("OLDPWD", oldpwd, &shell->envv) != OK)
-		return (cleanup(pwd, oldpwd), ERROR);
-	if (ft_setenv("PWD", pwd, &shell->envv) != OK)
-		return (cleanup(pwd, oldpwd), ERROR);
-	cleanup(pwd, oldpwd);
+	if (argv[1] && argv[2])
+		return (ft_fprintf(2, "cd: too many arguments\n"), 2);
+	ret = get_cd(shell, argv, &target);
+	if (ret != OK)
+		return (ret);
+	if (get_oldpwd(shell, &oldpwd) != OK)
+		return (free(target), ERROR);
+	if (chdir(target) < 0)
+	{
+		perror("cd");
+		return (cleanup(target, oldpwd), FAIL);
+	}
+	if (update_envv(shell, target, oldpwd))
+		return (cleanup(target, oldpwd), ERROR);
+	cleanup(target, oldpwd);
 	shell->status = 0;
 	return (OK);
 }
 
-static int	get_cd(t_shell *shell, char **argv, char **cd)
+static int	get_cd(t_shell *shell, char **argv, char **pwd)
 {
-	if (!*argv || ft_strcmp(*argv, "~") == 0)
+	if (!argv[1] || ft_strcmp(argv[1], "~") == 0)
 	{
-		if (ft_getenv("HOME", shell->envv, cd) != OK)
+		if (ft_getenv("HOME", shell->envv, pwd) != OK)
 			return (ERROR);
-		if (!*cd)
-		{
-			ft_putstr_fd("Error: cd: HOME not set\n", 2);
-			shell->status = 1;
-			return (FAIL);
-		}
+		if (!pwd)
+			return (ft_fprintf(2, "cd: HOME not set\n"), FAIL);
 	}
-	else if (ft_strcmp(*argv, "-") == 0)
+	else if (ft_strcmp(argv[1], "-") == 0)
 	{
-		if (ft_getenv("OLDPWD", shell->envv, cd) != OK)
+		if (ft_getenv("OLDPWD", shell->envv, pwd) != OK)
 			return (ERROR);
-		if (!*cd)
-		{
-			ft_putstr_fd("Error: cd: OLDPWD not set\n", 2);
-			shell->status = 1;
-			return (FAIL);
-		}
-		ft_printf("%s\n", *cd);
+		if (!pwd)
+			return (ft_fprintf(2, "cd: OLDPWD not set\n"), FAIL);
+		ft_printf("%s\n", pwd);
+	}
+	else
+	{
+		*pwd = ft_strdup(argv[1]);
+		if (!*pwd)
+			return (ERROR);
 	}
 	return (OK);
 }
 
-static int	change_directory(char **argv, char *cd)
+static int	get_oldpwd(t_shell *shell, char **oldpwd)
 {
-	if (cd)
+	*oldpwd = getcwd(NULL, 0);
+	if (!*oldpwd)
 	{
-		if (chdir(cd) < 0)
-		{
-			free(cd);
-			return (perror("Error: cd"), FAIL);
-		}
-		free(cd);
+		if (ft_getenv("PWD", shell->envv, oldpwd) != OK || !*oldpwd)
+			return (ERROR);
+	}
+	return (OK);
+}
+
+static int	update_envv(t_shell *shell, char *target, char *oldpwd)
+{
+	char	*pwd;
+	int		ret;
+
+	pwd = getcwd(NULL, 0);
+	if (pwd)
+	{
+		ret = ft_setenv("PWD", pwd, &shell->envv);
+		free(pwd);
 	}
 	else
-	{
-		if (chdir(*argv) < 0)
-			return (perror("Error: cd"), FAIL);
-	}
+		ret = ft_setenv("PWD", target, &shell->envv);
+	if (ret != OK)
+		return (ERROR);
+	ft_setenv("OLDPWD", oldpwd, &shell->envv);
+	if (ret != OK)
+		return (ERROR);
 	return (OK);
 }
 
