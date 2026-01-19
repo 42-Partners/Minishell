@@ -62,6 +62,8 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 	}
 	else
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		exec_and_redirect(exec, cmd, shell);
 		free(exec);
 	}
@@ -84,10 +86,22 @@ static void	exec_and_redirect(char *exec, t_cmd_node *cmd, t_shell *shell)
 
 static int	wait_child(int pid)
 {
-	int	ret;
+	int	status;
+	int	sig;
 
-	waitpid(pid, &ret, 0);
+	ignore_sig_handlers();
+	waitpid(pid, &status, 0);
 	while (wait(NULL) > 0)
 		;
-	return (ret >> 8);
+	register_sig_handlers();
+	sig = status & 0x7F;
+	if (sig != 0)
+	{
+		if (sig == SIGQUIT)
+			write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+		else if (sig == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
+		return (128 + sig);
+	}
+	return ((status >> 8) & 0xFF);
 }
