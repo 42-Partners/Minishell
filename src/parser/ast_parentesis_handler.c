@@ -37,7 +37,8 @@ int	parentesis_handler(t_ast_node **ast, t_token *tokens)
 	if (!tokens)
 		return (ft_fprintf(2, "syntax error near token '('\n"), FAIL);
 	if (tokens->type == TOKEN_CLOSE_PARENTESIS)
-		return (ft_fprintf(2, "syntax error near unexpected token ')'\n"), FAIL);
+		return (
+			ft_fprintf(2, "syntax error near unexpected token ')'\n"), FAIL);
 	ret = isolate(&tokens, &leftovers);
 	if (ret != OK)
 		return (ret);
