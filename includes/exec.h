@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/27 18:51:10 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 06:04:53 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ int		check_cmds(t_ast_node **ast, t_shell *shell);
 int		exec_redirects(t_cmd_node *node);
 int		exec_ast(t_ast_node *node, t_shell *shell, int pipe);
 int		exec_cmd(t_cmd_node *cmd, t_shell *shell, int pipe);
+int		handle_wildcard(t_cmd_node **cmd, t_shell *shell);
 
 #endif
