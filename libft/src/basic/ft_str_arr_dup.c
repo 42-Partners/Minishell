@@ -6,7 +6,7 @@
 /*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 07:34:29 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/19 14:11:55 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:40:24 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,7 @@ char	**ft_str_arr_dup(char **str_array)
 		else
 			duplicate[i] = ft_strdup(str_array[i]);
 		if (!duplicate[i])
-		{
-			while (--i >= 0)
-				free(duplicate[i]);
-			return (free(duplicate), NULL);
-		}
+			ft_free_arr(&duplicate);
 		i++;
 	}
 	duplicate[i] = NULL;
