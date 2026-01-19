@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:10:41 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,17 @@ static int	handle_invalid_var_name(char **result, char *cmd, int *index);
 
 int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
 {
-	int		i;
 	char	*aux;
+	int		ret;
+	int		i;
 
+	ft_printf("entrou aqui\n");
+	ret = OK;
 	i = *index + 1;
-	if (ft_isalpha(cmd[i]) || cmd[i] == '_')
-	{
-		if (expand_env(result, cmd, &i, shell->envp) != OK)
-			return (ERROR);
-	}
+	if (!cmd[i] || cmd[i] == '"')
+		ret = append_fragment(result, cmd, i - 1, i);
+	else if (ft_isalpha(cmd[i]) || cmd[i] == '_')
+		ret = expand_env(result, cmd, &i, shell->envp);
 	else if (cmd[i] == '?')
 	{
 		aux = ft_itoa(shell->status);
@@ -41,10 +43,9 @@ int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
 		i++;
 	}
 	else
-	{
-		if (handle_invalid_var_name(result, cmd, &i) != OK)
-			return (ERROR);
-	}
+		ret = handle_invalid_var_name(result, cmd, &i);
+	if (ret != OK)
+		return (ret);
 	*index = i;
 	return (OK);
 }
