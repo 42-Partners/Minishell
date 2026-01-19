@@ -24,8 +24,10 @@ static int		count_redirects(t_token *tokens);
 int	get_redirects(t_cmd_node **node, t_token *tokens)
 {
 	int	i;
+	int	ret;
 
 	i = count_redirects(tokens);
+	ret = OK;
 	(*node)->redirect_count = i;
 	if (i == 0)
 		(*node)->redirects = NULL;
@@ -37,8 +39,9 @@ int	get_redirects(t_cmd_node **node, t_token *tokens)
 			ft_putstr_fd(ERR_MALLOC, 2);
 			return (ERROR);
 		}
-		if (parse_redirect_tokens(&(*node)->redirects, tokens) != OK)
-			return (ERROR);
+		ret = parse_redirect_tokens(&(*node)->redirects, tokens);
+		if (ret != OK)
+			return (ret);
 	}
 	return (OK);
 }
@@ -77,23 +80,22 @@ static int	handle_redirect_token(t_redirect **redirect, t_token *token)
 	{
 		(*redirect)->type = HERE_DOC;
 		(*redirect)->fd = 0;
-		if (token->next && token->next->type == TOKEN_WORD)
-			(*redirect)->file_name = ft_strdup(token->next->value);
-		if (!(*redirect)->file_name)
-			return (ERROR);
-		return (OK);
 	}
-	if (token->type == TOKEN_REDIRECT_IN)
+	else if (token->type == TOKEN_REDIRECT_IN)
 		(*redirect)->type = REDIRECT_IN;
 	else if (token->type == TOKEN_REDIRECT_OUT)
 		(*redirect)->type = REDIRECT_OUT;
 	else if (token->type == TOKEN_REDIRECT_APPEND)
 		(*redirect)->type = REDIRECT_APPEND;
 	if (!token->next || token->next->type != TOKEN_WORD)
-		return (OK);
+	{
+		ft_fprintf(2,
+			"syntax error near token '%s'\n", token->value);
+		return (FAIL);
+	}
 	(*redirect)->file_name = ft_strdup(token->next->value);
 	if (!(*redirect)->file_name)
-		return (ERROR);
+		return (ft_fprintf(2, ERR_MALLOC), ERROR);
 	return (OK);
 }
 

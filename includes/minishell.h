@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 09:25:58 by rafaoliv          #+#    #+#             */
-/*   Updated: 2026/01/16 18:39:18 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 16:34:01 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ extern volatile sig_atomic_t	g_signal;
 typedef struct s_shell
 {
 	int			status;
-	char		**envv;
+	char		**envp;
 	t_ast_node	*ast;
 }	t_shell;
 
 // signal
 void	register_sig_handlers(void);
+void	ignore_sig_handlers(void);
 void	signal_handler(int signum);
 void	heredoc_handler(int signum);
 
@@ -41,8 +42,8 @@ int		expand_string(char **cmd, t_shell *shell);
 int		read_all_here_docs(t_ast_node *ast, t_shell *shell);
 
 // env management
-int		ft_getenv(char *env, char *envv[], char **result);
-int		ft_setenv(char *name, char *value, char **envv[]);
+int		ft_getenv(char *env, char *envp[], char **result);
+int		ft_setenv(char *name, char *value, char **envp[]);
 
 // builtin
 int		is_builtin(char *cmd);

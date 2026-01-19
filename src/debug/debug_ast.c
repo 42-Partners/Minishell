@@ -46,7 +46,7 @@ static void	print_ast_identaded(t_ast_node *ast, int ident_level)
 		print_ast_identaded(ast->t_node.pipe_node.right, ident_level + 1);
 		print_idents_text(ident_level, "<PIPE/>");
 	}
-	else if (ast->type == LOGICAL)
+	else if (ast->type == LOGICAL_AND || ast->type == LOGICAL_OR)
 	{
 		if (ast->t_node.logical_node.type == AND)
 			print_idents_text(ident_level, "<LOGICAL AND>");

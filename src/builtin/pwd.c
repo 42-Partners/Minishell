@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:22:09 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/18 17:43:01 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_pwd(t_shell *shell, char **args)
 	(void)args;
 	pwd = NULL;
 	shell->status = 1;
-	ft_getenv("PWD", shell->envv, &pwd);
+	ft_getenv("PWD", shell->envp, &pwd);
 	if (pwd)
 	{
 		ft_printf("%s\n", pwd);

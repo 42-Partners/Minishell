@@ -40,6 +40,7 @@ SRC		:= \
 			src/parser/ast_builder.c \
 			src/parser/ast_free.c \
 			src/parser/ast_level_handler.c \
+			src/parser/ast_parentesis_handler.c \
 			src/parser/ast_redirects.c \
 			src/parser/ast_token_parser.c \
 			src/parser/ast_validate.c \
@@ -63,8 +64,9 @@ SRC		:= \
 			src/builtin/env.c \
 			src/builtin/export.c \
 			src/builtin/unset.c \
-			src/debug_ast.c \
-			src/debug.c
+			src/wildcard/wildcard.c \
+			src/debug/debug_ast.c \
+			src/debug/debug.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
 
 $(NAME): $(OBJ) $(LIBFT)

@@ -47,3 +47,9 @@ void	register_sig_handlers(void)
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+void	ignore_sig_handlers(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}

@@ -19,7 +19,7 @@
 #include <stdio.h>
 
 static int	validate_ast_node(t_ast_node *node);
-static int	validate_cmd(t_cmd_node cmd);
+static int	validate_cmd_node(t_cmd_node cmd);
 static int	validate_high_level(t_node_type type, t_ast_node *node);
 static int	validate_ast_children(t_ast_node *left, t_ast_node *right);
 
@@ -41,13 +41,13 @@ static int	validate_ast_node(t_ast_node *node)
 	if (!node)
 		return (ERROR);
 	if (node->type == CMD)
-		return (validate_cmd(node->t_node.cmd_node));
-	else if (node->type == LOGICAL || node->type == PIPE)
+		return (validate_cmd_node(node->t_node.cmd_node));
+	else
 		return (validate_high_level(node->type, node));
 	return (OK);
 }
 
-static int	validate_cmd(t_cmd_node cmd)
+static int	validate_cmd_node(t_cmd_node cmd)
 {
 	int	i;
 
@@ -56,7 +56,7 @@ static int	validate_cmd(t_cmd_node cmd)
 	{
 		if (!cmd.redirects[i]->file_name)
 		{
-			write(1, "syntax error near unexpected token '", 25);
+			write(1, "syntax error near token '", 25);
 			if (cmd.redirects[i]->type == REDIRECT_IN)
 				write(1, "<'\n", 3);
 			else if (cmd.redirects[i]->type == REDIRECT_OUT)
@@ -76,12 +76,12 @@ static int	validate_high_level(t_node_type type, t_ast_node *node)
 	t_ast_node	*left;
 	t_ast_node	*right;
 
-	if (type == LOGICAL)
+	if (type == LOGICAL_AND || type == LOGICAL_OR)
 	{
 		left = node->t_node.logical_node.left;
 		right = node->t_node.logical_node.right;
 		if ((!left || !right))
-			ft_putstr_fd("syntax error near logical token\n", 2);
+			return (ft_putstr_fd("syntax error near logical token\n", 2), FAIL);
 	}
 	else if (type == PIPE)
 	{

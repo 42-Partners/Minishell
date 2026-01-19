@@ -22,20 +22,22 @@ static int			get_args(t_cmd_node **node, t_token *tokens);
 static	t_cmd_node	*new_cmd_node(void);
 static int			fill_args(t_cmd_node **node, t_token *tokens);
 
-t_cmd_node	*consume_tokens(t_token *tokens)
+int	consume_tokens(t_cmd_node **cmd_node, t_token *tokens)
 {
-	t_cmd_node	*ret;
+	int	ret;
 
-	ret = new_cmd_node();
-	if (!ret)
-		return (NULL);
-	if (get_args(&ret, tokens) != OK)
-		return (free(ret), NULL);
-	if (get_redirects(&ret, tokens) != OK)
-		return (free(ret), NULL);
-	if (ret->args)
-		ret->cmd = ret->args[0];
-	return (ret);
+	*cmd_node = new_cmd_node();
+	if (!*cmd_node)
+		return (ERROR);
+	ret = get_args(cmd_node, tokens);
+	if (ret != OK)
+		return (free(*cmd_node), ret);
+	ret = get_redirects(cmd_node, tokens);
+	if (ret != OK)
+		return (free(*cmd_node), ret);
+	if ((*cmd_node)->args)
+		(*cmd_node)->cmd = (*cmd_node)->args[0];
+	return (OK);
 }
 
 static int	get_args(t_cmd_node **node, t_token *tokens)
@@ -46,19 +48,20 @@ static int	get_args(t_cmd_node **node, t_token *tokens)
 	if (!node || !*node)
 		return (ERROR);
 	if (!tokens || n_args == 0)
+	{
 		(*node)->args = NULL;
+		return (OK);
+	}
 	else if (n_args == 1)
 		(*node)->args = malloc(sizeof(char *) * 2);
 	else
-	{
 		(*node)->args = malloc(sizeof(char *) * (n_args + 1));
-		if (!(*node)->args)
-		{
-			ft_putstr_fd(ERR_MALLOC, 2);
-			free(*node);
-			*node = NULL;
-			return (ERROR);
-		}
+	if (!(*node)->args)
+	{
+		ft_fprintf(2, ERR_MALLOC);
+		free(*node);
+		*node = NULL;
+		return (ERROR);
 	}
 	fill_args(node, tokens);
 	return (OK);
