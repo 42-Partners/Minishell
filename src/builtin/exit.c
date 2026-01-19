@@ -29,15 +29,15 @@ int	ft_exit(t_shell *shell, char **args, int pipe)
 	exit_status = shell->status;
 	if (args && args[1])
 	{
-		if (args[2])
-		{
-			shell->status = 1;
-			return (ft_fprintf(2, "exit: too many arguments\n"), FAIL);
-		}
-		else if (!is_arg_valid(args[1]))
+		if (!is_arg_valid(args[1]))
 		{
 			ft_fprintf(2, "exit: %s: numeric argument required\n", args[1]);
 			exit_status = 2;
+		}
+		else if (args[2])
+		{
+			shell->status = 1;
+			return (ft_fprintf(2, "exit: too many arguments\n"), FAIL);
 		}
 		else
 			exit_status = (unsigned char)ft_atoi(args[1]);
