@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/16 17:15:46 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 02:47:57 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-static int	get_bin_paths(char **envv, char ***bin_paths);
+static int	get_bin_paths(char **envp, char ***bin_paths);
 static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **exec);
 static char	*construct_path(char *bin_path, char *cmd);
 
@@ -41,7 +41,7 @@ int	validate_cmd(t_cmd_node *cmd, t_shell *shell)
 		return (free(cmd_expanded), OK);
 	if (access(cmd_expanded, X_OK) == 0)
 		return (free(cmd_expanded), OK);
-	ret = get_bin_paths(shell->envv, &bin_paths);
+	ret = get_bin_paths(shell->envp, &bin_paths);
 	if (ret != OK)
 		return (free(cmd_expanded), ret);
 	ret = verify_cmd_in_bin_paths(cmd_expanded, bin_paths, &aux);
@@ -51,7 +51,7 @@ int	validate_cmd(t_cmd_node *cmd, t_shell *shell)
 	return (free(cmd_expanded), ret);
 }
 
-int	get_cmd_path(char **exec, char *cmd, char *envv[])
+int	get_cmd_path(char **exec, char *cmd, char *envp[])
 {
 	char	**bin_paths;
 	int		ret;
@@ -65,7 +65,7 @@ int	get_cmd_path(char **exec, char *cmd, char *envv[])
 	}
 	else
 	{
-		ret = get_bin_paths(envv, &bin_paths);
+		ret = get_bin_paths(envp, &bin_paths);
 		if (ret != OK)
 			return (ret);
 		ret = verify_cmd_in_bin_paths(cmd, bin_paths, exec);
@@ -76,6 +76,8 @@ int	get_cmd_path(char **exec, char *cmd, char *envv[])
 
 static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **exec)
 {
+	if (!*cmd)
+		return (ft_printf("Command not found: %s\n", cmd), FAIL);
 	while (*bin_paths)
 	{
 		*exec = construct_path(*bin_paths, cmd);
@@ -105,17 +107,17 @@ static char	*construct_path(char *bin_path, char *cmd)
 	return (res);
 }
 
-static int	get_bin_paths(char **envv, char ***bin_paths)
+static int	get_bin_paths(char **envp, char ***bin_paths)
 {
-	while (*envv)
+	while (*envp)
 	{
-		if (ft_strncmp(*envv, "PATH=", 5) == 0)
+		if (ft_strncmp(*envp, "PATH=", 5) == 0)
 			break ;
-		envv++;
+		envp++;
 	}
-	if (*envv == NULL)
+	if (*envp == NULL)
 		return (FAIL);
-	*bin_paths = ft_split((*envv + 5), ':');
+	*bin_paths = ft_split((*envp + 5), ':');
 	if (!*bin_paths)
 		return (ft_putstr_fd("get_bin_paths", 2), ERROR);
 	return (OK);

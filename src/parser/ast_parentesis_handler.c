@@ -82,7 +82,6 @@ static int	handle_tokens(t_ast_node **ast, t_token *left, t_token *right)
 	t_ast_node	*left_node;
 
 	ret = OK;
-	print_tokens(right, "leftover=");
 	if (right
 		&& ((right->type != TOKEN_AND && right->type != TOKEN_OR
 				&& right->type != TOKEN_PIPE) || !right->next))

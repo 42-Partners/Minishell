@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 17:55:26 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/18 17:40:17 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 static int	get_cd(t_shell *shell, char **argv, char **pwd);
 static int	get_oldpwd(t_shell *shell, char **oldpwd);
-static int	update_envv(t_shell *shell, char *target, char *oldpwd);
+static int	update_envp(t_shell *shell, char *target, char *oldpwd);
 static void	cleanup(char *pwd, char *oldpwd);
 
 int	ft_cd(t_shell *shell, char **argv)
@@ -40,7 +40,7 @@ int	ft_cd(t_shell *shell, char **argv)
 		perror("cd");
 		return (cleanup(target, oldpwd), FAIL);
 	}
-	if (update_envv(shell, target, oldpwd))
+	if (update_envp(shell, target, oldpwd))
 		return (cleanup(target, oldpwd), ERROR);
 	cleanup(target, oldpwd);
 	shell->status = 0;
@@ -51,14 +51,14 @@ static int	get_cd(t_shell *shell, char **argv, char **pwd)
 {
 	if (!argv[1] || ft_strcmp(argv[1], "~") == 0)
 	{
-		if (ft_getenv("HOME", shell->envv, pwd) != OK)
+		if (ft_getenv("HOME", shell->envp, pwd) != OK)
 			return (ERROR);
 		if (!pwd)
 			return (ft_fprintf(2, "cd: HOME not set\n"), FAIL);
 	}
 	else if (ft_strcmp(argv[1], "-") == 0)
 	{
-		if (ft_getenv("OLDPWD", shell->envv, pwd) != OK)
+		if (ft_getenv("OLDPWD", shell->envp, pwd) != OK)
 			return (ERROR);
 		if (!pwd)
 			return (ft_fprintf(2, "cd: OLDPWD not set\n"), FAIL);
@@ -78,13 +78,13 @@ static int	get_oldpwd(t_shell *shell, char **oldpwd)
 	*oldpwd = getcwd(NULL, 0);
 	if (!*oldpwd)
 	{
-		if (ft_getenv("PWD", shell->envv, oldpwd) != OK || !*oldpwd)
+		if (ft_getenv("PWD", shell->envp, oldpwd) != OK || !*oldpwd)
 			return (ERROR);
 	}
 	return (OK);
 }
 
-static int	update_envv(t_shell *shell, char *target, char *oldpwd)
+static int	update_envp(t_shell *shell, char *target, char *oldpwd)
 {
 	char	*pwd;
 	int		ret;
@@ -92,14 +92,14 @@ static int	update_envv(t_shell *shell, char *target, char *oldpwd)
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 	{
-		ret = ft_setenv("PWD", pwd, &shell->envv);
+		ret = ft_setenv("PWD", pwd, &shell->envp);
 		free(pwd);
 	}
 	else
-		ret = ft_setenv("PWD", target, &shell->envv);
+		ret = ft_setenv("PWD", target, &shell->envp);
 	if (ret != OK)
 		return (ERROR);
-	ft_setenv("OLDPWD", oldpwd, &shell->envv);
+	ft_setenv("OLDPWD", oldpwd, &shell->envp);
 	if (ret != OK)
 		return (ERROR);
 	return (OK);

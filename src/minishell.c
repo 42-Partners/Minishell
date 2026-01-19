@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/19 01:15:14 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
-	shell.envv = ft_str_arr_dup(envp);
-	if (!shell.envv)
+	shell.envp = ft_str_arr_dup(envp);
+	if (!shell.envp)
 		return (ERROR);
 	shell.ast = NULL;
 	shell.status = 0;
@@ -44,7 +44,7 @@ int	main(int argc, char *argv[], char *envp[])
 		if (input_process(input, &shell) == ERROR)
 			break ;
 	}
-	ft_free_arr(&(shell.envv));
+	ft_free_arr(&(shell.envp));
 	close(STDERR_FILENO);
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);

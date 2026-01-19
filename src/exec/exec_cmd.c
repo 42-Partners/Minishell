@@ -36,7 +36,7 @@ int	exec_cmd(t_cmd_node *cmd, t_shell *shell, int pipe)
 	{
 		if (is_builtin(cmd->cmd))
 			return (exec_builtin(cmd, shell, pipe));
-		ret = get_cmd_path(&exec, cmd->cmd, shell->envv);
+		ret = get_cmd_path(&exec, cmd->cmd, shell->envp);
 		if (ret != OK)
 			return (ret);
 	}
@@ -75,7 +75,7 @@ static void	exec_and_redirect(char *exec, t_cmd_node *cmd, t_shell *shell)
 	i = 3;
 	while (i < 1024)
 		close(i++);
-	execve(exec, cmd->args, shell->envv);
+	execve(exec, cmd->args, shell->envp);
 	ft_putstr_fd("execve failed :(\n", 2);
 	free(exec);
 	exec_exit(shell, FAIL);
