@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/31 21:46:37 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 18:35:41 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "minishell.h"
 #include "error_handling.h"
 
+int			ft_env(t_shell *shell, char **args);
 static int	set_var(t_shell *shell, char *args);
 static int	is_valid_var_name(char *arg);
 static void	cleanup(char *name, char *value);
@@ -24,7 +25,7 @@ int	ft_export(t_shell *shell, char **args)
 
 	shell->status = 0;
 	if (!args[1])
-		return (OK);
+		return (ft_env(shell, args));
 	if (args[1][0] == '-')
 	{
 		shell->status = 1;

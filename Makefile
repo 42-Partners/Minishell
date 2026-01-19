@@ -57,11 +57,12 @@ SRC		:= \
 			src/here_doc/here_doc.c \
 			src/here_doc/here_doc_utils.c \
 			src/builtin/builtin.c \
-			src/builtin/cd.c \
 			src/builtin/echo.c \
 			src/builtin/exit.c \
-			src/builtin/export.c \
+			src/builtin/cd.c \
 			src/builtin/pwd.c \
+			src/builtin/env.c \
+			src/builtin/export.c \
 			src/builtin/unset.c \
 			src/wildcard/wildcard.c \
 			src/debug/debug_ast.c \
