@@ -66,6 +66,10 @@ static char	*get_token_type(t_token token)
 		return ("TOKEN_OPEN_PARENTESIS");
 	else if (token.type == TOKEN_CLOSE_PARENTESIS)
 		return ("TOKEN_CLOSE_PARENTESIS");
+	else if (token.type == TOKEN_AND)
+		return ("TOKEN_AND");
+	else if (token.type == TOKEN_OR)
+		return ("TOKEN_OR");
 	else
 		return ("ERROR");
 }

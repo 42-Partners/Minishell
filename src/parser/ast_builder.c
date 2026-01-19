@@ -28,7 +28,8 @@ int	build_ast(t_ast_node **ast, t_token *tokens)
 
 	if (!tokens)
 		return (*ast = NULL, OK);
-	if (tokens->type == TOKEN_OPEN_PARENTESIS || tokens->type == TOKEN_CLOSE_PARENTESIS)
+	if (tokens->type == TOKEN_OPEN_PARENTESIS
+		|| tokens->type == TOKEN_CLOSE_PARENTESIS)
 		return (parentesis_handler(ast, tokens));
 	next_node_type = detect_next_node_type(tokens);
 	if (next_node_type == CMD)

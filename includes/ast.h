@@ -84,7 +84,7 @@ int			consume_tokens(t_cmd_node **cmd_node, t_token *tokens);
 int			handle_low_level(t_ast_node **ast, t_token *tokens);
 int			handle_high_level(t_ast_node **ast, t_node_type type,
 				t_token *right_tokens, t_token *left_tokens);
-int 		parentesis_handler(t_ast_node **ast, t_token *tokens);
+int			parentesis_handler(t_ast_node **ast, t_token *tokens);
 int			validate_ast(t_ast_node **ast);
 void		free_ast(t_ast_node **ast);
 

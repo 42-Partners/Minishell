@@ -6,7 +6,7 @@
 /*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 15:39:45 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/17 19:24:51 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/18 23:24:39 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static int	parse_and_execute(t_token *token, t_shell *shell)
 	free_token(&token);
 	if (ret != OK)
 		return (free_ast(&shell->ast), ret);
+	print_ast(shell->ast);
 	ret = validate_ast(&shell->ast);
 	if (ret != OK)
 		return (ret);
