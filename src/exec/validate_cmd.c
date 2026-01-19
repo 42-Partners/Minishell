@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 18:43:28 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/19 02:47:57 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/19 18:11:47 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	get_cmd_path(char **exec, char *cmd, char *envp[])
 static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **exec)
 {
 	if (!*cmd)
-		return (ft_printf("Command not found: %s\n", cmd), FAIL);
+		return (ft_printf("%s: command not found\n", cmd), FAIL);
 	while (*bin_paths)
 	{
 		*exec = construct_path(*bin_paths, cmd);
@@ -88,7 +88,7 @@ static int	verify_cmd_in_bin_paths(char *cmd, char **bin_paths, char **exec)
 		free(*exec);
 		bin_paths++;
 	}
-	return (ft_printf("Command not found: %s\n", cmd), FAIL);
+	return (ft_printf("bash: %s: No such file or directory\n", cmd), FAIL);
 }
 
 static char	*construct_path(char *bin_path, char *cmd)
