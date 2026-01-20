@@ -13,7 +13,7 @@
 #include "lexer.h"
 #include "ast.h"
 #include "error_handling.h"
-
+#include "libft.h" //! excluir
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -22,9 +22,9 @@ static t_node_type	detect_next_node_type(t_token *tokens);
 
 int	build_ast(t_ast_node **ast, t_token *tokens)
 {
+	t_node_type	next_node_type;
 	t_token		*tk_node;
 	int			ret;
-	t_node_type	next_node_type;
 
 	if (!tokens)
 		return (*ast = NULL, OK);

@@ -30,7 +30,7 @@ int	handle_low_level(t_ast_node **ast, t_token *tokens)
 	cmd_node = NULL;
 	*ast = malloc(sizeof(t_ast_node));
 	if (!*ast)
-		return (ft_putstr_fd(ERR_MALLOC, 2), ERROR);
+		return (ft_fprintf(2, ERR_MALLOC), ERROR);
 	(*ast)->type = CMD;
 	ret = consume_tokens(&cmd_node, tokens);
 	if (ret != OK)

@@ -56,15 +56,15 @@ static int	validate_cmd_node(t_cmd_node cmd)
 	{
 		if (!cmd.redirects[i]->file_name)
 		{
-			write(1, "syntax error near token '", 25);
+			write(2, "syntax error near token '", 25);
 			if (cmd.redirects[i]->type == REDIRECT_IN)
-				write(1, "<'\n", 3);
+				write(2, "<'\n", 3);
 			else if (cmd.redirects[i]->type == REDIRECT_OUT)
-				write(1, ">'\n", 3);
+				write(2, ">'\n", 3);
 			else if (cmd.redirects[i]->type == REDIRECT_APPEND)
-				write(1, ">>'\n", 4);
+				write(2, ">>'\n", 4);
 			else if (cmd.redirects[i]->type == HERE_DOC)
-				write(1, "<<'\n", 4);
+				write(2, "<<'\n", 4);
 			return (FAIL);
 		}
 	}
@@ -88,7 +88,7 @@ static int	validate_high_level(t_node_type type, t_ast_node *node)
 		left = node->t_node.pipe_node.left;
 		right = node->t_node.pipe_node.right;
 		if (!left || !right)
-			return (ft_putstr_fd("syntax error near token '|'\n", 2), FAIL);
+			return (ft_fprintf(2, "syntax error near token '|'\n"), FAIL);
 	}
 	else
 		return (ERROR);
