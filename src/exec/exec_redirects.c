@@ -26,8 +26,6 @@ int	exec_redirects(t_cmd_node *node)
 
 	ret = OK;
 	i = 0;
-	if (!node)
-		return (ERROR);
 	while (i < node->redirect_count)
 	{
 		ret = redirect(node->redirects[i++]);

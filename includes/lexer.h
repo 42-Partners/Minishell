@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 22:54:01 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/17 22:47:09 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/20 15:41:24 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,5 @@ t_token	*new_token(char *value, t_token_type type);
 void	free_token(t_token **token);
 t_token	*divide_left(t_token *token_head, t_token *father);
 t_token	*divide_right(t_token *token_head, t_token *father);
-
-/* Debug (remove on project delivery) */
-void	print_tokens(t_token *tokens, char *custom);
-void	debug_flag(char *print_mgs);
 
 #endif

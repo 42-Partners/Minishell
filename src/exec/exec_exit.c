@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/14 20:56:21 by gustaoli          #+#    #+#             */
-/*   Updated: 2026/01/19 02:11:36 by gustaoli         ###   ########.fr       */
+/*   Updated: 2026/01/20 16:13:26 by rafaoliv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 void	exec_exit(t_shell *shell, int status)
 {
+	get_next_line(-1);
 	if (shell->ast)
 		free_ast(&shell->ast);
 	ft_free_arr(&shell->envp);

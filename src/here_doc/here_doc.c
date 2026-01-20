@@ -19,9 +19,8 @@
 
 #define _GNU_SOURCE
 
-int			read_and_expand(char **delimiter, char **content, t_shell *shell);
-int			write_here_doc(int *fd, char *content);
-int			needs_expand(char **delimiter);
+int			read_and_expand(char *delimiter, char **content, t_shell *shell);
+static int	write_here_doc(int *fd, char *content);
 static int	read_here_docs(t_cmd_node cmd, t_shell *shell);
 
 int	read_all_here_docs(t_ast_node *ast, t_shell *shell)
@@ -63,7 +62,7 @@ static int	read_here_docs(t_cmd_node cmd, t_shell *shell)
 		content = ft_strdup("");
 		if (!content)
 			return (ft_fprintf(2, ERR_MALLOC), ERROR);
-		ret = read_and_expand(&(cmd.redirects[i]->file_name), &content, shell);
+		ret = read_and_expand(cmd.redirects[i]->file_name, &content, shell);
 		if (ret != OK)
 			return (ret);
 		ret = write_here_doc(&(cmd.redirects[i]->fd), content);
@@ -71,5 +70,17 @@ static int	read_here_docs(t_cmd_node cmd, t_shell *shell)
 		if (ret != OK)
 			return (ret);
 	}
+	return (OK);
+}
+
+static int	write_here_doc(int *fd, char *content)
+{
+	int		aux[2];
+
+	if (pipe(aux) == -1)
+		return (FAIL);
+	write(aux[1], content, ft_strlen(content));
+	close (aux[1]);
+	*fd = aux[0];
 	return (OK);
 }

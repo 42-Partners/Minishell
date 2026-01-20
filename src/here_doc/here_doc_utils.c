@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 20:23:27 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/15 22:24:12 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/20 03:11:19 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,63 +15,73 @@
 #include "libft.h"
 #include "error_handling.h"
 
+int			needs_expand(char *delimiter, char **clean_delimiter, int *quote);
+static int	get_clean_delimiter(char *delimiter, char **clean_delimiter);
 static int	get_here_doc_content(char **content, char *delimiter);
 static char	*get_here_doc_line(void);
 
-int	write_here_doc(int *fd, char *content)
+int	read_and_expand(char *delimiter, char **content, t_shell *shell)
 {
-	int		aux[2];
+	char	*clean_delimiter;
+	int		quote;
+	int		ret;
 
-	if (pipe(aux) == -1)
-		return (FAIL);
-	write(aux[1], content, ft_strlen(content));
-	close (aux[1]);
-	*fd = aux[0];
-	return (OK);
-}
-
-int	needs_expand(char **delimiter)
-{
-	int	quote;
-	int	i;
-	int	j;
-
+	clean_delimiter = NULL;
 	quote = 0;
-	i = 0;
-	while ((*delimiter)[i])
-	{
-		if (ft_isquote((*delimiter)[i]))
-			quote = 1;
-		i++;
-	}
-	i = 0;
-	j = 0;
-	if (quote)
-	{
-		while ((*delimiter)[i])
-		{
-			if ((*delimiter)[i] != '\'')
-				(*delimiter)[j++] = (*delimiter)[i];
-			i++;
-		}
-		(*delimiter)[j] = '\0';
-	}
-	return (quote);
-}
-
-int	read_and_expand(char **delimiter, char **content, t_shell *shell)
-{
-	int	quote;
-	int	ret;
-
-	quote = 0;
-	quote = needs_expand(delimiter);
-	ret = get_here_doc_content(content, *delimiter);
+	if (needs_expand(delimiter, &clean_delimiter, &quote) != OK)
+		return (ERROR);
+	ret = get_here_doc_content(content, clean_delimiter);
+	free(clean_delimiter);
 	if (ret != OK)
 		return (ret);
 	if (!quote)
 		expand_string(content, shell);
 	return (ret);
+}
+
+int	needs_expand(char *delimiter, char **clean_delimiter, int *quote)
+{
+	int	i;
+
+	i = 0;
+	while (delimiter[i])
+	{
+		if (ft_isquote(delimiter[i]))
+			*quote = 1;
+		i++;
+	}
+	if (*quote)
+	{
+		if (get_clean_delimiter(delimiter, clean_delimiter) != OK)
+			return (ERROR);
+	}
+	else
+	{
+		*clean_delimiter = ft_strdup(delimiter);
+		if (!*clean_delimiter)
+			return (ERROR);
+	}
+	return (OK);
+}
+
+static int	get_clean_delimiter(char *delimiter, char **clean_delimiter)
+{
+	int	i;
+	int	j;
+
+	*clean_delimiter = malloc(ft_strlen(delimiter) + 1);
+	if (!*clean_delimiter)
+		return (ERROR);
+	i = 0;
+	j = 0;
+	while (delimiter[i])
+	{
+		if (delimiter[i] != '\'' && delimiter[i] != '"')
+			(*clean_delimiter)[j++] = delimiter[i];
+		i++;
+	}
+	(*clean_delimiter)[j] = '\0';
+	return (OK);
 }
 
 static int	get_here_doc_content(char **content, char *delimiter)
@@ -100,7 +110,7 @@ static int	get_here_doc_content(char **content, char *delimiter)
 	signal(SIGINT, signal_handler);
 	if (g_signal != 0)
 		return (free(*content), FAIL);
-	return (get_next_line(-1), OK);
+	return (OK);
 }
 
 static char	*get_here_doc_line(void)

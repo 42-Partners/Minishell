@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_handlers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafaoliv <rafaoliv@student.42.fr>          +#+  +:+       +#+        */
+/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/23 04:13:33 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/19 17:14:32 by rafaoliv         ###   ########.fr       */
+/*   Updated: 2026/01/19 20:42:55 by devrafaelly      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	handle_dollar(char **result, char *cmd, int *index, t_shell *shell)
 
 	ret = OK;
 	i = *index + 1;
-	if (!cmd[i] || cmd[i] == '"')
+	if (!cmd[i] || cmd[i] == '"' || ft_isspace(cmd[i]))
 		ret = append_fragment(result, cmd, i - 1, i);
 	else if (ft_isalpha(cmd[i]) || cmd[i] == '_')
 		ret = expand_env(result, cmd, &i, shell->envp);

@@ -58,6 +58,7 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 	if (!cmd->cmd)
 	{
 		exec_redirects(cmd);
+		free(exec);
 		exec_exit(shell, OK);
 	}
 	else
@@ -65,7 +66,6 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		exec_and_redirect(exec, cmd, shell);
-		free(exec);
 	}
 }
 
@@ -74,14 +74,14 @@ static void	exec_and_redirect(char *exec, t_cmd_node *cmd, t_shell *shell)
 	int	i;
 
 	if (exec_redirects(cmd) == ERROR)
-		exec_exit(shell, FAIL);
+		exec_exit(shell, 1);
 	i = 3;
 	while (i < 1024)
 		close(i++);
 	execve(exec, cmd->args, shell->envp);
 	ft_putstr_fd("execve failed :(\n", 2);
 	free(exec);
-	exec_exit(shell, FAIL);
+	exec_exit(shell, 1);
 }
 
 static int	wait_child(int pid)
