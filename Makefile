@@ -64,9 +64,7 @@ SRC		:= \
 			src/builtin/env.c \
 			src/builtin/export.c \
 			src/builtin/unset.c \
-			src/wildcard/wildcard.c \
-			src/debug/debug_ast.c \
-			src/debug/debug.c
+			src/wildcard/wildcard.c
 OBJ		:= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRC))
 
 $(NAME): $(OBJ) $(LIBFT)
