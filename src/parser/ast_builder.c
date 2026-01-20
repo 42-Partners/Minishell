@@ -13,7 +13,6 @@
 #include "lexer.h"
 #include "ast.h"
 #include "error_handling.h"
-#include "libft.h" //! excluir
 #include <stdlib.h>
 #include <stdio.h>
 

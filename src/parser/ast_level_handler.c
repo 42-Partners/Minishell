@@ -34,7 +34,7 @@ int	handle_low_level(t_ast_node **ast, t_token *tokens)
 	(*ast)->type = CMD;
 	ret = consume_tokens(&cmd_node, tokens);
 	if (ret != OK)
-		return (ret);
+		return (free(*ast), ret);
 	(*ast)->t_node.cmd_node = *cmd_node;
 	free(cmd_node);
 	return (OK);

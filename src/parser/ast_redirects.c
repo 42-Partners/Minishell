@@ -58,6 +58,7 @@ static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 			|| tokens->type == 6 || tokens->type == 7)
 		{
 			(*redirect)[i] = malloc(sizeof(t_redirect));
+			(*redirect)[i + 1] = NULL;
 			if (!(*redirect)[i])
 			{
 				ft_fprintf(2, ERR_MALLOC);
@@ -70,7 +71,6 @@ static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 		}
 		tokens = tokens->next;
 	}
-	(*redirect)[i] = NULL;
 	return (OK);
 }
 
