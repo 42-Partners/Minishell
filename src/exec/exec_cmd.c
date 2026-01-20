@@ -58,6 +58,7 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 	if (!cmd->cmd)
 	{
 		exec_redirects(cmd);
+		free(exec);
 		exec_exit(shell, OK);
 	}
 	else
@@ -65,7 +66,6 @@ static void	launch_command(t_cmd_node *cmd, char *exec, t_shell *shell)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		exec_and_redirect(exec, cmd, shell);
-		free(exec);
 	}
 }
 

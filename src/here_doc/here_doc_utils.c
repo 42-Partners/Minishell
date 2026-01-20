@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: devrafaelly <devrafaelly@student.42.fr>    +#+  +:+       +#+        */
+/*   By: gustaoli <gustaoli@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 20:23:27 by devrafaelly       #+#    #+#             */
-/*   Updated: 2026/01/19 21:48:13 by devrafaelly      ###   ########.fr       */
+/*   Updated: 2026/01/20 03:11:19 by gustaoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static int	get_here_doc_content(char **content, char *delimiter)
 	signal(SIGINT, signal_handler);
 	if (g_signal != 0)
 		return (free(*content), FAIL);
-	return (get_next_line(-1), OK);
+	return (OK);
 }
 
 static char	*get_here_doc_line(void)
