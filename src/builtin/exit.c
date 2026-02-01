@@ -67,9 +67,9 @@ static int	is_arg_valid(char *arg)
 
 static void	exit_cleanup(t_shell *shell, int pipe)
 {
+	get_next_line(-1);
 	if (!pipe)
 	{
-		get_next_line(-1);
 		ft_fprintf(1, "exit\n");
 	}
 	close(STDIN_FILENO);

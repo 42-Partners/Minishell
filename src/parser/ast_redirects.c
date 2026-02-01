@@ -23,11 +23,11 @@ static int		count_redirects(t_token *tokens);
 
 int	get_redirects(t_cmd_node **node, t_token *tokens)
 {
-	int	i;
 	int	ret;
+	int	i;
 
-	i = count_redirects(tokens);
 	ret = OK;
+	i = count_redirects(tokens);
 	(*node)->redirect_count = i;
 	if (i == 0)
 		(*node)->redirects = NULL;
@@ -36,7 +36,7 @@ int	get_redirects(t_cmd_node **node, t_token *tokens)
 		(*node)->redirects = malloc(sizeof(t_redirect *) * (i + 1));
 		if (!(*node)->redirects)
 		{
-			ft_putstr_fd(ERR_MALLOC, 2);
+			ft_fprintf(2, ERR_MALLOC);
 			return (ERROR);
 		}
 		ret = parse_redirect_tokens(&(*node)->redirects, tokens);
@@ -48,27 +48,29 @@ int	get_redirects(t_cmd_node **node, t_token *tokens)
 
 static int	parse_redirect_tokens(t_redirect ***redirect, t_token *tokens)
 {
+	int	ret;
 	int	i;
 
-	if (!(*redirect))
-		return (ERROR);
 	i = 0;
 	while (tokens)
 	{
-		if (tokens->type == TOKEN_HEREDOC || tokens->type == TOKEN_REDIRECT_IN
-			|| tokens->type == TOKEN_REDIRECT_OUT
-			|| tokens->type == TOKEN_REDIRECT_APPEND)
+		if (tokens->type == 4 || tokens->type == 5
+			|| tokens->type == 6 || tokens->type == 7)
 		{
 			(*redirect)[i] = malloc(sizeof(t_redirect));
+			(*redirect)[i + 1] = NULL;
 			if (!(*redirect)[i])
+			{
+				ft_fprintf(2, ERR_MALLOC);
 				return (free_redirect_array(redirect), ERROR);
-			if (handle_redirect_token(&((*redirect)[i]), tokens) != OK)
-				return (free_redirect_array(redirect), ERROR);
+			}
+			ret = handle_redirect_token(&((*redirect)[i]), tokens);
+			if (ret != OK)
+				return (free_redirect_array(redirect), ret);
 			i++;
 		}
 		tokens = tokens->next;
 	}
-	(*redirect)[i] = NULL;
 	return (OK);
 }
 
