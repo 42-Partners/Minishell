@@ -1,5 +1,5 @@
 # Minishell
-![Página do minishell na intra](\_resources\banner.png)
+![Página do minishell na intra](\_resources/banner.png)
 Feito por :
 * [gustaoli](https://github.com/Gus1331)
 * [rafaoliv](https://github.com/devrafaelly)
