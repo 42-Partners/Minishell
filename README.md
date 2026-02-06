@@ -122,7 +122,7 @@ Antes de continuar temos que interpretar os tokens words em cada caso seguindo a
 Algumas regras de sintaxe para comandos e redirects:
 * Redirects sempre serão seguidos por words.
 * A primeira word após um redirect é o arquivo alvo do redirect (excedo em _here\_doc_ que se torna o _delimiter_).
-* A primeira word que não não é um arquivo, é um comando, as demais words são argumentos;
+* A primeira word que não é um arquivo, é um comando, as demais words são argumentos;
 * Redirects podem ser definidos tanto antes ou depois de um comando, e até mesmo entre seus argumentos.
 * Um redirect não é dependente de um comando para ser válido e executado.
 * Multiplos redirects podem ser definidos, mesmo sendo do mesmo tipo.
@@ -135,7 +135,7 @@ Você pode conferir as principais _structs_ definidas deste tópico em `includes
 
 # Execução e Expansão
 
-Apartir do momento que temos nossa AST montada, organizada e validada, chegamos ao ponto de expandir textos e executar.
+A partir do momento que temos nossa AST montada, organizada e validada, chegamos ao ponto de expandir textos e executar.
 
 A expansão serve para diversas coisas, entre elas: Usar valores definidos em `env`, usar textos inteiros passados dentro de aspas simples ou duplas ou escapar caracteres especiais e expansões usando aspas.
 
@@ -144,9 +144,9 @@ Exemplos:
 ![Exemplos de expansão](_resources/img6.png)
 ![Exemplos de expansão](_resources/img7.png)
 
-O processo de expansão é relativamente simples, onde tentamos expandir cada caractere se adequando ao contexto de _quotes_ ou na leitura de _here\_doc_ quando necessário.
+O processo de expansão é relativamente simples, identificamos a ausência ou presença de _quotes_, e qual comportamento de expansão elas definem no contexto atual.
 
-Com texto expandido, temos tudo pronto para execução, que na prática é mais complicado e técnido. Como usamos `execve` para executar os binários, temos que se atentar que a função substitui todo o processo atual para o processo novo que vai ser executado, isso significa que ele vai executar o binário, mas não vai voltar pra execução do nosso shell. Isso é um problema grande pois um shell que executa apenas um comando e fecha, é extramente limitado e com mal funcionamento.
+Com o texto expandido, temos tudo pronto para execução, que na prática é mais complicado e técnico. Como usamos `execve` para executar os binários, temos que manter em mente que a função substitui todo o processo atual pelo processo novo que vai ser executado, isso significa que ele vai executar o binário, mas não vai voltar pra execução do nosso shell. Isso é um problema grande pois um shell que executa apenas um comando e fecha, é extramente limitado e com mal funcionamento.
 
 Para isso utilizamos `fork` que cria um processo filho apenas para esse trabalho. Agora temos a responsabilidade de cuidar deste subprocesso em casos de sinais do shell, erros, etc.
 
